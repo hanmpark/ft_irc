@@ -64,4 +64,25 @@ How to get in touch with you or the project team.
 
 ![socker_representation](./img/socketImg.png)
 
+```c
+#include <sys/socket.h>
+
+int	socket(int domain, int type, int protocol)
+
+
+1. `domain` => specifies the domain for the socket.
+	- `AF_INET`: This specifies the Internet Protocol version 4 (IPv4) communication domain.
+
+	- `AF_INET6`: This specifies the Internet Protocol version 6 (IPv6) communication domain.
+
+	- `AF_UNIX`: This specifies the Unix domain communication domain.
+
+2. `type` => type of socket to be created.
+	- `SOCK_STREAM`: This specifies a stream-oriented socket, which provides a reliable, connection-oriented byte stream. This is typically used for TCP connections.
+
+	- `SOCK_DGRAM`: This specifies a datagram-oriented socket, which provides a connectionless, unreliable message delivery service. This is typically used for UDP connections.
+
+3. `protocol` => protocol to be used with the socket.
+	- can be set to 0 to use the default protocol for the specified domain and type.
+```
 

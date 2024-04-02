@@ -2,7 +2,8 @@
 
 #include "IrcIncludes.hpp"
 
-/* Custom exception */
+/* Custom exceptions */
+
 class TypeConversionError : public std::exception {
 public:
 	virtual const char *what() const throw() {
@@ -11,6 +12,7 @@ public:
 };
 
 /* Utilities */
+
 template <typename T>
 int myAtoi(const T &str) {
 	int res = 0;
