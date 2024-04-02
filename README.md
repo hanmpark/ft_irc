@@ -100,3 +100,13 @@ int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t
 3. `optname` => parameter specifies the option name.
 4. `optval` => pointer to the value of the option.
 4. `optlen` => size of the option value.
+
+## References
+
+Here are some references that you may find helpful:
+
+- [IRC Protocol](https://tools.ietf.org/html/rfc1459)
+- [Socket Programming in C](https://www.geeksforgeeks.org/socket-programming-cc/)
+- [Linux man pages for socket](https://man7.org/linux/man-pages/man2/socket.2.html)
+- [Linux man pages for setsockopt](https://man7.org/linux/man-pages/man2/setsockopt.2.html)
+- [TCP/IP Sockets in C](https://beej.us/guide/bgnet/html/)
