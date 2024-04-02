@@ -22,5 +22,5 @@
 # include <vector>
 
 /* Error message */
-# define ERR_ARGS "Usage: ./ircserv <port> <server>"
+# define ERR_ARGS "Usage: ./ircserv <port> <password>"
 # define ERR_UNKNOWN "An unknown error occured"

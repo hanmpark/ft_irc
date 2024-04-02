@@ -28,48 +28,6 @@ int main(int argc, char **argv) {
 	else if (scanArgs(argv) == 1) {
 		return 1;
 	}
-	//* Create a socket
-	/*
-	* AF_INET: IPv4
-	* SOCK_STREAM: TCP
-	* 0: Default protocol
-	*/
-	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
-	if (sockfd < 0) {
-		std::cerr << "Error creating socket" << std::endl;
-		return 1;
-	}
-
-	struct sockaddr serv_addr = {
-		AF_INET,
-		htons(9999),
-		0
-	};
-
-
-	//* Bind the socket to an address, therefore we can start listening
-	bind(sockfd, &serv_addr, sizeof(serv_addr));
-
-	//* Listen for incoming connections
-	listen(sockfd, 5);
-
-	//* Accept a connection from a client
-	int client_sockfd = accept(sockfd, NULL, NULL);
-
-	/*
-	* once we have a connection with a client, we can send and receive data
-	TODO:
-		- print the data received from the client
-		- enable the server to send data to the client
-	*/
-
-	struct pollfd {
-		STDIN_FILENO,
-	};
-
-	//* Use the poll() function to wait for data to be received
-	poll()
-
 
 	return 0;
 }

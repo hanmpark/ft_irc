@@ -19,20 +19,20 @@ class Server {
 		int	_port;
 		int	_sockfd;
 		std::vector<Client>	_clients;
-		std::string	_serverName;
+		std::string	_password;
 
 		Server();
 		Server(Server const &src);
 		Server	&operator=(Server const &rhs);
 	public:
-		Server(int port, std::string const &serverName);
+		Server(int port, int sockfd, std::string const &password);
 		~Server();
 
 		/* Accessors */
 		int	getPort() const;
 		int	getSockfd() const;
 		std::vector<Client>	getClients() const;
-		std::string	getServerName() const;
+		std::string	getPassword() const;
 
 		/* Server methods */
 		void	initServer();
