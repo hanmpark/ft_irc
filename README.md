@@ -14,6 +14,7 @@ IRC is a text-based communication protocol used for real-time messaging. <br>
 - [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
+- [Definitions](#definitions)
 
 ## Installation
 
@@ -57,3 +58,10 @@ Information about the license for your project.
 ## Contact
 
 How to get in touch with you or the project team.
+
+## Definitions
+**socket**: socket is a file descriptor. It is used to send/receive data over a network. They are used to create a connection between 2 endpoints.
+
+![socker_representation](./img/socketImg.png)
+
+

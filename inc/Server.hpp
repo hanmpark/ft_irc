@@ -5,12 +5,25 @@
 
 class Client;
 
+/*
+* Server class:
+- Server class is responsible for creating a socket,
+accepting connections, receiving and sending data.
+- It containes all of the information about the server.
+- It has a private attribute _clients to keep track of all
+the clients connected to the server, as well as manage their
+requests.
+*/
 class Server {
 	private:
 		int	_port;
 		int	_sockfd;
 		std::vector<Client>	_clients;
 		std::string	_serverName;
+
+		Server();
+		Server(Server const &src);
+		Server	&operator=(Server const &rhs);
 	public:
 		Server(int port, std::string const &serverName);
 		~Server();
