@@ -85,4 +85,3 @@ int	socket(int domain, int type, int protocol)
 3. `protocol` => protocol to be used with the socket.
 	- can be set to 0 to use the default protocol for the specified domain and type.
 ```
-
