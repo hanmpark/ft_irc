@@ -23,4 +23,7 @@
 
 /* Error message */
 # define ERR_ARGS "Usage: ./ircserv <port> <password>"
+# define ERR_TYPE "Error: Type conversion failed"
+# define ERR_PORT "Error: Port number must be between 0 and 65535"
+# define ERR_PASS "Error: Password cannot be empty"
 # define ERR_UNKNOWN "An unknown error occured"

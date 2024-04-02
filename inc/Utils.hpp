@@ -7,7 +7,28 @@
 class TypeConversionError : public std::exception {
 public:
 	virtual const char *what() const throw() {
-		return "Error: Type conversion failed";
+		return ERR_TYPE;
+	}
+};
+
+class ArgsError : public std::exception {
+public:
+	virtual const char *what() const throw() {
+		return ERR_ARGS;
+	}
+};
+
+class PortArgError : public std::exception {
+public:
+	virtual const char *what() const throw() {
+		return ERR_PORT;
+	}
+};
+
+class PasswordArgError : public std::exception {
+public:
+	virtual const char *what() const throw() {
+		return ERR_PASS;
 	}
 };
 

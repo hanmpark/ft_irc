@@ -21,10 +21,10 @@ class Server {
 		std::vector<Client>	_clients;
 		std::string	_password;
 
-		Server();
 		Server(Server const &src);
 		Server	&operator=(Server const &rhs);
 	public:
+		Server();
 		Server(int port, int sockfd, std::string const &password);
 		~Server();
 
