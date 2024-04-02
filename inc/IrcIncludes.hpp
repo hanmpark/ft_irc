@@ -10,8 +10,15 @@
 # include <iostream>
 # include <string>
 
-# include <sys/socket.h>
-# include <arpa/inet.h>
+# include <sys/socket.h> // socket
+# include <sys/types.h> // socket
+# include <netinet/in.h> // sockaddr_in
+# include <arpa/inet.h> // htons
+# include <unistd.h> // close
+# include <cstring> // memset
+# include <sstream> // istringstream
+# include <poll.h> // poll
+# include <exception> // exception
 
 /* Error message */
 # define ERR_ARGS "Usage: ./ircserv <port> <server>"
