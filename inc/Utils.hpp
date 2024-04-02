@@ -3,4 +3,10 @@
 #include "IrcIncludes.hpp"
 
 /* Utilities */
-int myAtoi(const char* str);
+
+class Utils {
+		Utils();
+		
+		~Utils();
+		int myAtoi(const char* str);
+};
