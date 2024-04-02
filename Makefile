@@ -49,6 +49,9 @@ ${NAME}:	${OBJS}
 strict:
 	@${MAKE} STRICT=1
 
+debug:
+	@${MAKE} DEBUG=1
+
 clean:
 	@printf "${PROMPT} ${RED}Cleaning${RESET} objects"
 	@rm -f ${OBJS}
