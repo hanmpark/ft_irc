@@ -15,7 +15,13 @@ int	Server::createSocket() {
 	servAddr.sin_port = htons(_port);
 	servAddr.sin_addr.s_addr = INADDR_ANY;
 
-	if (setsockopt(_sockfd, SOL_SOCKET, SO_REUSEADDR, ))
+	if (setsockopt(_sockfd, SOL_SOCKET, SO_REUSEADDR, &(int){1}, sizeof(int)) < 0) {
+		std::cerr << ERR_SOCK << std::endl;
+		return 0;
+	}
+
+	// Bind the socket
+
 }
 
 void	Server::initServer(int port, std::string const &password) {

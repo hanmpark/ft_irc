@@ -97,3 +97,6 @@ int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t
 ```
 1. `sockfd` => file descriptor of the socket on which the option is to be set.
 2. `level` => specifies the protocol level at which the option is defined.
+3. `optname` => parameter specifies the option name.
+4. `optval` => pointer to the value of the option.
+4. `optlen` => size of the option value.
