@@ -60,7 +60,7 @@ Information about the license for your project.
 How to get in touch with you or the project team.
 
 ## Definitions
-**socket**: socket is a file descriptor. It is used to send/receive data over a network. They are used to create a connection between 2 endpoints.
+- **socket**: socket is a file descriptor. It is used to send/receive data over a network. They are used to create a connection between 2 endpoints.
 
 ![socker_representation](./img/socketImg.png)
 
@@ -68,7 +68,7 @@ How to get in touch with you or the project team.
 #include <sys/socket.h>
 
 int	socket(int domain, int type, int protocol)
-
+```
 
 1. `domain` => specifies the domain for the socket.
 	- `AF_INET`: This specifies the Internet Protocol version 4 (IPv4) communication domain.
@@ -84,4 +84,16 @@ int	socket(int domain, int type, int protocol)
 
 3. `protocol` => protocol to be used with the socket.
 	- can be set to 0 to use the default protocol for the specified domain and type.
+
+***
+
+- **setsockopt**: used to set options on a socket.
+```c
+#include <sys/types.h>
+#include <sys/socket.h>
+
+// prototype:
+int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen);
 ```
+1. `sockfd` => file descriptor of the socket on which the option is to be set.
+2. `level` => specifies the protocol level at which the option is defined.

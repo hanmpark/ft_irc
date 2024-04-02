@@ -1,7 +1,36 @@
 #include "Server.hpp"
 
-Server::Server() {
+int	Server::createSocket() {
+	// Create a socket
+	_sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	if (_sockfd < 0) {
+		std::cerr << ERR_SOCK << std::endl;
+		return 0;
+	}
 
+	// Set the socket options
+	struct sockaddr_in	servAddr;
+	memset(&servAddr, 0, sizeof(servAddr));
+	servAddr.sin_family = AF_INET;
+	servAddr.sin_port = htons(_port);
+	servAddr.sin_addr.s_addr = INADDR_ANY;
+
+	if (setsockopt(_sockfd, SOL_SOCKET, SO_REUSEADDR, ))
+}
+
+void	Server::initServer(int port, std::string const &password) {
+	_port = port;
+	_password = password;
+
+	if (!createSocket()) {
+		throw std::exception();
+	}
+
+}
+
+Server::Server() : _port(0), _sockfd(0), _password("") {
+
+	return ;
 }
 
 Server::Server(Server const &src) {

@@ -22,7 +22,7 @@ int	scanArgs(int argc, char **argv) {
 			throw ArgsError();
 		}
 
-	} catch (std::exception &e) {
+	} catch (const std::exception &e) {
 		std::cerr << e.what() << std::endl;
 		return 1;
 	} catch (...) {
@@ -39,9 +39,14 @@ int main(int argc, char **argv) {
 	try {
 		Server	server;
 
-	}
-	catch(const std::exception& e) {
+		int	port = myAtoi(argv[1]);
+		std::string	password = argv[2];
+		server.initServer(port, password);
+
+	} catch(const std::exception &e) {
 		std::cerr << e.what() << std::endl;
+	} catch (...) {
+		std::cerr << ERR_UNKNOWN << std::endl;
 	}
 	
 	return 0;

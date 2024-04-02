@@ -35,8 +35,8 @@ class Server {
 		std::string	getPassword() const;
 
 		/* Server methods */
-		void	initServer();
-		void	createSocket();
+		void	initServer(int port, std::string const &password);
+		int		createSocket();
 		void	acceptConnection();
 		void	receiveData(int fd);
 		void	sendData();
