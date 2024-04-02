@@ -19,6 +19,7 @@
 # include <sstream> // istringstream
 # include <poll.h> // poll
 # include <exception> // exception
+# include <vector>
 
 /* Error message */
 # define ERR_ARGS "Usage: ./ircserv <port> <server>"
