@@ -15,6 +15,7 @@ IRC is a text-based communication protocol used for real-time messaging. <br>
 - [Contributing](#contributing)
 - [License](#license)
 - [Definitions](#definitions)
+- [References](#references)
 
 ## Installation
 
