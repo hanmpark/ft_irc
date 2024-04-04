@@ -32,6 +32,17 @@ public:
 	}
 };
 
+class CustomError : public std::exception {
+	private:
+		std::string	_msg;
+	public:
+		CustomError(std::string const &msg) : _msg(msg) {}
+
+		virtual const char *what() const throw() {
+			return _msg.c_str();
+		}
+};
+
 /* Utilities */
 
 template <typename T>
@@ -41,12 +52,8 @@ int myAtoi(const T &str) {
 
 	std::istringstream iss(str);
 	iss >> res;
-	if (iss.fail()) {
-		throw TypeConversionError();
-	}
-
-	if (iss >> rest) {
-		throw TypeConversionError();
+	if (iss.fail() || iss >> rest) {
+		throw CustomError(ERR_TYPE)
 	}
 
 	return res;

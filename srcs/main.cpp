@@ -8,26 +8,21 @@
 */
 
 int	scanArgs(int argc, char **argv) {
-	try {
-		if (argc != 3) {
-			throw ArgsError();
-		}
-
-		int	port = myAtoi(argv[1]);
-		std::string	password = argv[2];
-		if (port < 0 || port > 65535) {
-			throw PortArgError();
-		}
-		else if (password.empty()) {
-			throw ArgsError();
-		}
-
-	} catch (const std::exception &e) {
-		std::cerr << e.what() << std::endl;
+	if (argc != 3) {
+		std::cerr << ERR_ARGS << std::endl;
 		return 1;
-	} catch (...) {
-		std::cerr << ERR_UNKNOWN << std::endl;
 	}
+
+	int	port = myAtoi(argv[1]);
+	std::string	password = argv[2];
+	if (port < 0 || port > 65535) {
+		std::cerr << ERR_PORT << std::endl;
+		return 1;
+	}
+	else if (password.empty()) {
+		std::cerr << ERR_PASS << std::endl;
+	}
+
 	return 0;
 }
 

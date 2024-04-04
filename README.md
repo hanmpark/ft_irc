@@ -88,12 +88,17 @@ int	socket(int domain, int type, int protocol)
 
 ***
 
-- **setsockopt**: used to set options on a socket.
+- **setsockopt**: used to set options on a socket. Prevents error such as: “address already in use”.
+
+> `SO_REUSEADDR` arg tells the OS that calls to bind() this socket are allowed to reuse a local address; this is particularly useful when stopping and then quickly restarting a server, since otherwise the address you want to bind to might still be allocated to the previous server instance, and thus your server won't be able to bind() to it for several minutes.<br>
+https://stackoverflow.com/questions/69923217/what-exactly-is-the-purpose-of-setsockopt
+
+> `SO_REUSEPORT` tells the OS that you'd like to allow multiple sockets to bind to the same socket address simultaneously; it's useful e.g. when running multiple clients that all want to receive the multicast or broadcast traffic coming in on a given port simultaneously.
+
 ```c
 #include <sys/types.h>
 #include <sys/socket.h>
 
-// prototype:
 int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen);
 ```
 1. `sockfd` => file descriptor of the socket on which the option is to be set.
@@ -111,3 +116,4 @@ Here are some references that you may find helpful:
 - [Linux man pages for socket](https://man7.org/linux/man-pages/man2/socket.2.html)
 - [Linux man pages for setsockopt](https://man7.org/linux/man-pages/man2/setsockopt.2.html)
 - [TCP/IP Sockets in C](https://beej.us/guide/bgnet/html/)
+- [RFC 1459 IRC :Replies](http://www.iprelax.fr/irc/irc_rfcus6.php)

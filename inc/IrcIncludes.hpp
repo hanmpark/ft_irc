@@ -20,6 +20,7 @@
 # include <poll.h> // poll
 # include <exception> // exception
 # include <vector>
+# include <fcntl.h>
 
 /* Error message */
 # define ERR_ARGS "Usage: ./ircserv <port> <password>"

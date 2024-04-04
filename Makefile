@@ -29,7 +29,8 @@ HEADER	=		./inc
 
 # Files
 SRCS	=	${addprefix ${SRCS_DIR}, main.cpp \
-										utils.cpp}
+										Server.cpp \
+										utils.cpp }
 
 OBJS	=	${SRCS:.cpp=.o}
 

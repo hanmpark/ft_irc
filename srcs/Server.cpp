@@ -1,35 +1,56 @@
 #include "Server.hpp"
+#include "Utils.hpp"
 
+//https://www.geeksforgeeks.org/socket-programming-cc/
 int	Server::createSocket() {
 	// Create a socket
 	_sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (_sockfd < 0) {
-		std::cerr << ERR_SOCK << std::endl;
-		return 0;
+		return 1;
 	}
 
 	// Set the socket options
 	struct sockaddr_in	servAddr;
 	memset(&servAddr, 0, sizeof(servAddr));
-	servAddr.sin_family = AF_INET;
-	servAddr.sin_port = htons(_port);
-	servAddr.sin_addr.s_addr = INADDR_ANY;
+	servAddr.sin_family = AF_INET; // IPv4
+	servAddr.sin_port = htons(_port); // Convert to network byte order
+	servAddr.sin_addr.s_addr = INADDR_ANY; // Bind to any address
 
-	if (setsockopt(_sockfd, SOL_SOCKET, SO_REUSEADDR, &(int){1}, sizeof(int)) < 0) {
-		std::cerr << ERR_SOCK << std::endl;
-		return 0;
+	// Set socket options to reuse the address and port for multiple connections.
+	if (setsockopt(_sockfd, SOL_SOCKET, \
+		SO_REUSEADDR | SO_REUSEPORT, &(int){1}, sizeof(int)) < 0) {
+		return 1;
 	}
 
-	// Bind the socket
+	// Set the socket to non-blocking
+	if (fcntl(_sockfd, F_SETFL, O_NONBLOCK) < 0) {
+		return 1;
+	}
 
+	// Bind the socket to the address
+	if (bind(_sockfd, (struct sockaddr *)&servAddr, sizeof(servAddr)) < 0) {
+		return 1;
+	}
+
+	// Listen for incoming connections
+	if (listen(_sockfd, SOMAXCONN) < 0) {
+		return 1;
+	}
+
+	// Add the server socket to the pollfd structure
+	struct pollfd	newFd;
+	newFd.fd = _sockfd;
+	newFd.events = POLLIN; // know when a client is trying to connect
+	newFd.revents = 0; // no events yet
+	
 }
 
 void	Server::initServer(int port, std::string const &password) {
 	_port = port;
 	_password = password;
 
-	if (!createSocket()) {
-		throw std::exception();
+	if (createSocket() == 1) {
+		throw CustomError(ERR_SOCK);
 	}
 
 }
