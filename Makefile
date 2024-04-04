@@ -36,7 +36,7 @@ OBJS	=	${SRCS:.cpp=.o}
 
 %.o: %.cpp
 	@printf "${PROMPT} ${GREEN}Compiling${RESET} $<"
-	@${CC} ${CFLAGS} -I ${HEADER} -c $< -o $@
+	@${CC} ${CFLAGS} -I${HEADER} -c $< -o $@
 
 # === Rules === #
 NAME	=	ircserv

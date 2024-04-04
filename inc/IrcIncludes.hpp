@@ -19,7 +19,7 @@
 # include <sstream>			// istringstream
 # include <poll.h>			// poll
 # include <exception>		// exception
-# include <list>
+# include <vector>
 # include <fcntl.h>
 
 using namespace std;
@@ -30,4 +30,5 @@ using namespace std;
 # define ERR_PORT "Error: Port number must be between 0 and 65535"
 # define ERR_PASS "Error: Password cannot be empty"
 # define ERR_SOCK "Error: Socket creation failed"
+# define ERR_SERVER "Error: Server failed to run"
 # define ERR_UNKNOWN "An unknown error occured"

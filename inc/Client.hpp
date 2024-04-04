@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IrcIncludes.hpp"
+# include "IrcIncludes.hpp"
 
 /* Client class:
 - Client class is responsible for keeping track of all the

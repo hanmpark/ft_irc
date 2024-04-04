@@ -1,4 +1,3 @@
-#include "IrcInclude.hpp"
 #include "Server.hpp"
 #include "Utils.hpp"
 
@@ -50,9 +49,24 @@ int	Server::createSocket() {
 
 int	Server::runServer()
 {
-	while ("quoicoubeh") {
-		if (poll(&_fds[0], _fds.size()m, -1))
+	while ("running server") {
+		if (poll(&_fds[0], _fds.size(), -1) < 0) {
+			return 1;
+		}
+		for (size_t i = 0; i < _fds.size(); i++) {
+			if (_fds[i].revents & POLLIN) {
+				if (_fds[i].fd == _sockfd) {
+					acceptConnection();
+				}
+				else {
+					receiveData(_fds[i].fd);
+				}
+			}
+		}
 	}
+
+	/* Close the server socket and all client sockets if they are still open */
+	// cleanupFileDescriptors();
 	return 0;
 }
 
@@ -108,7 +122,7 @@ int	Server::getSockfd() const {
 	return _sockfd;
 }
 
-list<Client>	Server::getClients() const {
+vector<Client>	Server::getClients() const {
 	return _clients;
 }
 

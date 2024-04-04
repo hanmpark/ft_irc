@@ -23,8 +23,8 @@ class Server {
 	private:
 		int	_port;
 		int	_sockfd;
-		list<Client>	_clients; // list of clients
-		list<struct pollfd>	_fds; // list of pollfds
+		vector<Client>	_clients; // vector of clients
+		vector<struct pollfd>	_fds; // vector of pollfds
 		string	_password;
 
 		Server(Server const &src);
@@ -37,7 +37,7 @@ class Server {
 		/* Accessors */
 		int	getPort() const;
 		int	getSockfd() const;
-		list<Client>	getClients() const;
+		vector<Client>	getClients() const;
 		string	getPassword() const;
 
 		/* Server methods */
