@@ -1,3 +1,4 @@
+#include "IrcInclude.hpp"
 #include "Server.hpp"
 #include "Utils.hpp"
 
@@ -47,12 +48,25 @@ int	Server::createSocket() {
 	return 0;
 }
 
+int	Server::runServer()
+{
+	while ("quoicoubeh") {
+		if (poll(&_fds[0], _fds.size()m, -1))
+	}
+	return 0;
+}
+
 void	Server::initServer(int port, string const &password) {
 	_port = port;
 	_password = password;
 
+	// need to include signal handler for not leaking fds?
+
 	if (createSocket() == 1) {
 		throw CustomError(ERR_SOCK);
+	}
+	else if (runServer() == 1) {
+		throw CustomError(ERR_SERVER);
 	}
 
 }
@@ -94,7 +108,7 @@ int	Server::getSockfd() const {
 	return _sockfd;
 }
 
-vector<Client>	Server::getClients() const {
+list<Client>	Server::getClients() const {
 	return _clients;
 }
 

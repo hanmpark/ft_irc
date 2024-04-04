@@ -15,6 +15,14 @@ int	scanArgs(int argc, char **argv) {
 
 	int	port = myAtoi(argv[1]);
 	string	password = argv[2];
+
+	/*
+	reasoning behind the range is that TCP & UDP have port numbers represented
+	by a 16-bit unsigned integer.
+	1. 0-1023 reserved for specific services
+	2. 1024 to 49151 can be registered for specific purposes
+	3. 49152-65535 used by client apps for outgoing conncections.
+	*/
 	if (port < 0 || port > 65535) {
 		cerr << ERR_PORT << endl;
 		return 1;
