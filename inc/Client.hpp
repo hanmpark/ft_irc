@@ -15,10 +15,10 @@ class Client {
 		std::string	_username;
 		std::string	_ipAddr;
 
-		Client();
 		Client(Client const &src);
 		Client	&operator=(Client const &rhs);
 	public:
+		Client();
 		Client(int fd, std::string const &nickname, std::string const &username);
 		~Client();
 

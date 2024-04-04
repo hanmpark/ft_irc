@@ -47,12 +47,29 @@ int	Server::createSocket() {
 	return 0;
 }
 
+void	Server::acceptConnection() {
+	Client				client;
+	struct sockaddr_in	cliAddr;
+	socklen_t			cliLen = sizeof(cliAddr);
+
+	// Accept the connection
+	int	clientFd = accept(_sockfd, reinterpret_cast<sockaddr*>(&cliAddr), &cliLen);
+	if (clientFd < 0) {
+		return ;
+	}
+	
+}
+
 int	Server::runServer()
 {
-	while ("running server") {
-		if (poll(&_fds[0], _fds.size(), -1) < 0) {
+	while (1) {
+		// Poll for incoming events
+		int ret = poll(&_fds[0], _fds.size(), -1);
+		if (ret < 0) {
 			return 1;
 		}
+
+		// Check if the server socket has an event
 		for (size_t i = 0; i < _fds.size(); i++) {
 			if (_fds[i].revents & POLLIN) {
 				if (_fds[i].fd == _sockfd) {
