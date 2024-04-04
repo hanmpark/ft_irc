@@ -28,7 +28,7 @@ int	Server::createSocket() {
 	}
 
 	// Bind the socket to the address
-	if (bind(_sockfd, (struct sockaddr *)&servAddr, sizeof(servAddr)) < 0) {
+	if (bind(_sockfd, reinterpret_cast<sockaddr*>(&servAddr), sizeof(servAddr)) < 0) {
 		return 1;
 	}
 
@@ -41,11 +41,13 @@ int	Server::createSocket() {
 	struct pollfd	newFd;
 	newFd.fd = _sockfd;
 	newFd.events = POLLIN; // know when a client is trying to connect
-	newFd.revents = 0; // no events yet
-	
+	newFd.revents = 0; // no events yet, will be filled by poll later on.
+	_fds.push_back(newFd); // adding our server to the private list of pollfds.
+
+	return 0;
 }
 
-void	Server::initServer(int port, std::string const &password) {
+void	Server::initServer(int port, string const &password) {
 	_port = port;
 	_password = password;
 
@@ -64,7 +66,7 @@ Server::Server(Server const &src) {
 	*this = src;
 }
 
-Server::Server(int port, int sockfd, std::string const &password) : _port(port), \
+Server::Server(int port, int sockfd, string const &password) : _port(port), \
 																	_sockfd(sockfd), \
 																	_password(password) {
 
@@ -92,10 +94,10 @@ int	Server::getSockfd() const {
 	return _sockfd;
 }
 
-std::vector<Client>	Server::getClients() const {
+vector<Client>	Server::getClients() const {
 	return _clients;
 }
 
-std::string	Server::getPassword() const {
+string	Server::getPassword() const {
 	return _password;
 }

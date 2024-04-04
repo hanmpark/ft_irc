@@ -9,18 +9,18 @@
 
 int	scanArgs(int argc, char **argv) {
 	if (argc != 3) {
-		std::cerr << ERR_ARGS << std::endl;
+		cerr << ERR_ARGS << endl;
 		return 1;
 	}
 
 	int	port = myAtoi(argv[1]);
-	std::string	password = argv[2];
+	string	password = argv[2];
 	if (port < 0 || port > 65535) {
-		std::cerr << ERR_PORT << std::endl;
+		cerr << ERR_PORT << endl;
 		return 1;
 	}
 	else if (password.empty()) {
-		std::cerr << ERR_PASS << std::endl;
+		cerr << ERR_PASS << endl;
 	}
 
 	return 0;
@@ -35,13 +35,13 @@ int main(int argc, char **argv) {
 		Server	server;
 
 		int	port = myAtoi(argv[1]);
-		std::string	password = argv[2];
+		string	password = argv[2];
 		server.initServer(port, password);
 
-	} catch(const std::exception &e) {
-		std::cerr << e.what() << std::endl;
+	} catch(const exception &e) {
+		cerr << e.what() << endl;
 	} catch (...) {
-		std::cerr << ERR_UNKNOWN << std::endl;
+		cerr << ERR_UNKNOWN << endl;
 	}
 	
 	return 0;

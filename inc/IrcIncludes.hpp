@@ -10,17 +10,19 @@
 # include <iostream>
 # include <string>
 
-# include <sys/socket.h> // socket
-# include <sys/types.h> // socket
-# include <netinet/in.h> // sockaddr_in
-# include <arpa/inet.h> // htons
-# include <unistd.h> // close
-# include <cstring> // memset
-# include <sstream> // istringstream
-# include <poll.h> // poll
-# include <exception> // exception
-# include <vector>
+# include <sys/socket.h>	// socket
+# include <sys/types.h>		// socket
+# include <netinet/in.h>	// sockaddr_in
+# include <arpa/inet.h>		// htons
+# include <unistd.h>		// close
+# include <cstring>			// memset
+# include <sstream>			// istringstream
+# include <poll.h>			// poll
+# include <exception>		// exception
+# include <list>
 # include <fcntl.h>
+
+using namespace std;
 
 /* Error message */
 # define ERR_ARGS "Usage: ./ircserv <port> <password>"

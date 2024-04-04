@@ -4,34 +4,6 @@
 
 /* Custom exceptions */
 
-class TypeConversionError : public std::exception {
-public:
-	virtual const char *what() const throw() {
-		return ERR_TYPE;
-	}
-};
-
-class ArgsError : public std::exception {
-public:
-	virtual const char *what() const throw() {
-		return ERR_ARGS;
-	}
-};
-
-class PortArgError : public std::exception {
-public:
-	virtual const char *what() const throw() {
-		return ERR_PORT;
-	}
-};
-
-class PasswordArgError : public std::exception {
-public:
-	virtual const char *what() const throw() {
-		return ERR_PASS;
-	}
-};
-
 class CustomError : public std::exception {
 	private:
 		std::string	_msg;
@@ -47,10 +19,11 @@ class CustomError : public std::exception {
 
 template <typename T>
 int myAtoi(const T &str) {
-	int res = 0;
-	int rest = 0;
+	int		res = 0;
+	char	rest = 0;
 
 	std::istringstream iss(str);
+	iss >> res;
 	iss >> res;
 	if (iss.fail() || iss >> rest) {
 		throw CustomError(ERR_TYPE)
