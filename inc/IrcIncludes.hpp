@@ -10,8 +10,8 @@
 # include <iostream>
 # include <string>
 
-# include <sys/socket.h>	// socket
 # include <sys/types.h>		// socket
+# include <sys/socket.h>	// socket
 # include <netinet/in.h>	// sockaddr_in
 # include <arpa/inet.h>		// htons
 # include <unistd.h>		// close

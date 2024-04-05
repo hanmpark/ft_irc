@@ -10,23 +10,23 @@ of the client.
 */
 class Client {
 	private:
-		int	_fd;
-		std::string	_nickname;
-		std::string	_username;
-		std::string	_ipAddr;
+		int		_fd;
+		string	_nickname;
+		string	_username;
+		string	_ipAddr;
 
 		Client(Client const &src);
 		Client	&operator=(Client const &rhs);
 	public:
 		Client();
-		Client(int fd, std::string const &nickname, std::string const &username);
+		Client(int fd, string const &nickname, string const &username);
 		~Client();
 
 		/* Accessors */
-		int	getFd() const;
-		std::string	getNickname() const;
-		std::string	getUsername() const;
-		std::string	getIpAddr() const;
+		int		getFd() const;
+		string	getNickname() const;
+		string	getUsername() const;
+		string	getIpAddr() const;
 
-		void	setIpAddr(std::string const &ipAddr);
+		void	setIpAddr(string const &ipAddr);
 };

@@ -21,11 +21,11 @@ Which prevents the block events.
 */
 class Server {
 	private:
-		int	_port;
-		int	_sockfd;
-		vector<Client>	_clients; // vector of clients
-		vector<struct pollfd>	_fds; // vector of pollfds
-		string	_password;
+		int						_port;
+		int						_sockfd;
+		vector<Client>			_clients; // vector of clients
+		vector<struct pollfd>	_pollFds; // vector of pollfds
+		string					_password;
 
 		Server(Server const &src);
 		Server	&operator=(Server const &rhs);
