@@ -5,6 +5,8 @@
 
 class Client;
 
+# define BUFFER_SIZE 1024
+
 /*
 * Server class:
 - Server class is responsible for creating a socket,
@@ -45,7 +47,7 @@ class Server {
 		int		createSocket();
 		int		runServer();
 		void	acceptConnection();
-		void	receiveData(int fd);
+		void	receiveData(int clientFd);
 		void	sendData();
 
 		/* Handle signals */

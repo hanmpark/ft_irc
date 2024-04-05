@@ -84,6 +84,20 @@ void	Server::acceptConnection() {
 	return ;
 }
 
+void	Server::receiveData(int clientFd) {
+	char	buff[BUFFER_SIZE];
+	bzero(buff, BUFFER_SIZE); // clear the buffer
+
+	ssize_t	bytesReceived = recv(clientFd, buff, BUFFER_SIZE, 0);
+	if (bytesReceived < 0) {
+		return ;
+	}
+
+	cout << "Received data: " << buff << endl;
+
+	return ;
+}
+
 int	Server::runServer()
 {
 	while (1) {
@@ -117,12 +131,10 @@ void	Server::initServer(int port, string const &password) {
 
 	// need to include signal handler for not leaking fds?
 
-	if (createSocket() == 1) {
+	if (createSocket() == 1)
 		throw CustomError(ERR_SOCK);
-	}
-	else if (runServer() == 1) {
+	else if (runServer() == 1)
 		throw CustomError(ERR_SERVER);
-	}
 
 }
 
