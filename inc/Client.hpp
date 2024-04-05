@@ -28,5 +28,9 @@ class Client {
 		string	getUsername() const;
 		string	getIpAddr() const;
 
+		/* Mutators */
+		void	setFd(int fd);
+		void	setNickname(string const &nickname);
+		void	setUsername(string const &username);
 		void	setIpAddr(string const &ipAddr);
 };

@@ -16,6 +16,18 @@ string	Client::getIpAddr() const {
 	return _ipAddr;
 }
 
+void	Client::setFd(int fd) {
+	_fd = fd;
+}
+
+void	Client::setNickname(string const &nickname) {
+	_nickname = nickname;
+}
+
+void	Client::setUsername(string const &username) {
+	_username = username;
+}
+
 void	Client::setIpAddr(string const &ipAddr) {
 	_ipAddr = ipAddr;
 }

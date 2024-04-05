@@ -75,7 +75,7 @@ void	Server::acceptConnection() {
 	_clients.push_back(client); // Add the client to the list of clients
 	_pollFds.push_back(newFd); // Add the client to the list of pollfds
 
-	
+	client.
 
 }
 
