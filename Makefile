@@ -16,7 +16,7 @@ ifndef STRICT
 	CFLAGS	+=	-pedantic
 endif
 
-ifnef DEBUG
+ifndef DEBUG
 	CFLAGS	+=	-g3
 endif
 
@@ -29,8 +29,8 @@ HEADER	=		./inc
 
 # Files
 SRCS	=	${addprefix ${SRCS_DIR}, main.cpp \
-										Server.cpp \
-										utils.cpp }
+										Client.cpp \
+										Server.cpp }
 
 OBJS	=	${SRCS:.cpp=.o}
 

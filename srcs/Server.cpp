@@ -75,7 +75,7 @@ void	Server::acceptConnection() {
 
 	client.setFd(clientFd);
 	// inet_ntoa() converts the client address to a string.
-	client.setIpAddr(inet_ntoa(cliAddr.sin_addr)); 
+	client.setIpAddr(inet_ntoa(cliAddr.sin_addr));
 	_clients.push_back(client);
 	_pollFds.push_back(newFd);
 
