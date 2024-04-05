@@ -15,11 +15,11 @@ class Client {
 		string	_username;
 		string	_ipAddr;
 
-		Client(Client const &src);
-		Client	&operator=(Client const &rhs);
 	public:
 		Client();
+		Client(Client const &src);
 		Client(int fd, string const &nickname, string const &username);
+		Client	&operator=(Client const &rhs);
 		~Client();
 
 		/* Accessors */
