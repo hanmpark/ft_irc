@@ -72,11 +72,16 @@ void	Server::acceptConnection() {
 	newFd.fd = clientFd;
 	newFd.events = POLLIN; // for reading data
 	newFd.revents = 0;
-	_clients.push_back(client); // Add the client to the list of clients
-	_pollFds.push_back(newFd); // Add the client to the list of pollfds
 
-	client.
+	client.setFd(clientFd);
+	// inet_ntoa() converts the client address to a string.
+	client.setIpAddr(inet_ntoa(cliAddr.sin_addr)); 
+	_clients.push_back(client);
+	_pollFds.push_back(newFd);
 
+	cout << "New connection from: " << client.getIpAddr() << endl;
+
+	return ;
 }
 
 int	Server::runServer()
