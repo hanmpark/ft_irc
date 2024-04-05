@@ -35,7 +35,7 @@ SRCS	=	${addprefix ${SRCS_DIR}, main.cpp \
 OBJS	=	${SRCS:.cpp=.o}
 
 %.o: %.cpp
-	@printf "${PROMPT} ${GREEN}Compiling${RESET} $<"
+	@printf "${PROMPT} ${GREEN}Compiling${RESET} $<\n"
 	@${CC} ${CFLAGS} -I${HEADER} -c $< -o $@
 
 # === Rules === #
@@ -44,7 +44,7 @@ NAME	=	ircserv
 all:		 ${NAME}
 
 ${NAME}:	${OBJS}
-	@printf "${PROMPT} ${GREEN}Linking${RESET} ${NAME}"
+	@printf "${PROMPT} ${GREEN}Linking${RESET} ${NAME}\n"
 	@${CC} ${CFLAGS} ${OBJS} -o ${NAME}
 
 strict:
@@ -54,11 +54,11 @@ debug:
 	@${MAKE} DEBUG=1
 
 clean:
-	@printf "${PROMPT} ${RED}Cleaning${RESET} objects"
+	@printf "${PROMPT} ${RED}Cleaning${RESET} objects\n"
 	@rm -f ${OBJS}
 
 fclean:		clean
-	@printf "${PROMPT} ${RED}Cleaning${RESET} ${NAME}"
+	@printf "${PROMPT} ${RED}Cleaning${RESET} ${NAME}\n"
 	@rm -f ${NAME}
 
 re:			fclean all

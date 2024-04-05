@@ -19,8 +19,8 @@ int	Server::createSocket() {
 	servAddr.sin_addr.s_addr = INADDR_ANY; // Bind to any address
 
 	// Set socket options to reuse the address and port for multiple connections.
-	if (setsockopt(_sockfd, SOL_SOCKET, \
-		SO_REUSEADDR | SO_REUSEPORT, &(int){1}, sizeof(int)) < 0) {
+	int	opt = 1;
+	if (setsockopt(_sockfd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)) < 0) {
 		return 1;
 	}
 
@@ -132,9 +132,9 @@ void	Server::initServer(int port, string const &password) {
 	// need to include signal handler for not leaking fds?
 
 	if (createSocket() == 1)
-		throw CustomError(ERR_SOCK);
+		throw runtime_error(ERR_SOCK);
 	else if (runServer() == 1)
-		throw CustomError(ERR_SERVER);
+		throw runtime_error(ERR_SERVER);
 
 }
 

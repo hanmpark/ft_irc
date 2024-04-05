@@ -2,19 +2,6 @@
 
 #include "IrcIncludes.hpp"
 
-/* Custom exceptions */
-
-class CustomError : public std::exception {
-	private:
-		std::string	_msg;
-	public:
-		CustomError(std::string const &msg) : _msg(msg) {}
-
-		virtual const char *what() const throw() {
-			return _msg.c_str();
-		}
-};
-
 /* Utilities */
 
 template <typename T>
@@ -26,7 +13,7 @@ int myAtoi(const T &str) {
 	iss >> res;
 	iss >> res;
 	if (iss.fail() || iss >> rest) {
-		throw CustomError(ERR_TYPE)
+		throw std::runtime_error(ERR_TYPE);
 	}
 
 	return res;
