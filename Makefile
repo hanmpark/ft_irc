@@ -23,9 +23,9 @@ endif
 # === Sources & Objects === #
 
 # Directories
-SRCS_DIR	=	./srcs
+SRCS_DIR	=	./srcs/
 OBJS_DIR	=	./objs # Add objects to a separate directory?
-HEADER	=		./inc
+HEADER	=		./inc/
 
 # Files
 SRCS	=	${addprefix ${SRCS_DIR}, main.cpp \
