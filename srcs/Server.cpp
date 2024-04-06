@@ -102,7 +102,8 @@ void	Server::receiveData(int clientFd) {
 
 int	Server::runServer()
 {
-	while (1) {
+	// Run the server, must handle signals
+	while (_signalReceived == false) {
 		// Poll for incoming events
 		int ret = poll(&_pollFds[0], _pollFds.size(), -1);
 		if (ret < 0) {
@@ -140,7 +141,7 @@ void	Server::initServer(int port, string const &password) {
 
 }
 
-Server::Server() : _port(0), _sockfd(0), _password("") {
+Server::Server() : _port(0), _sockfd(0), _password(""), _signalReceived(false) {
 
 	return ;
 }
@@ -151,7 +152,8 @@ Server::Server(Server const &src) {
 
 Server::Server(int port, int sockfd, string const &password) : _port(port), \
 																	_sockfd(sockfd), \
-																	_password(password) {
+																	_password(password), \
+																	_signalReceived(false) {
 
 }
 
@@ -165,6 +167,7 @@ Server	&Server::operator=(Server const &rhs) {
 		_sockfd = rhs.getSockfd();
 		_clients = rhs.getClients();
 		_password = rhs.getPassword();
+		_signalReceived = rhs._signalReceived;
 	}
 	return *this;
 }

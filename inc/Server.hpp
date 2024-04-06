@@ -28,6 +28,7 @@ class Server {
 		vector<Client>			_clients; // vector of clients
 		vector<struct pollfd>	_pollFds; // vector of pollfds
 		string					_password;
+		bool					_signalReceived;
 
 		Server(Server const &src);
 		Server	&operator=(Server const &rhs);
