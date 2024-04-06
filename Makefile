@@ -30,7 +30,8 @@ HEADER	=		./inc/
 # Files
 SRCS	=	${addprefix ${SRCS_DIR}, main.cpp \
 										Client.cpp \
-										Server.cpp }
+										Server.cpp \
+										signalHandler.cpp}
 
 OBJS	=	${SRCS:.cpp=.o}
 

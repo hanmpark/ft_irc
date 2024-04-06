@@ -22,6 +22,7 @@
 # include <vector>
 # include <fcntl.h>
 
+/* Namespace */
 using namespace std;
 
 /* Error message */

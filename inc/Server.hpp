@@ -28,7 +28,6 @@ class Server {
 		vector<Client>			_clients; // vector of clients
 		vector<struct pollfd>	_pollFds; // vector of pollfds
 		string					_password;
-		bool					_signalReceived;
 
 		Server(Server const &src);
 		Server	&operator=(Server const &rhs);
@@ -43,6 +42,9 @@ class Server {
 		vector<Client>	getClients() const;
 		string	getPassword() const;
 
+		/* Mutators */
+		void	setSignalVar(bool signalReceived);
+
 		/* Server methods */
 		void	initServer(int port, string const &password);
 		int		createSocket();
@@ -51,10 +53,8 @@ class Server {
 		void	receiveData(int clientFd);
 		void	sendData();
 
-		/* Handle signals */
-		void	signalHandler(int signum);
-
 		void	closeFileDescriptors();
 		void	removeClient(int fd);
 
 };
+
