@@ -26,7 +26,7 @@ using namespace std;
 
 /* Error message */
 # define ERR_ARGS "Usage: ./ircserv <port> <password>"
-# define ERR_TYPE "Error: Type conversion failed"
+# define ERR_CONVERT "Error: Conversion failed"
 # define ERR_PORT "Error: Port number must be between 0 and 65535"
 # define ERR_PASS "Error: Password cannot be empty"
 # define ERR_SOCK "Error: Socket creation failed"

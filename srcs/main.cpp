@@ -13,22 +13,30 @@ int	scanArgs(int argc, char **argv) {
 		return 1;
 	}
 
-	int	port = myAtoi(argv[1]);
-	string	password = argv[2];
+	try {
+		int	port = myAtoi(argv[1]);
+		string	password = argv[2];
 
-	/*
-	reasoning behind the range is that TCP & UDP have port numbers represented
-	by a 16-bit unsigned integer.
-	1. 0-1023 reserved for specific services
-	2. 1024 to 49151 can be registered for specific purposes
-	3. 49152-65535 used by client apps for outgoing conncections.
-	*/
-	if (port < 0 || port > 65535) {
-		cerr << ERR_PORT << endl;
+		/*
+		reasoning behind the range is that TCP & UDP have port numbers represented
+		by a 16-bit unsigned integer.
+		1. 0-1023 reserved for specific services
+		2. 1024 to 49151 can be registered for specific purposes
+		3. 49152-65535 used by client apps for outgoing conncections.
+		*/
+		if (port < 0 || port > 65535) {
+			cerr << ERR_PORT << endl;
+			return 1;
+		}
+		else if (password.empty()) {
+			cerr << ERR_PASS << endl;
+		}
+	} catch (runtime_error &e) {
+		cerr << e.what() << endl;
 		return 1;
-	}
-	else if (password.empty()) {
-		cerr << ERR_PASS << endl;
+	} catch (...) {
+		cerr << ERR_UNKNOWN << endl;
+		return 1;
 	}
 
 	return 0;
@@ -45,11 +53,14 @@ int main(int argc, char **argv) {
 		int	port = myAtoi(argv[1]);
 		string	password = argv[2];
 		server.initServer(port, password);
-
-	} catch(const exception &e) {
+	}
+	catch (runtime_error &e) {
 		cerr << e.what() << endl;
-	} catch (...) {
+		return 1;
+	}
+	catch (...) {
 		cerr << ERR_UNKNOWN << endl;
+		return 1;
 	}
 	
 	return 0;

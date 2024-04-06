@@ -8,6 +8,7 @@ int	Server::createSocket() {
 	// Create a socket
 	_sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (_sockfd < 0) {
+		cout << "At socket creation" << endl;
 		return 1;
 	}
 
@@ -20,7 +21,8 @@ int	Server::createSocket() {
 
 	// Set socket options to reuse the address and port for multiple connections.
 	int	opt = 1;
-	if (setsockopt(_sockfd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)) < 0) {
+	if (setsockopt(_sockfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
+		cout << "At setsockopt" << endl;
 		return 1;
 	}
 

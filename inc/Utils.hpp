@@ -9,11 +9,10 @@ int myAtoi(const T &str) {
 	int		res = 0;
 	char	rest = 0;
 
-	std::istringstream iss(str);
-	iss >> res;
+	istringstream iss(str);
 	iss >> res;
 	if (iss.fail() || iss >> rest) {
-		throw std::runtime_error(ERR_TYPE);
+		throw runtime_error(ERR_CONVERT);
 	}
 
 	return res;
