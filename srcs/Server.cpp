@@ -10,7 +10,7 @@ int	Server::createSocket() {
 	_sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (_sockfd < 0) {
 		cout << "At socket creation" << endl;
-		return 1;
+		return 1; // POURQUOI PAS UTILISER LES THROW CATCH ?
 	}
 
 	// Set the socket options
@@ -91,13 +91,14 @@ void	Server::receiveData(int clientFd) {
 	char	buff[BUFFER_SIZE];
 	bzero(buff, BUFFER_SIZE); // clear the buffer
 
-	ssize_t	bytesReceived = recv(clientFd, buff, BUFFER_SIZE, 0);
-	if (bytesReceived < 0) {
+	ssize_t	bytesReceived = recv(clientFd, buff, BUFFER_SIZE - 1, 0);
+	if (bytesReceived <= 0) {
+		removeClient(clientFd);
+		close(clientFd);
 		return ;
 	}
-
-	cout << "Received data: " << buff << endl;
-
+	cout << "Client <" << clientFd << "> Received data: " << buff << endl;
+	// deal with commands here ?
 	return ;
 }
 
@@ -108,8 +109,7 @@ int	Server::runServer()
 	// Run the server, must handle signals
 	while (g_signalReceived == false) {
 		// Poll for incoming events
-		int ret = poll(&_pollFds[0], _pollFds.size(), -1);
-		if (ret < 0) {
+		if (poll(&_pollFds[0], _pollFds.size(), -1) < 0) {
 			return 1;
 		}
 
@@ -118,8 +118,7 @@ int	Server::runServer()
 			if (_pollFds[i].revents & POLLIN) {
 				if (_pollFds[i].fd == _sockfd) {
 					acceptConnection();
-				}
-				else {
+				} else {
 					receiveData(_pollFds[i].fd);
 				}
 			}
@@ -127,7 +126,7 @@ int	Server::runServer()
 	}
 
 	/* Close the server socket and all client sockets if they are still open */
-	// cleanupFileDescriptors();
+	closeFileDescriptors();
 	return 0;
 }
 
@@ -144,7 +143,34 @@ void	Server::initServer(int port, string const &password) {
 
 }
 
-Server::Server() : _port(0), _sockfd(0), _password("") {
+void Server::closeFileDescriptors() {
+	for (size_t i = 0; i < _clients.size(); i++) {
+		cout << RED << "Client <" << _clients[i].getFd() << "> Disconnected" << RESET << endl;
+		close(_clients[i].getFd());
+	}
+	if (_sockfd != -1) {
+		cout << RED << "Server <" << _sockfd << "> Disconnected" << RESET << endl;
+		close(_sockfd);
+	}
+}
+
+void Server::removeClient(int fd)
+{
+	for (size_t i = 0; i < _pollFds.size(); i++) {
+		if (_pollFds[i].fd == fd) {
+			_pollFds.erase(_pollFds.begin() + i);
+			break;
+		}
+	}
+	for (size_t i = 0; i < _clients.size(); i++) {
+		if (_clients[i].getFd() == fd) {
+			_clients.erase(_clients.begin() + i);
+			break;
+		}
+	}
+}
+
+Server::Server() : _port(0), _sockfd(-1), _password("") {
 
 	return ;
 }
