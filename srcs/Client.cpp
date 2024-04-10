@@ -1,5 +1,18 @@
 #include "Client.hpp"
 
+/* Constructors / Destructors */
+
+Client::Client() : _fd(0) {}
+
+Client::~Client() {}
+
+Client::Client(int fd, string const &nickname, string const &username) :	_fd(fd), \
+																			_nickname(nickname), \
+																			_username(username), \
+																			_ipAddr("") {}
+
+/* Getters */
+
 int	Client::getFd() const {
 	return _fd;
 }
@@ -16,6 +29,8 @@ string	Client::getIpAddr() const {
 	return _ipAddr;
 }
 
+/* Setters */
+
 void	Client::setFd(int fd) {
 	_fd = fd;
 }
@@ -30,36 +45,4 @@ void	Client::setUsername(string const &username) {
 
 void	Client::setIpAddr(string const &ipAddr) {
 	_ipAddr = ipAddr;
-}
-
-Client::Client() : _fd(0), _nickname(""), _username(""), _ipAddr("") {
-
-	return ;
-}
-
-Client::Client(int fd, string const &nickname, string const &username) : _fd(fd), \
-																			_nickname(nickname), \
-																			_username(username), \
-																			_ipAddr("") {
-
-	return ;
-}
-
-Client::~Client() {
-
-	return ;
-}
-
-Client::Client(Client const &src) {
-	*this = src;
-}
-
-Client	&Client::operator=(Client const &rhs) {
-	if (this != &rhs) {
-		_fd = rhs.getFd();
-		_nickname = rhs.getNickname();
-		_username = rhs.getUsername();
-		_ipAddr = rhs.getIpAddr();
-	}
-	return *this;
 }

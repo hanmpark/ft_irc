@@ -12,11 +12,11 @@ PROMPT	=	${GREY}[${BLUE}${NAME}${GREY}]${RESET}:
 CC		=	c++
 CFLAGS	=	-Wall -Wextra -Werror -std=c++98
 
-ifndef STRICT
+ifdef STRICT
 	CFLAGS	+=	-pedantic
 endif
 
-ifndef DEBUG
+ifdef DEBUG
 	CFLAGS	+=	-g3
 endif
 
@@ -25,17 +25,22 @@ endif
 # Directories
 SRCS_DIR	=	./srcs/
 OBJS_DIR	=	./objs # Add objects to a separate directory?
-HEADER	=		./inc/
+HEADER		=	./inc/
+DEPS		=	${addprefix ${HEADER},	Client.hpp \
+										IrcIncludes.hpp \
+										Server.hpp \
+										Utils.hpp}
 
 # Files
-SRCS	=	${addprefix ${SRCS_DIR}, main.cpp \
-										Client.cpp \
-										Server.cpp \
-										signalHandler.cpp}
+SRCS	=	${addprefix ${SRCS_DIR},	main.cpp \
+										Client.cpp} \
+			${addprefix ${SRCS_DIR}server/,	Server.cpp \
+											socket.cpp}
 
 OBJS	=	${SRCS:.cpp=.o}
 
-%.o: %.cpp
+
+${SRCS_DIR}%.o: ${SRCS_DIR}%.cpp ${DEPS}
 	@printf "${PROMPT} ${GREEN}Compiling${RESET} $<\n"
 	@${CC} ${CFLAGS} -I${HEADER} -c $< -o $@
 

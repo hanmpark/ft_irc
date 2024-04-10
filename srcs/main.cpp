@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
 		string	password = argv[2];
 		Server	server(port, password);
 
-		server.initServer(port, password);
+		server.initServer();
 	} catch (runtime_error &e) {
 		cerr << e.what() << endl;
 		return 1;

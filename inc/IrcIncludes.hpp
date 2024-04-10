@@ -21,6 +21,7 @@
 # include <exception>		// exception
 # include <vector>
 # include <fcntl.h>
+# include <signal.h>
 
 /* Namespace */
 using namespace std;
