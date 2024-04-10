@@ -5,47 +5,50 @@
 #include "signalHandler.hpp"
 
 //https://www.geeksforgeeks.org/socket-programming-cc/
-int	Server::createSocket() {
-	int	ret, opt = 1;
+void	Server::createSocket() {
+	try {
+		int					ret, opt = 1;
+		struct sockaddr_in	servAddr;
+		struct pollfd		newFd;
 
-	_sockfd = socket(AF_INET, SOCK_STREAM, 0);
-	if (_sockfd < 0) {
-		throw runtime_error("Error: Failed at socket creation\n");
+		_sockfd = socket(AF_INET, SOCK_STREAM, 0);
+		if (_sockfd < 0) {
+			throw runtime_error("Error: Failed at socket creation\n");
+		}
+
+		ret = setsockopt(_sockfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+		if (ret < 0) {
+			throw runtime_error("Error: Failed at socket options setup\n");
+		}
+
+		ret = fcntl(_sockfd, F_SETFL, O_NONBLOCK);
+		if (ret < 0) {
+			throw runtime_error("Error: Failed at setting non-blocking socket\n");
+		}
+
+		memset(&servAddr, 0, sizeof(servAddr));
+		servAddr.sin_family = AF_INET; // IPv4
+		servAddr.sin_port = htons(_port); // Convert to network byte order
+		servAddr.sin_addr.s_addr = INADDR_ANY; // Bind to any address
+		ret = bind(_sockfd, reinterpret_cast<sockaddr*>(&servAddr), sizeof(servAddr));
+		if (ret < 0) {
+			throw runtime_error("Error: Failed at binding socket to the address\n");
+		}
+
+		ret = listen(_sockfd, SOMAXCONN);
+		if (ret < 0) {
+			throw runtime_error("Error: Failed at listen function\n");
+		}
+		// Add the server socket to the pollfd structure
+		newFd.fd = _sockfd;
+		newFd.events = POLLIN; // know when a client is trying to connect
+		newFd.revents = 0; // no events yet, will be filled by poll later on.
+		this->_pollFds.push_back(newFd);
+	} catch (runtime_error &e) {
+		cout << e.what() << endl;
 	}
 
-	ret = setsockopt(_sockfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
-	if (ret < 0) {
-		throw runtime_error("Error: Failed at socket options setup\n");
-	}
-
-	ret = fcntl(_sockfd, F_SETFL, O_NONBLOCK);
-	if (ret < 0) {
-		throw runtime_error("Error: Failed at setting non-blocking socket\n");
-	}
-
-	struct sockaddr_in	servAddr;
-	memset(&servAddr, 0, sizeof(servAddr));
-	servAddr.sin_family = AF_INET; // IPv4
-	servAddr.sin_port = htons(_port); // Convert to network byte order
-	servAddr.sin_addr.s_addr = INADDR_ANY; // Bind to any address
-	ret = bind(_sockfd, reinterpret_cast<sockaddr*>(&servAddr), sizeof(servAddr));
-	if (ret < 0) {
-		throw runtime_error("Error: Failed at binding socket to the address\n");
-	}
-
-	ret = listen(_sockfd, SOMAXCONN);
-	if (ret < 0) {
-		throw runtime_error("Error: Failed at listen function\n");
-	}
-
-	// Add the server socket to the pollfd structure
-	struct pollfd	newFd;
-	newFd.fd = _sockfd;
-	newFd.events = POLLIN; // know when a client is trying to connect
-	newFd.revents = 0; // no events yet, will be filled by poll later on.
-	_pollFds.push_back(newFd); // adding our server to the private list of pollfds.
-
-	return 0;
+	return ;
 }
 
 void	Server::acceptConnection() {
@@ -127,13 +130,11 @@ int	Server::runServer()
 }
 
 void	Server::initServer(int port, string const &password) {
-	// need to include signal handler for not leaking fds?
 
-	if (createSocket() == 1)
-		throw runtime_error(ERR_SOCK);
-	else if (runServer() == 1)
-		throw runtime_error(ERR_SERVER);
+	this->createSocket();
+	this->runServer();
 
+	return ;
 }
 
 void Server::closeFileDescriptors() {
@@ -187,6 +188,7 @@ Server::Server(int const port, string const &password) {
 
 	this->_port = port;
 	this->_password = password;
+	this->_sockfd = -1;
 
 	return ;
 }

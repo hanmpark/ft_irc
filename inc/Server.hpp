@@ -47,7 +47,7 @@ class Server {
 
 		/* Server methods */
 		void	initServer(int port, string const &password);
-		int		createSocket();
+		void	createSocket();
 		int		runServer();
 		void	acceptConnection();
 		void	receiveData(int clientFd);
