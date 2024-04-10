@@ -6,40 +6,36 @@
 
 //https://www.geeksforgeeks.org/socket-programming-cc/
 int	Server::createSocket() {
-	// Create a socket
+	int	ret, opt = 1;
+
 	_sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (_sockfd < 0) {
-		cout << "At socket creation" << endl;
-		return 1; // POURQUOI PAS UTILISER LES THROW CATCH ?
+		throw runtime_error("Error: Failed at socket creation\n");
 	}
 
-	// Set the socket options
+	ret = setsockopt(_sockfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+	if (ret < 0) {
+		throw runtime_error("Error: Failed at socket options setup\n");
+	}
+
+	ret = fcntl(_sockfd, F_SETFL, O_NONBLOCK);
+	if (ret < 0) {
+		throw runtime_error("Error: Failed at setting non-blocking socket\n");
+	}
+
 	struct sockaddr_in	servAddr;
 	memset(&servAddr, 0, sizeof(servAddr));
 	servAddr.sin_family = AF_INET; // IPv4
 	servAddr.sin_port = htons(_port); // Convert to network byte order
 	servAddr.sin_addr.s_addr = INADDR_ANY; // Bind to any address
-
-	// Set socket options to reuse the address and port for multiple connections.
-	int	opt = 1;
-	if (setsockopt(_sockfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
-		cout << "At setsockopt" << endl;
-		return 1;
+	ret = bind(_sockfd, reinterpret_cast<sockaddr*>(&servAddr), sizeof(servAddr));
+	if (ret < 0) {
+		throw runtime_error("Error: Failed at binding socket to the address\n");
 	}
 
-	// Set the socket to non-blocking
-	if (fcntl(_sockfd, F_SETFL, O_NONBLOCK) < 0) {
-		return 1;
-	}
-
-	// Bind the socket to the address
-	if (bind(_sockfd, reinterpret_cast<sockaddr*>(&servAddr), sizeof(servAddr)) < 0) {
-		return 1;
-	}
-
-	// Listen for incoming connections
-	if (listen(_sockfd, SOMAXCONN) < 0) {
-		return 1;
+	ret = listen(_sockfd, SOMAXCONN);
+	if (ret < 0) {
+		throw runtime_error("Error: Failed at listen function\n");
 	}
 
 	// Add the server socket to the pollfd structure
@@ -131,9 +127,6 @@ int	Server::runServer()
 }
 
 void	Server::initServer(int port, string const &password) {
-	_port = port;
-	_password = password;
-
 	// need to include signal handler for not leaking fds?
 
 	if (createSocket() == 1)
@@ -191,6 +184,11 @@ Server::Server(int const port, string const &password) {
 		throw runtime_error("Error: Invalid port\n");
 	else if (password.empty())
 		throw runtime_error("Error: Password empty\n");
+
+	this->_port = port;
+	this->_password = password;
+
+	return ;
 }
 
 Server::~Server() {
