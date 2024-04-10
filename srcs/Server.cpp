@@ -132,7 +132,10 @@ int	Server::runServer()
 void	Server::initServer(int port, string const &password) {
 
 	this->createSocket();
-	this->runServer();
+	if (this->_sockfd == -1)
+		throw runtime_error("Could not run server\n");
+	else if (this->runServer() == 1)
+		throw runtime_error("Failed trying to run the server\n");
 
 	return ;
 }
