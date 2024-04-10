@@ -32,8 +32,8 @@ class Server {
 		Server(Server const &src);
 		Server	&operator=(Server const &rhs);
 	public:
+		Server(int const port, string const &password);
 		Server();
-		Server(int port, int sockfd, string const &password);
 		~Server();
 
 		/* Accessors */

@@ -179,10 +179,18 @@ Server::Server(Server const &src) {
 	*this = src;
 }
 
-Server::Server(int port, int sockfd, string const &password) : _port(port), \
-																	_sockfd(sockfd), \
-																	_password(password) {
-
+/*
+reasoning behind the port range is that TCP & UDP have port numbers represented
+by a 16-bit unsigned integer.
+1. 0-1023 reserved for specific services
+2. 1024 to 49151 can be registered for specific purposes
+3. 49152-65535 used by client apps for outgoing conncections.
+*/
+Server::Server(int const port, string const &password) {
+	if (port < 0 || port > 65535)
+		throw runtime_error("Error: Invalid port\n");
+	else if (password.empty())
+		throw runtime_error("Error: Password empty\n");
 }
 
 Server::~Server() {
