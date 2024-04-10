@@ -27,7 +27,17 @@ private:
 	string					_password;
 	static bool				_signalReceived;
 
-	static void	signalHandler(int signum);
+	static void		signalHandler(int signum);
+
+	struct pollfd	createSocket(int fd) const;
+	void			initServerSocket();
+	int				runServer();
+	void			acceptNewClient();
+	void			receiveData(int clientFd);
+	void			sendData();
+
+	void			closeFileDescriptors();
+	void			removeClient(int fd);
 
 public:
 	Server(int const port, string const &password);
@@ -41,16 +51,8 @@ public:
 	vector<Client>	getClients() const;
 	string	getPassword() const;
 
-	/* Server methods */
+	/* Server method */
 
 	void	initServer();
-	void	createSocket();
-	int		runServer();
-	void	acceptConnection();
-	void	receiveData(int clientFd);
-	void	sendData();
-
-	void	closeFileDescriptors();
-	void	removeClient(int fd);
 };
 

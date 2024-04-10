@@ -13,36 +13,20 @@ Client::Client(int fd, string const &nickname, string const &username) :	_fd(fd)
 
 /* Getters */
 
-int	Client::getFd() const {
-	return _fd;
-}
+int	Client::getFd() const { return _fd; }
 
-string	Client::getNickname() const {
-	return _nickname;
-}
+string	Client::getNickname() const { return _nickname; }
 
-string	Client::getUsername() const {
-	return _username;
-}
+string	Client::getUsername() const { return _username; }
 
-string	Client::getIpAddr() const {
-	return _ipAddr;
-}
+string	Client::getIpAddr() const { return _ipAddr; }
 
 /* Setters */
 
-void	Client::setFd(int fd) {
-	_fd = fd;
-}
+void	Client::setFd(int fd) { _fd = fd; }
 
-void	Client::setNickname(string const &nickname) {
-	_nickname = nickname;
-}
+void	Client::setNickname(string const &nickname) { _nickname = nickname; }
 
-void	Client::setUsername(string const &username) {
-	_username = username;
-}
+void	Client::setUsername(string const &username) { _username = username; }
 
-void	Client::setIpAddr(string const &ipAddr) {
-	_ipAddr = ipAddr;
-}
+void	Client::setIpAddr(string const &ipAddr) { _ipAddr = ipAddr; }
