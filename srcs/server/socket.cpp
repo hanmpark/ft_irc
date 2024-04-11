@@ -58,7 +58,7 @@ struct pollfd	Server::createSocket(int fd) const {
 	struct pollfd	newSocket;
 
 	newSocket.fd = fd;
-	newSocket.events = POLLIN;
+	newSocket.events = POLLIN; // POLLOUT ?
 	newSocket.revents = 0;
 
 	return newSocket;

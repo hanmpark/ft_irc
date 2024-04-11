@@ -13,7 +13,9 @@ private:
 	int		_fd;
 	string	_nickname;
 	string	_username;
+	string	_hostname;
 	string	_ipAddr;
+	bool	_registered;
 
 public:
 	Client();
@@ -27,6 +29,7 @@ public:
 	string	getNickname() const;
 	string	getUsername() const;
 	string	getIpAddr() const;
+	bool	getRegistered() const;
 
 	/* Mutators */
 
@@ -34,4 +37,5 @@ public:
 	void	setNickname(string const &nickname);
 	void	setUsername(string const &username);
 	void	setIpAddr(string const &ipAddr);
+	void	setRegistered(bool registered);
 };

@@ -36,7 +36,10 @@ SRCS	=	${addprefix ${SRCS_DIR},	main.cpp \
 										Client.cpp} \
 			${addprefix ${SRCS_DIR}server/,	Server.cpp \
 											socket.cpp \
-											runner.cpp}
+											runner.cpp} \
+			${addprefix ${SRCS_DIR}commands/,	PASS.cpp \
+												NICK.cpp \
+												USER.cpp}
 
 OBJS	=	${SRCS:.cpp=.o}
 

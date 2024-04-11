@@ -1,6 +1,7 @@
 # pragma once
 
 # include "IrcIncludes.hpp"
+# include "Command.hpp"
 # include "Client.hpp"
 
 class Client;
@@ -19,12 +20,16 @@ class Client;
  * Which prevents the block events.
  */
 class Server {
+protected:
+	vector<Client>	_clients;	// vector of clients
+	string			_password;
+
+	typedef vector<Client>::iterator	clientIt;
+
 private:
 	int						_port;
 	int						_sockfd;
-	vector<Client>			_clients;	// vector of clients
 	vector<struct pollfd>	_pollFds;	// vector of pollfds
-	string					_password;
 	static bool				_signalReceived;
 
 	static void		signalHandler(int signum);
@@ -34,15 +39,16 @@ private:
 	int				runServer();
 	void			acceptNewClient();
 	void			receiveData(int clientFd);
-	void			sendData();
 
 	void			closeFileDescriptors();
 	void			removeClient(int fd);
 
+	void			initFtSelect();
+
 public:
 	Server(string const &portString, string const &password);
 	Server();
-	~Server();
+	virtual ~Server();
 
 	/* Accessors */
 
@@ -55,4 +61,3 @@ public:
 
 	void	initServer();
 };
-

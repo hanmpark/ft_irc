@@ -39,8 +39,16 @@ void	Server::receiveData(int clientFd) {
 		close(clientFd);
 		return ;
 	}
-	cout << "Client:" << clientFd << " Received data: " << buff << endl;
-	// deal with commands here ?
+
+	cout << "Client:" << clientFd << " Received data: " << buff;
+
+	clientIt	client = find(_clients.begin(), _clients.end(), clientFd);
+	if (client == _clients.end()) {
+		throw runtime_error("Client not found\n");
+	}
+	// Find and exceute the command MAYBE IN ANOTHER FUNCTION ?
+	Command	cmd;
+	cmd.selectCommand(*client, static_cast<string>(buff));
 }
 
 void	Server::signalHandler(int signum) {

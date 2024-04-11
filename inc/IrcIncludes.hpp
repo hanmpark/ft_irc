@@ -23,7 +23,9 @@
 # include <fcntl.h>
 # include <signal.h>
 # include <cstdlib>
-# include <cctype>
+# include <algorithm>
+# include <map>
+# include <deque>
 
 /* Namespace */
 using namespace std;
