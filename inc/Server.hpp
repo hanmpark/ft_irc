@@ -40,7 +40,7 @@ private:
 	void			removeClient(int fd);
 
 public:
-	Server(int const port, string const &password);
+	Server(string const &portString, string const &password);
 	Server();
 	~Server();
 

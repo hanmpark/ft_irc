@@ -23,6 +23,7 @@
 # include <fcntl.h>
 # include <signal.h>
 # include <cstdlib>
+# include <cctype>
 
 /* Namespace */
 using namespace std;

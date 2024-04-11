@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
 	}
 
 	try {
-		Server	server(atoi(argv[1]), argv[2]);
+		Server	server(static_cast<string>(argv[1]), static_cast<string>(argv[2]));
 
 		server.initServer();
 	} catch (runtime_error &e) {
