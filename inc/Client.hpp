@@ -13,6 +13,8 @@ private:
 	int		_fd;
 	string	_nickname;
 	string	_username;
+	string	_hostname;
+	string	_realname;
 	string	_ipAddr;
 
 public:
@@ -27,8 +29,6 @@ public:
 	string	getNickname() const;
 	string	getUsername() const;
 	string	getIpAddr() const;
-
-	/* Mutators */
 
 	void	setFd(int fd);
 	void	setNickname(string const &nickname);
