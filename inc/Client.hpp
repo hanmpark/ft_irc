@@ -31,8 +31,6 @@ public:
 	string	getIpAddr() const;
 	bool	getRegistered() const;
 
-	/* Mutators */
-
 	void	setFd(int fd);
 	void	setNickname(string const &nickname);
 	void	setUsername(string const &username);

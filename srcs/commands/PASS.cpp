@@ -2,7 +2,7 @@
 
 void	Command::PASS(Client &client) {
 	if (client.getRegistered() == true) {
-		send(client.getFd(), KIAN, sizeof(KIAN), 0); // ERR_ALREADYREGISTRED
+		send(client.getFd(), KIAN, sizeof(KIAN), 0); // ERR_UNKNOWNCOMMAND
 	} else if (_arguments.empty()) {
 		send(client.getFd(), KIAN, sizeof(KIAN), 0); // ERR_NEEDMOREPARAMS
 	} else if (_arguments.front() != _password) {

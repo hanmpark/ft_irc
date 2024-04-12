@@ -40,7 +40,7 @@ void	Server::receiveData(int clientFd) {
 		return ;
 	}
 
-	cout << "Client:" << clientFd << " Received data: " << buff;
+	cout << "Client " << clientFd << ": " << buff;
 
 	clientIt	client = find(_clients.begin(), _clients.end(), clientFd);
 	if (client == _clients.end()) {
@@ -48,6 +48,11 @@ void	Server::receiveData(int clientFd) {
 	}
 	// Find and exceute the command MAYBE IN ANOTHER FUNCTION ?
 	Command	cmd;
+	if (client->getRegistered() == false) {
+		cmd.selectCommand(*client, static_cast<string>(buff));
+	} else {
+		// Handle the command
+	}
 	cmd.selectCommand(*client, static_cast<string>(buff));
 }
 

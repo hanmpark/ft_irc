@@ -3,6 +3,8 @@
 # include "IrcIncludes.hpp"
 # include "Server.hpp"
 
+# define SPECIAL_CHARACTERS "[]\\`_^{|}"
+
 class Command : public Server {
 private:
 	typedef void	(Command::*ft)(Client &client);
@@ -15,6 +17,8 @@ private:
 	void	parseArguments(string buff);
 
 	void	PASS(Client &client);
+	bool	isValidNickname(string &nickname) const;
+	bool	isNicknameInUse(string const &nickname) const;
 	void	NICK(Client &client);
 	void	USER(Client &client);
 

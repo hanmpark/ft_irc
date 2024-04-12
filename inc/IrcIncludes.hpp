@@ -24,6 +24,7 @@
 # include <signal.h>
 # include <cstdlib>
 # include <algorithm>
+# include <cctype>
 # include <map>
 # include <deque>
 
