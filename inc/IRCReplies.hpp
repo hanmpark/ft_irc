@@ -7,7 +7,9 @@ struct IRCReplies {
 		return ": 001 " + nick + " :Welcome to the Internet Relay Network " + user + "@" + host + "\r\n";
 	}
 
-	
+	static string const RPL_YOUREOPER() {
+		return ": 381 :You are now an IRC operator";
+	}
 
 };
 
@@ -42,6 +44,26 @@ struct IRCErrors {
 
 	static string const ERR_RESTRICTED() {
 		return ": 484 :Your connection is restricted!";
+	}
+
+	static string const ERR_NOOPERHOST() {
+		return ": 491 :No O-lines for your host";
+	}
+
+	static string const ERR_PASSWDMISMATCH() {
+		return ": 464 :Password incorrect";
+	}
+
+	static string const ERR_UMODEUNKNOWNFLAG() {
+		return ": 501 :Unknown MODE flag";
+	}
+
+	static string const ERR_USERSDONTMATCH() {
+		return ": 502 :Cannot change mode for other users";
+	}
+
+	static string const RPL_UMODEIS(string const &userModeString) {
+		return ": 221 :" + userModeString;
 	}
 
 	
