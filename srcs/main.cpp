@@ -35,7 +35,8 @@
 		* -> A normal user uses the OPER command to obtain operator privileges. Both parameters are required.
 		* Upon success, the user receives a RPL_YOUREOPER message.
 		* -> Numeric Replies: ERR_NEEDMOREPARAMS, ERR_PASSWDMISMATCH, ERR_NOOPERHOST, RPL_YOUREOPER
-		
+ * Channel operations:
+ TODO-	Join message
 
  */
 int main(int argc, char **argv) {
