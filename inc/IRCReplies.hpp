@@ -11,6 +11,9 @@ struct IRCReplies {
 		return ": 381 :You are now an IRC operator";
 	}
 
+	static string const RPL_TOPIC(string const &channel, string const &topic) {
+		return ": 332 " + channel + " :" + topic;
+	}
 };
 
 struct IRCErrors {

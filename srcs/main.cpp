@@ -36,7 +36,11 @@
 		* Upon success, the user receives a RPL_YOUREOPER message.
 		* -> Numeric Replies: ERR_NEEDMOREPARAMS, ERR_PASSWDMISMATCH, ERR_NOOPERHOST, RPL_YOUREOPER
  * Channel operations:
- TODO-	Join message
+ TODO-	Join message:
+		* -> Command: JOIN
+		* -> Parameters: <channel>{,<channel>} [<key>{,<key>}]
+		* -> used by a user to request to start listening to the specific channel.
+		* -> if the JOIN is successful, the user will receive a JOIN message.
 
  */
 int main(int argc, char **argv) {
