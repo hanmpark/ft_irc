@@ -7,5 +7,4 @@ void	Command::USER(Client &client) {
 	}
 	client.setUsername(_arguments.front());
 	_arguments.pop_front();
-	send(client.getFd(), KIAN, sizeof(KIAN), 0); // RPL_WELCOME
 }

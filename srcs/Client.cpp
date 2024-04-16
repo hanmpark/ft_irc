@@ -19,7 +19,11 @@ string	Client::getNickname() const { return _nickname; }
 
 string	Client::getUsername() const { return _username; }
 
+string 	Client::getHostname() const { return _hostname; }
+
 string	Client::getIpAddr() const { return _ipAddr; }
+
+string	Client::getCommand() const { return _command; }
 
 bool	Client::getRegistered() const { return _registered; }
 
@@ -31,6 +35,10 @@ void	Client::setNickname(string const &nickname) { _nickname = nickname; }
 
 void	Client::setUsername(string const &username) { _username = username; }
 
+void	Client::setHostname(string const &hostname) { _hostname = hostname; }
+
 void	Client::setIpAddr(string const &ipAddr) { _ipAddr = ipAddr; }
 
-void 	Client::setRegistered(bool registered) { _registered = registered; }
+void	Client::setRegistered(bool registered) { _registered = registered; }
+
+void	Client::setCommand(string const &command) { _command = command; }

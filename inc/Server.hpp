@@ -34,11 +34,12 @@ private:
 
 	static void		signalHandler(int signum);
 
-	struct pollfd	createSocket(int fd) const;
+	struct pollfd	createSocket(int fd, bool isClient) const;
 	void			initServerSocket();
 	int				runServer();
 	void			acceptNewClient();
 	void			receiveData(int clientFd);
+	void			handleCommand(Client &client);
 
 	void			closeFileDescriptors();
 	void			removeClient(int fd);

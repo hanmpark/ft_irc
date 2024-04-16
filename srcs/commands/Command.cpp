@@ -22,8 +22,9 @@ void	Command::parseArguments(string buff) {
 }
 
 void	Command::selectCommand(Client &client, string buff) {
-	buff.erase(buff.find_last_not_of("\n") + 1);
+	buff.erase(buff.find_last_not_of("\n") + 1); // NOT SURE
 
+	parseArguments(buff);
 	for (commandIt it = _commandList.begin(); it != _commandList.end(); it++) {
 		if (_arguments.front() == it->first) {
 			_arguments.pop_front();
