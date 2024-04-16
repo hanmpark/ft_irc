@@ -30,15 +30,20 @@ void Server::removeClient(int fd)
 }
 
 void	Server::handleCommand(Client &client) {
-	Command	cmd;
+	Command	command;
+	string	buffer = client.getCommand();
+	size_t	pos;
 
-	if (client.getRegistered() == false) {
-		if (!client.getNickname().empty() || !client.getUsername().empty() || !client.getHostname().empty()) {
-			client.setRegistered(true);
-			// send RPL_WELCOME
+	while ((pos = buffer.find("\r\n")) != string::npos) {
+		if (client.getRegistered() == false) {
+			if (!client.getNickname().empty() || !client.getUsername().empty() || !client.getHostname().empty()) {
+				client.setRegistered(true);
+				// send RPL_WELCOME
+			}
+		} else {
+			command.selectCommand(client, client.getCommand());
 		}
 	}
-	cmd.selectCommand(client, client.getCommand());
 }
 
 void	Server::receiveData(int clientFd) {
@@ -52,7 +57,7 @@ void	Server::receiveData(int clientFd) {
 		return ;
 	}
 	cout << "Client " << clientFd << ": " << buff;
-	client.setCommand(static_cast<string>(buff));
+	client.addToCommand(static_cast<string>(buff));
 	if (client.getCommand().find("\r\n") != string::npos) {
 		handleCommand(client);
 	}
@@ -72,7 +77,7 @@ int	Server::runServer()
 	while (_signalReceived == false) {
 		// Poll for incoming events
 		if (poll(&_pollFds[0], _pollFds.size(), -1) < 0) {
-			return 1;
+			return -1;
 		}
 		// Check if the server socket has an event
 		for (size_t i = 0; i < _pollFds.size(); i++) {
@@ -82,8 +87,6 @@ int	Server::runServer()
 				} else {
 					receiveData(_pollFds[i].fd);
 				}
-			} else if (_pollFds[i].revents & POLLOUT) {
-				// treat the POLLOUT event
 			}
 		}
 	}
@@ -97,6 +100,6 @@ void	Server::initServer() {
 	initServerSocket();
 	if (_sockfd == -1)
 		throw runtime_error("Could not run server\n");
-	else if (runServer() == 1)
+	else if (runServer() == -1)
 		throw runtime_error("Failed trying to run the server\n");
 }

@@ -15,6 +15,7 @@ private:
 	typedef vector<string>::iterator	argumentsIt;
 
 	void	parseArguments(string buff);
+	char	to_upper(unsigned char c);
 
 	void	PASS(Client &client);
 	bool	isValidNickname(string &nickname) const;

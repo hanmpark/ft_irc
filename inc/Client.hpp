@@ -44,4 +44,6 @@ public:
 	void	setIpAddr(string const &ipAddr);
 	void	setCommand(string const &command);
 	void	setRegistered(bool registered);
+
+	void	addToCommand(string const &buffer);
 };

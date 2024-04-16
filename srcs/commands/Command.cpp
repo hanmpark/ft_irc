@@ -12,12 +12,19 @@ Command::~Command() {
 	_clients.clear();
 }
 
+char	Command::to_upper(unsigned char c) {
+	return static_cast<char>(toupper(c));
+}
+
 void	Command::parseArguments(string buff) {
 	stringstream	ss(buff);
-	string		tmp;
+	string			tmp;
 
 	while (getline(ss, tmp, ' ')) {
 		cerr << "tmp: " << tmp << endl; // checking
+		if (_arguments.empty()) {
+			transform(tmp.begin(), tmp.end(), tmp.begin(), to_upper); // putting the first argument in uppercase to match with _commandList's commands
+		}
 		_arguments.push_back(tmp);
 	}
 }

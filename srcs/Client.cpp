@@ -21,7 +21,7 @@ string	Client::getUsername() const { return _username; }
 
 string 	Client::getHostname() const { return _hostname; }
 
-string Client::getRealname() const { return string(); }
+string	Client::getRealname() const { return _realname; }
 
 string	Client::getIpAddr() const { return _ipAddr; }
 
@@ -46,3 +46,5 @@ void	Client::setIpAddr(string const &ipAddr) { _ipAddr = ipAddr; }
 void	Client::setRegistered(bool registered) { _registered = registered; }
 
 void	Client::setCommand(string const &command) { _command = command; }
+
+void	Client::addToCommand(string const &buffer) { _command += buffer; }

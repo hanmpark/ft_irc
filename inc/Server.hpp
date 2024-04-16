@@ -34,7 +34,7 @@ private:
 
 	static void		signalHandler(int signum);
 
-	struct pollfd	createSocket(int fd, bool isClient) const;
+	struct pollfd	createSocket(int fd) const;
 	void			initServerSocket();
 	int				runServer();
 	void			acceptNewClient();
