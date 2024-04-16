@@ -1,10 +1,10 @@
 #include "Command.hpp"
 
 void	Command::PASS(Client &client) {
-	if (client.getRegistered() == true) {
-		send(client.getFd(), KIAN, sizeof(KIAN), 0); // ERR_UNKNOWNCOMMAND
-	} else if (_arguments.empty()) {
+	if (_arguments.empty()) {
 		send(client.getFd(), KIAN, sizeof(KIAN), 0); // ERR_NEEDMOREPARAMS
+	} else if (client.getRegistered() == true) {
+		send(client.getFd(), KIAN, sizeof(KIAN), 0); // ERR_ALREADYREGISTERED
 	} else if (_arguments[0] != _password) {
 		send(client.getFd(), KIAN, sizeof(KIAN), 0); // ERR_PASSWDMISMATCH
 	} else {

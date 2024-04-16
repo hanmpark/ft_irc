@@ -7,4 +7,5 @@ void	Command::USER(Client &client) {
 	}
 	client.setUsername(_arguments[0]);
 	client.setRealname(_arguments[3]);
+	_arguments.clear();
 }
