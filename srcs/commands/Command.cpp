@@ -17,6 +17,7 @@ void	Command::parseArguments(string buff) {
 	string		tmp;
 
 	while (getline(ss, tmp, ' ')) {
+		cerr << "tmp: " << tmp << endl; // checking
 		_arguments.push_back(tmp);
 	}
 }
@@ -27,10 +28,11 @@ void	Command::selectCommand(Client &client, string buff) {
 	parseArguments(buff);
 	for (commandIt it = _commandList.begin(); it != _commandList.end(); it++) {
 		if (_arguments.front() == it->first) {
-			_arguments.pop_front();
+			_arguments.erase(_arguments.begin());
 			(this->*(it->second))(client);
 			return;
 		}
 	}
+	_arguments.clear();
 	throw runtime_error("Command not found");
 }

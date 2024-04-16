@@ -9,10 +9,10 @@ class Command : public Server {
 private:
 	typedef void	(Command::*ft)(Client &client);
 	map<string, ft>	_commandList;
-	deque<string>	_arguments;
+	vector<string>	_arguments;
 
 	typedef map<string, ft>::iterator	commandIt;
-	typedef deque<string>::iterator		argumentsIt;
+	typedef vector<string>::iterator	argumentsIt;
 
 	void	parseArguments(string buff);
 

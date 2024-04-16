@@ -31,6 +31,7 @@ public:
 	string	getNickname() const;
 	string	getUsername() const;
 	string	getHostname() const;
+	string	getRealname() const;
 	string	getIpAddr() const;
 	string	getCommand() const;
 	bool	getRegistered() const;
@@ -39,6 +40,7 @@ public:
 	void	setNickname(string const &nickname);
 	void	setUsername(string const &username);
 	void	setHostname(string const &hostname);
+	void	setRealname(string const &realname);
 	void	setIpAddr(string const &ipAddr);
 	void	setCommand(string const &command);
 	void	setRegistered(bool registered);

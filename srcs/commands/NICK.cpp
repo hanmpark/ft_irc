@@ -36,17 +36,17 @@ void	Command::NICK(Client &client) {
 		send(client.getFd(), KIAN, sizeof(KIAN), 0); // ERR_NONICKNAMEGIVEN
 	} else if (!client.getNickname().empty() && _arguments.empty()) {
 		send(client.getFd(), KIAN, sizeof(KIAN), 0); // send nickname
-	} else if (!isValidNickname(_arguments.front())) {
+	} else if (!isValidNickname(_arguments[0])) {
 		send(client.getFd(), KIAN, sizeof(KIAN), 0); // ERR_ERRONEUSNICKNAME
-	} else if (isNicknameInUse(_arguments.front())) {
+	} else if (isNicknameInUse(_arguments[0])) {
 		send(client.getFd(), KIAN, sizeof(KIAN), 0); // ERR_NICKNAMEINUSE
 	} else {
 		if (client.getNickname().empty()) {
 			send(client.getFd(), KIAN, sizeof(KIAN), 0); // setting nickname
-		} else if (client.getNickname() != _arguments.front()) {
+		} else if (client.getNickname() != _arguments[0]) {
 			send(client.getFd(), KIAN, sizeof(KIAN), 0); // changing nickname
 		}
-		client.setNickname(_arguments.front());
+		client.setNickname(_arguments[0]);
 		_arguments.clear();
 	}
 }

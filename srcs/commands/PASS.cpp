@@ -5,10 +5,10 @@ void	Command::PASS(Client &client) {
 		send(client.getFd(), KIAN, sizeof(KIAN), 0); // ERR_UNKNOWNCOMMAND
 	} else if (_arguments.empty()) {
 		send(client.getFd(), KIAN, sizeof(KIAN), 0); // ERR_NEEDMOREPARAMS
-	} else if (_arguments.front() != _password) {
+	} else if (_arguments[0] != _password) {
 		send(client.getFd(), KIAN, sizeof(KIAN), 0); // ERR_PASSWDMISMATCH
 	} else {
 		client.setRegistered(true);
-		_arguments.pop_front();
+		_arguments.clear();
 	}
 }

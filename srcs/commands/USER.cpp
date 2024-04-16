@@ -5,6 +5,6 @@ void	Command::USER(Client &client) {
 		send(client.getFd(), KIAN, sizeof(KIAN), 0); // ERR_NEEDMOREPARAMS
 		return;
 	}
-	client.setUsername(_arguments.front());
-	_arguments.pop_front();
+	client.setUsername(_arguments[0]);
+	client.setRealname(_arguments[3]);
 }
