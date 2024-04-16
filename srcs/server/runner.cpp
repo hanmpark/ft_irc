@@ -29,6 +29,10 @@ void Server::removeClient(int fd)
 	}
 }
 
+/*
+ TODO:
+ -	Have to check the order of how I treat the registration part...
+ */
 void	Server::handleCommand(Client &client) {
 	Command	command;
 	string	buffer = client.getCommand();
@@ -38,12 +42,16 @@ void	Server::handleCommand(Client &client) {
 		if (client.getRegistered() == false) {
 			if (!client.getNickname().empty() || !client.getUsername().empty() || !client.getHostname().empty()) {
 				client.setRegistered(true);
-				// send RPL_WELCOME
+				string	welcome = IRCReplies::RPL_WELCOME(client.getNickname(), client.getUsername(), client.getHostname());
+				send(client.getFd(), welcome.c_str(), sizeof(welcome), 0);
+				cout << "user: " << client.getUsername() << " nick: " << client.getNickname() << " real: " << client.getRealname() << endl;
 			}
 		} else {
 			command.selectCommand(client, client.getCommand());
 		}
+		buffer.erase(0, pos + 2);
 	}
+	client.clearCommand();
 }
 
 void	Server::receiveData(int clientFd) {
@@ -59,7 +67,12 @@ void	Server::receiveData(int clientFd) {
 	cout << "Client " << clientFd << ": " << buff;
 	client.addToCommand(static_cast<string>(buff));
 	if (client.getCommand().find("\r\n") != string::npos) {
-		handleCommand(client);
+		try {
+			handleCommand(client);
+		} catch (exception &e) { // This is when the client's password mismatches
+			removeClient(clientFd);
+			close(clientFd);
+		}
 	}
 }
 

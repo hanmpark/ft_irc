@@ -7,6 +7,7 @@ void	Command::PASS(Client &client) {
 		send(client.getFd(), KIAN, sizeof(KIAN), 0); // ERR_ALREADYREGISTERED
 	} else if (_arguments[0] != _password) {
 		send(client.getFd(), KIAN, sizeof(KIAN), 0); // ERR_PASSWDMISMATCH
+		throw exception();
 	} else {
 		client.setRegistered(true);
 		_arguments.clear();

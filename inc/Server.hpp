@@ -1,6 +1,7 @@
 # pragma once
 
 # include "IrcIncludes.hpp"
+# include "IRCReplies.hpp"
 # include "Command.hpp"
 # include "Client.hpp"
 

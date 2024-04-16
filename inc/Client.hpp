@@ -1,6 +1,7 @@
 #pragma once
 
 # include "IrcIncludes.hpp"
+# include "IRCReplies.hpp"
 
 /* Client class:
  * - Client class is responsible for keeping track of all the
@@ -46,4 +47,5 @@ public:
 	void	setRegistered(bool registered);
 
 	void	addToCommand(string const &buffer);
+	void	clearCommand();
 };

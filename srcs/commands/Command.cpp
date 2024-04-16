@@ -16,6 +16,10 @@ char	Command::to_upper(unsigned char c) {
 	return static_cast<char>(toupper(c));
 }
 
+/*
+ TODO:
+ -	Have to complete this part
+*/
 void	Command::parseArguments(string buff) {
 	stringstream	ss(buff);
 	string			tmp;
@@ -30,16 +34,15 @@ void	Command::parseArguments(string buff) {
 }
 
 void	Command::selectCommand(Client &client, string buff) {
-	buff.erase(buff.find_last_not_of("\n") + 1); // NOT SURE
-
 	parseArguments(buff);
-	for (commandIt it = _commandList.begin(); it != _commandList.end(); it++) {
-		if (_arguments.front() == it->first) {
-			_arguments.erase(_arguments.begin());
-			(this->*(it->second))(client);
-			return;
-		}
+	commandIt	launch = _commandList.find(_arguments[0]);
+	if (launch != _commandList.end()) {
+		cout << "Command: " << _arguments[0] << endl;
+		_arguments.erase(_arguments.begin());
+		(this->*(launch->second))(client);
+	} else {
+		string	unknownCmd = IRCErrors::ERR_UNKNOWNCOMMAND(_arguments[0]);
+		send(client.getFd(), unknownCmd.c_str(), sizeof(unknownCmd), 0);
 	}
 	_arguments.clear();
-	throw runtime_error("Command not found");
 }

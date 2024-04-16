@@ -48,3 +48,5 @@ void	Client::setRegistered(bool registered) { _registered = registered; }
 void	Client::setCommand(string const &command) { _command = command; }
 
 void	Client::addToCommand(string const &buffer) { _command += buffer; }
+
+void	Client::clearCommand() { _command.clear(); }

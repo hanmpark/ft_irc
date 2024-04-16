@@ -1,6 +1,7 @@
 #pragma once
 
 # include "IrcIncludes.hpp"
+# include "IRCReplies.hpp"
 # include "Server.hpp"
 
 # define SPECIAL_CHARACTERS "[]\\`_^{|}"
