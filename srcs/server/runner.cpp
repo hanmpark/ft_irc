@@ -29,24 +29,38 @@ void Server::removeClient(int fd)
 	}
 }
 
-void	Server::receiveData(int clientFd) {
-	char	buff[BUFFER_SIZE];
+void	Server::handleCommand(Client &client) {
+	Command	cmd;
 
-	bzero(buff, BUFFER_SIZE); // clear the buffer
+	if (client.getRegistered() == false) {
+		if (!client.getNickname().empty() || !client.getUsername().empty() || !client.getHostname().empty()) {
+			client.setRegistered(true);
+			// send RPL_WELCOME
+		}
+	}
+	cmd.selectCommand(client, client.getCommand());
+}
+
+void	Server::receiveData(int clientFd) {
+	char		buff[BUFFER_SIZE]; bzero(buff, BUFFER_SIZE);
+	Client		&client = *find(_clients.begin(), _clients.end(), clientFd);
+
 	ssize_t	bytesReceived = recv(clientFd, buff, BUFFER_SIZE - 1, 0);
 	if (bytesReceived <= 0) {
 		removeClient(clientFd);
 		close(clientFd);
 		return ;
 	}
-	cout << "Client:" << clientFd << " Received data: " << buff << endl;
-	// deal with commands here ?
+	cout << "Client " << clientFd << ": " << buff;
+	client.setCommand(static_cast<string>(buff));
+	if (client.getCommand().find("\r\n") != string::npos) {
+		handleCommand(client);
+	}
 }
 
 void	Server::signalHandler(int signum) {
-	if (signum == SIGINT || signum == SIGQUIT) {
-		_signalReceived = true;
-	}
+	(void)signum;
+	_signalReceived = true;
 }
 
 int	Server::runServer()
@@ -68,6 +82,8 @@ int	Server::runServer()
 				} else {
 					receiveData(_pollFds[i].fd);
 				}
+			} else if (_pollFds[i].revents & POLLOUT) {
+				// treat the POLLOUT event
 			}
 		}
 	}

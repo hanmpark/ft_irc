@@ -16,6 +16,8 @@ private:
 	string	_hostname;
 	string	_realname;
 	string	_ipAddr;
+	string	_command;
+	bool	_registered;
 
 public:
 	Client();
@@ -28,10 +30,16 @@ public:
 	int		getFd() const;
 	string	getNickname() const;
 	string	getUsername() const;
+	string	getHostname() const;
 	string	getIpAddr() const;
+	string	getCommand() const;
+	bool	getRegistered() const;
 
 	void	setFd(int fd);
 	void	setNickname(string const &nickname);
 	void	setUsername(string const &username);
+	void	setHostname(string const &hostname);
 	void	setIpAddr(string const &ipAddr);
+	void	setCommand(string const &command);
+	void	setRegistered(bool registered);
 };

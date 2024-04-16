@@ -28,7 +28,7 @@ void	Server::initServerSocket() {
 	if (listen(_sockfd, SOMAXCONN) < 0) {
 		throw runtime_error("Failed at listen function\n");
 	}
-	_pollFds.push_back(createSocket(_sockfd));
+	_pollFds.push_back(createSocket(_sockfd, false));
 }
 
 void	Server::acceptNewClient() {
@@ -49,16 +49,20 @@ void	Server::acceptNewClient() {
 	client.setFd(clientFd);
 	client.setIpAddr(inet_ntoa(cliAddr.sin_addr)); // inet_ntoa() converts the client address to a string.
 	_clients.push_back(client);
-	_pollFds.push_back(createSocket(clientFd));
+	_pollFds.push_back(createSocket(clientFd, true));
 
 	cout << GREEN "New connection from: " << client.getIpAddr() << RESET << endl;
 }
 
-struct pollfd	Server::createSocket(int fd) const {
+struct pollfd	Server::createSocket(int fd, bool isClient) const {
 	struct pollfd	newSocket;
 
 	newSocket.fd = fd;
-	newSocket.events = POLLIN;
+	if (isClient) {
+		newSocket.events = POLLIN | POLLOUT;
+	} else {
+		newSocket.events = POLLIN;
+	}
 	newSocket.revents = 0;
 
 	return newSocket;
