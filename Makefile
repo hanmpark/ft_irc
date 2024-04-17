@@ -27,16 +27,20 @@ endif
 SRCS_DIR	:=	./srcs/
 OBJS_DIR	:=	./objs/ # Add objects to a separate directory?
 HEADER		:=	./inc/
-DEPS		:=	${addprefix ${HEADER},	Client.hpp \
-										IrcIncludes.hpp \
-										Server.hpp}
+DEPS		:=	${addprefix ${HEADER},	IrcIncludes.hpp \
+										Client.hpp \
+										Server.hpp \
+										IRCReplies.hpp \
+										Command.hpp}
 
 # Files
 SRCS	=	${addprefix ${SRCS_DIR},	main.cpp \
 										Client.cpp} \
 			${addprefix ${SRCS_DIR}server/,	Server.cpp \
 											socket.cpp \
-											runner.cpp} \
+											runner.cpp \
+											message.cpp \
+											handleClient.cpp} \
 			${addprefix ${SRCS_DIR}commands/,	PASS.cpp \
 												NICK.cpp \
 												USER.cpp}

@@ -72,4 +72,8 @@ struct IRCErrors {
 	static string const ERR_UNKNOWNCOMMAND(string const &command) {
 		return ": 421 " + command + " :Unknown command\r\n";
 	}
+
+	static string const ERR_NOTREGISTERED() {
+		return ": 451 :You have not registered\r\n";
+	}
 };

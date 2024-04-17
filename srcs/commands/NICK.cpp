@@ -33,18 +33,16 @@ bool	Command::isNicknameInUse(string const &nickname) const {
 
 void	Command::NICK(Client &client) {
 	if (client.getNickname().empty() && _arguments.empty()) {
-		send(client.getFd(), KIAN, sizeof(KIAN), 0); // ERR_NONICKNAMEGIVEN
-	} else if (!client.getNickname().empty() && _arguments.empty()) {
-		send(client.getFd(), KIAN, sizeof(KIAN), 0); // send nickname
+		sendMessage(client.getFd(), IRCErrors::ERR_NONICKNAMEGIVEN());
 	} else if (!isValidNickname(_arguments[0])) {
-		send(client.getFd(), KIAN, sizeof(KIAN), 0); // ERR_ERRONEUSNICKNAME
+		sendMessage(client.getFd(), IRCErrors::ERR_ERRONEUSNICKNAME(_arguments[0]));
 	} else if (isNicknameInUse(_arguments[0])) {
-		send(client.getFd(), KIAN, sizeof(KIAN), 0); // ERR_NICKNAMEINUSE
+		sendMessage(client.getFd(), IRCErrors::ERR_NICKNAMEINUSE(_arguments[0]));
 	} else {
 		if (client.getNickname().empty()) {
-			send(client.getFd(), KIAN, sizeof(KIAN), 0); // setting nickname
+			cout << "INFO: Client " << client.getFd() << ": set nickname to " << _arguments[0] << endl; // setting nickname
 		} else if (client.getNickname() != _arguments[0]) {
-			send(client.getFd(), KIAN, sizeof(KIAN), 0); // changing nickname
+			cout << "INFO: Client " << client.getFd() << ": changed nickname to " << _arguments[0] << endl; // changing nickname
 		}
 		client.setNickname(_arguments[0]);
 		_arguments.clear();

@@ -2,10 +2,7 @@
 
 # include "IrcIncludes.hpp"
 # include "IRCReplies.hpp"
-# include "Command.hpp"
 # include "Client.hpp"
-
-class Client;
 
 # define BUFFER_SIZE 1024
 
@@ -27,6 +24,8 @@ protected:
 
 	typedef vector<Client>::iterator	clientIt;
 
+	void	sendMessage(int fd, string const &message) const;
+
 private:
 	int						_port;
 	int						_sockfd;
@@ -40,12 +39,11 @@ private:
 	int				runServer();
 	void			acceptNewClient();
 	void			receiveData(int clientFd);
+	Client			&getClientByFd(int fd);
 	void			handleCommand(Client &client);
 
 	void			closeFileDescriptors();
 	void			removeClient(int fd);
-
-	void			initFtSelect();
 
 public:
 	Server(string const &portString, string const &password);

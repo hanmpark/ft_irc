@@ -2,11 +2,11 @@
 
 void	Command::PASS(Client &client) {
 	if (_arguments.empty()) {
-		send(client.getFd(), KIAN, sizeof(KIAN), 0); // ERR_NEEDMOREPARAMS
+		sendMessage(client.getFd(), IRCErrors::ERR_NEEDMOREPARAMS("PASS"));
 	} else if (client.getRegistered() == true) {
-		send(client.getFd(), KIAN, sizeof(KIAN), 0); // ERR_ALREADYREGISTERED
+		sendMessage(client.getFd(), IRCErrors::ERR_ALREADYREGISTRED());
 	} else if (_arguments[0] != _password) {
-		send(client.getFd(), KIAN, sizeof(KIAN), 0); // ERR_PASSWDMISMATCH
+		sendMessage(client.getFd(), IRCErrors::ERR_PASSWDMISMATCH());
 		throw exception();
 	} else {
 		client.setRegistered(true);

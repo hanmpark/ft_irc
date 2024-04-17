@@ -17,7 +17,7 @@ private:
 	string	_hostname;
 	string	_realname;
 	string	_ipAddr;
-	string	_command;
+	string	_buffer;
 	bool	_registered;
 
 public:
@@ -34,7 +34,7 @@ public:
 	string	getHostname() const;
 	string	getRealname() const;
 	string	getIpAddr() const;
-	string	getCommand() const;
+	string	getBuffer() const;
 	bool	getRegistered() const;
 
 	void	setFd(int fd);
@@ -43,9 +43,9 @@ public:
 	void	setHostname(string const &hostname);
 	void	setRealname(string const &realname);
 	void	setIpAddr(string const &ipAddr);
-	void	setCommand(string const &command);
+	void	setBuffer(string const &command);
 	void	setRegistered(bool registered);
 
-	void	addToCommand(string const &buffer);
+	void	addToBuffer(string const &buffer);
 	void	clearCommand();
 };

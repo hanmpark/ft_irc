@@ -1,6 +1,6 @@
 #include "Server.hpp"
 
-Server::Server() : _port(0), _sockfd(-1), _password("") {}
+Server::Server() : _port(0), _sockfd(-1) {}
 
 /*
  * reasoning behind the port range is that TCP & UDP have port numbers represented
@@ -10,7 +10,7 @@ Server::Server() : _port(0), _sockfd(-1), _password("") {}
  * 3. 49152-65535 used by client apps for outgoing conncections.
  */
 Server::Server(string const &portString, string const &password) : _sockfd(-1) {
-	if (portString.find_last_not_of("0123456789") == string::npos || atoi(portString.c_str()) < 0 || atoi(portString.c_str()) > 65535) { // Check Range
+	if (portString.find_last_not_of("0123456789") != string::npos || atoi(portString.c_str()) < 0 || atoi(portString.c_str()) > 65535) { // Check Range
 		throw runtime_error("Invalid port\n");
 	}
 	if (password.empty())

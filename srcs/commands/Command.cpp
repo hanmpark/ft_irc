@@ -1,14 +1,14 @@
 #include "Command.hpp"
 
 Command::Command() {
-	_commandList["CAP"] = NULL;
-	_commandList["PASS"] = &PASS;
-	_commandList["NICK"] = &NICK;
-	_commandList["USER"] = &USER;
+	_commandsList["CAP"] = NULL;
+	_commandsList["PASS"] = &PASS;
+	_commandsList["NICK"] = &NICK;
+	_commandsList["USER"] = &USER;
 }
 
 Command::~Command() {
-	_commandList.clear();
+	_commandsList.clear();
 	_clients.clear();
 }
 
@@ -17,32 +17,38 @@ char	Command::to_upper(unsigned char c) {
 }
 
 /*
- TODO:
- -	Have to complete this part
+ ! This function is not completed yet
 */
-void	Command::parseArguments(string buff) {
+void	Command::parseArguments(string const &buff) {
 	stringstream	ss(buff);
 	string			tmp;
 
+	cout << endl << "DEBUG:" << endl;
 	while (getline(ss, tmp, ' ')) {
 		cerr << "tmp: " << tmp << endl; // checking
 		if (_arguments.empty()) {
-			transform(tmp.begin(), tmp.end(), tmp.begin(), to_upper); // putting the first argument in uppercase to match with _commandList's commands
+			transform(tmp.begin(), tmp.end(), tmp.begin(), to_upper); // putting the first argument in uppercase to match with _commandsList's commands
 		}
 		_arguments.push_back(tmp);
 	}
 }
 
-void	Command::selectCommand(Client &client, string buff) {
+void	Command::selectCommand(Client &client, string const &buff) {
 	parseArguments(buff);
-	commandIt	launch = _commandList.find(_arguments[0]);
-	if (launch != _commandList.end()) {
-		cout << "Command: " << _arguments[0] << endl;
+	commandIt	launch = _commandsList.find(_arguments[0]);
+	cout << "INFO: Command " << _arguments[0] << endl;
+	if (launch != _commandsList.end() && client.getRegistered()) {
 		_arguments.erase(_arguments.begin());
 		(this->*(launch->second))(client);
+	} else if (launch != _commandsList.end() && !client.getRegistered()) {
+		if (_arguments[0] != "PASS" && _arguments[0] != "NICK" && _arguments[0] != "USER") {
+			sendMessage(client.getFd(), IRCErrors::ERR_NOTREGISTERED());
+		} else {
+			_arguments.erase(_arguments.begin());
+			(this->*(launch->second))(client);
+		}
 	} else {
-		string	unknownCmd = IRCErrors::ERR_UNKNOWNCOMMAND(_arguments[0]);
-		send(client.getFd(), unknownCmd.c_str(), sizeof(unknownCmd), 0);
+		sendMessage(client.getFd(), IRCErrors::ERR_UNKNOWNCOMMAND(_arguments[0]));
 	}
 	_arguments.clear();
 }

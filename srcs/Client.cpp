@@ -13,7 +13,7 @@ Client::Client(int fd, string const &nickname, string const &username) :	_fd(fd)
 
 /* Getters */
 
-int	Client::getFd() const { return _fd; }
+int		Client::getFd() const { return _fd; }
 
 string	Client::getNickname() const { return _nickname; }
 
@@ -25,7 +25,7 @@ string	Client::getRealname() const { return _realname; }
 
 string	Client::getIpAddr() const { return _ipAddr; }
 
-string	Client::getCommand() const { return _command; }
+string	Client::getBuffer() const { return _buffer; }
 
 bool	Client::getRegistered() const { return _registered; }
 
@@ -45,8 +45,8 @@ void	Client::setIpAddr(string const &ipAddr) { _ipAddr = ipAddr; }
 
 void	Client::setRegistered(bool registered) { _registered = registered; }
 
-void	Client::setCommand(string const &command) { _command = command; }
+void	Client::setBuffer(string const &command) { _buffer = command; }
 
-void	Client::addToCommand(string const &buffer) { _command += buffer; }
+void	Client::addToBuffer(string const &buffer) { _buffer += buffer; }
 
-void	Client::clearCommand() { _command.clear(); }
+void	Client::clearCommand() { _buffer.clear(); }
