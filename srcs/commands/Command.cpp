@@ -2,9 +2,9 @@
 
 Command::Command() {
 	_commandsList["CAP"] = NULL;
-	_commandsList["PASS"] = &PASS;
-	_commandsList["NICK"] = &NICK;
-	_commandsList["USER"] = &USER;
+	_commandsList["PASS"] = &Command::PASS;
+	_commandsList["NICK"] = &Command::NICK;
+	_commandsList["USER"] = &Command::USER;
 }
 
 Command::~Command() {
@@ -12,7 +12,7 @@ Command::~Command() {
 	_clients.clear();
 }
 
-char	Command::to_upper(unsigned char c) {
+char	to_upper(unsigned char c) {
 	return static_cast<char>(toupper(c));
 }
 

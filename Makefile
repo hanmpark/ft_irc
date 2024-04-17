@@ -41,7 +41,8 @@ SRCS	=	${addprefix ${SRCS_DIR},	main.cpp \
 											runner.cpp \
 											message.cpp \
 											handleClient.cpp} \
-			${addprefix ${SRCS_DIR}commands/,	PASS.cpp \
+			${addprefix ${SRCS_DIR}commands/,	Command.cpp \
+												PASS.cpp \
 												NICK.cpp \
 												USER.cpp}
 
