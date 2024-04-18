@@ -4,7 +4,7 @@ Command::Command(Server &parent) {
 	_clients = parent.getClients();
 	_password = parent.getPassword();
 
-	_commandsList["CAP"] = NULL;
+	_commandsList["CAP"] = &Command::CAP;
 	_commandsList["PASS"] = &Command::PASS;
 	_commandsList["NICK"] = &Command::NICK;
 	_commandsList["USER"] = &Command::USER;

@@ -21,6 +21,7 @@ private:
 	void	PASS(Client &client);
 	bool	isValidNickname(string &nickname) const;
 	bool	isNicknameInUse(string const &nickname) const;
+	void	CAP(Client &client);
 	void	NICK(Client &client);
 	void	USER(Client &client);
 

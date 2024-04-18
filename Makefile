@@ -42,6 +42,7 @@ SRCS	=	${addprefix ${SRCS_DIR},	main.cpp \
 											message.cpp \
 											handleClient.cpp} \
 			${addprefix ${SRCS_DIR}commands/,	Command.cpp \
+												CAP.cpp \
 												PASS.cpp \
 												NICK.cpp \
 												USER.cpp}

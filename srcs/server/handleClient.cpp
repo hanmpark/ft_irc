@@ -11,8 +11,9 @@ void	Server::handleCommand(Client &client) {
 		if (client.getRegistered() == false) {
 			if (client.getPassword() && !client.getNickname().empty() && !client.getUsername().empty()) {
 				client.setRegistered(true);
-				cout << "INFO: Client " << client.getFd() << ": is registered" << endl;
-				sendMessage(client.getFd(), IRCReplies::RPL_WELCOME(client.getNickname(), client.getUsername(), client.getRealname()));
+				cout << GREEN "INFO: Client " << client.getFd() << ": is registered" RESET << endl;
+				cout << RED << IRCReplies::RPL_WELCOME(client.getNickname(), client.getUsername()) << RESET << endl;
+				sendMessage(client.getFd(), IRCReplies::RPL_WELCOME(client.getNickname(), client.getUsername()));
 			}
 		}
 		buffer.erase(0, pos + 2);

@@ -3,8 +3,8 @@
 # include "IrcIncludes.hpp"
 
 struct IRCReplies {
-	static string const RPL_WELCOME(string const &nick, string const &user, string const &host) {
-		return ": 001 * :Welcome to the Internet Relay Network, " + nick + " " + user + "@" + host + "\r\n";
+	static string const RPL_WELCOME(string const &nick, string const &user) {
+		return ": 001 " + nick + " :Welcome to the Internet Relay Network " + user + "\r\n";
 	}
 
 	static string const RPL_YOUREOPER() {

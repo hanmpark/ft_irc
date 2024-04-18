@@ -45,6 +45,7 @@ void	Command::NICK(Client &client) {
 			cout << "INFO: Client " << client.getFd() << ": changed nickname to " << _arguments[0] << endl; // changing nickname
 		}
 		client.setNickname(_arguments[0]);
+		sendMessage(client.getFd(), ": NICK " + client.getNickname() + "\r\n");
 		_arguments.clear();
 	}
 }
