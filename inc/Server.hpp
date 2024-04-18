@@ -52,10 +52,10 @@ public:
 
 	/* Accessors */
 
-	int	getPort() const;
-	int	getSockfd() const;
-	vector<Client>	getClients() const;
-	string	getPassword() const;
+	int				getPort() const;
+	int				getSockfd() const;
+	vector<Client>	&getClients();
+	string			&getPassword();
 
 	/* Server method */
 

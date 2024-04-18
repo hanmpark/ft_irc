@@ -1,6 +1,9 @@
 #include "Command.hpp"
 
-Command::Command() {
+Command::Command(Server &parent) {
+	_clients = parent.getClients();
+	_password = parent.getPassword();
+
 	_commandsList["CAP"] = NULL;
 	_commandsList["PASS"] = &Command::PASS;
 	_commandsList["NICK"] = &Command::NICK;
@@ -31,6 +34,7 @@ void	Command::parseArguments(string const &buff) {
 		}
 		_arguments.push_back(tmp);
 	}
+	cout << endl;
 }
 
 void	Command::selectCommand(Client &client, string const &buff) {
@@ -41,11 +45,13 @@ void	Command::selectCommand(Client &client, string const &buff) {
 		_arguments.erase(_arguments.begin());
 		(this->*(launch->second))(client);
 	} else if (launch != _commandsList.end() && !client.getRegistered()) {
-		if (_arguments[0] != "PASS" && _arguments[0] != "NICK" && _arguments[0] != "USER") {
+		if (_arguments[0] != "CAP" && _arguments[0] != "PASS" && _arguments[0] != "NICK" && _arguments[0] != "USER") {
 			sendMessage(client.getFd(), IRCErrors::ERR_NOTREGISTERED());
 		} else {
 			_arguments.erase(_arguments.begin());
-			(this->*(launch->second))(client);
+			if (launch->second != NULL) {
+				(this->*(launch->second))(client);
+			}
 		}
 	} else {
 		sendMessage(client.getFd(), IRCErrors::ERR_UNKNOWNCOMMAND(_arguments[0]));

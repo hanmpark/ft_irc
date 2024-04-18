@@ -2,18 +2,19 @@
 #include "Command.hpp"
 
 void	Server::handleCommand(Client &client) {
-	Command	cmd;
+	Command	cmd(*this);
 	string	buffer = client.getBuffer();
 	size_t	pos;
 
 	while ((pos = buffer.find("\r\n")) != string::npos) {
+		cmd.selectCommand(client, buffer.substr(0, pos));
 		if (client.getRegistered() == false) {
-			if (!client.getNickname().empty() || !client.getUsername().empty() || !client.getHostname().empty()) {
+			if (client.getPassword() && !client.getNickname().empty() && !client.getUsername().empty()) {
 				client.setRegistered(true);
-				sendMessage(client.getFd(), IRCReplies::RPL_WELCOME(client.getNickname(), client.getUsername(), client.getHostname()));
+				cout << "INFO: Client " << client.getFd() << ": is registered" << endl;
+				sendMessage(client.getFd(), IRCReplies::RPL_WELCOME(client.getNickname(), client.getUsername(), client.getRealname()));
 			}
 		}
-		cmd.selectCommand(client, buffer.substr(0, pos));
 		buffer.erase(0, pos + 2);
 	}
 	client.clearCommand();

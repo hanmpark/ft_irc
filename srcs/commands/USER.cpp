@@ -6,5 +6,7 @@ void	Command::USER(Client &client) {
 		return;
 	}
 	client.setUsername(_arguments[0]);
+	cout << "INFO: Client " << client.getFd() << ": set username to " << _arguments[0] << endl;
 	client.setRealname(_arguments[3]);
+	cout << "INFO: Client " << client.getFd() << ": set realname to " << _arguments[3] << endl;
 }

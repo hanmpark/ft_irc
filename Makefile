@@ -18,7 +18,7 @@ ifdef STRICT
 endif
 
 ifdef DEBUG
-	CFLAGS	+=	-g3
+	CFLAGS	+=	-fsanitize=address -g3
 endif
 
 # === Sources & Objects === #

@@ -2,7 +2,7 @@
 
 /* Constructors / Destructors */
 
-Client::Client() : _fd(0), _registered(false) {}
+Client::Client() : _fd(0), _password(false), _registered(false) {}
 
 Client::~Client() {}
 
@@ -27,6 +27,8 @@ string	Client::getIpAddr() const { return _ipAddr; }
 
 string	Client::getBuffer() const { return _buffer; }
 
+bool	Client::getPassword() const { return _password; }
+
 bool	Client::getRegistered() const { return _registered; }
 
 /* Setters */
@@ -43,9 +45,11 @@ void	Client::setRealname(string const &realname) { _realname = realname; }
 
 void	Client::setIpAddr(string const &ipAddr) { _ipAddr = ipAddr; }
 
-void	Client::setRegistered(bool registered) { _registered = registered; }
-
 void	Client::setBuffer(string const &command) { _buffer = command; }
+
+void	Client::setPassword(bool password) { _password = password; }
+
+void	Client::setRegistered(bool registered) { _registered = registered; }
 
 void	Client::addToBuffer(string const &buffer) { _buffer += buffer; }
 

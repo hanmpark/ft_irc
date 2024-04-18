@@ -26,6 +26,6 @@ int	Server::getPort() const { return _port; }
 
 int	Server::getSockfd() const { return _sockfd; }
 
-vector<Client>	Server::getClients() const { return _clients; }
+vector<Client>	&Server::getClients() { return _clients; }
 
-string	Server::getPassword() const { return _password; }
+string	&Server::getPassword() { return _password; }

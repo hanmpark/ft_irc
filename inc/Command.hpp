@@ -24,8 +24,10 @@ private:
 	void	NICK(Client &client);
 	void	USER(Client &client);
 
-public:
 	Command();
+
+public:
+	Command(Server &parent);
 	~Command();
 
 	void	selectCommand(Client &client, string const &buff);
