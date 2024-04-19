@@ -76,4 +76,8 @@ struct IRCErrors {
 	static string const ERR_NOTREGISTERED() {
 		return ": 451 :You have not registered\r\n";
 	}
+
+	static string const ERR_NOSUCHCHANNEL(string const &channel) {
+		return ": 403 " + channel + " :No such channel\r\n";
+	}
 };

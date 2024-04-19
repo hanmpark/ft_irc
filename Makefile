@@ -31,7 +31,8 @@ DEPS		:=	${addprefix ${HEADER},	IrcIncludes.hpp \
 										Client.hpp \
 										Server.hpp \
 										IRCReplies.hpp \
-										Command.hpp}
+										Command.hpp \
+										Channel.hpp}
 
 # Files
 SRCS	=	${addprefix ${SRCS_DIR},	main.cpp \
@@ -45,7 +46,9 @@ SRCS	=	${addprefix ${SRCS_DIR},	main.cpp \
 												CAP.cpp \
 												PASS.cpp \
 												NICK.cpp \
-												USER.cpp}
+												USER.cpp \
+												JOIN.cpp} \
+			${addprefix ${SRCS_DIR}channel/, Channel.cpp}
 
 OBJS	=	${SRCS:.cpp=.o}
 

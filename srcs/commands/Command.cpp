@@ -8,6 +8,7 @@ Command::Command(Server &parent) {
 	_commandsList["PASS"] = &Command::PASS;
 	_commandsList["NICK"] = &Command::NICK;
 	_commandsList["USER"] = &Command::USER;
+	_commandsList["JOIN"] = &Command::JOIN;
 }
 
 Command::~Command() {
@@ -37,24 +38,36 @@ void	Command::parseArguments(string const &buff) {
 	cout << endl;
 }
 
-void	Command::selectCommand(Client &client, string const &buff) {
+void	Command::selectCommand(Client *client, string const &buff) {
 	parseArguments(buff);
+	// print after pareArguments, the arguments
+	for (size_t i = 0; i < _arguments.size(); i++) {
+		cout << BLUE "ARGUMENTS[" << i << "]: " << _arguments[i] << RESET << endl;
+	}
 	commandIt	launch = _commandsList.find(_arguments[0]);
 	cout << "INFO: Command " << _arguments[0] << endl;
-	if (launch != _commandsList.end() && client.getRegistered()) {
+	if (launch != _commandsList.end() && client->getRegistered()) {
+		cout << RED "1: LAUNCHING COMMAND: " << _arguments[0] << RESET << endl;
 		_arguments.erase(_arguments.begin());
 		(this->*(launch->second))(client);
-	} else if (launch != _commandsList.end() && !client.getRegistered()) {
+	} else if (launch != _commandsList.end() && !client->getRegistered()) {
 		if (_arguments[0] != "CAP" && _arguments[0] != "PASS" && _arguments[0] != "NICK" && _arguments[0] != "USER") {
-			sendMessage(client.getFd(), IRCErrors::ERR_NOTREGISTERED());
+			sendMessage(client->getFd(), IRCErrors::ERR_NOTREGISTERED());
 		} else {
 			_arguments.erase(_arguments.begin());
 			if (launch->second != NULL) {
 				(this->*(launch->second))(client);
 			}
 		}
+	} else if (launch != _commandsList.end()) {
+		cout << RED "3: LAUNCHING COMMAND: " << _arguments[0] << RESET << endl;
+		_arguments.erase(_arguments.begin());
+		if (launch->second != NULL) {
+			(this->*(launch->second))(client);
+		}
 	} else {
-		sendMessage(client.getFd(), IRCErrors::ERR_UNKNOWNCOMMAND(_arguments[0]));
+		cout << "FUCK" << endl;
+		sendMessage(client->getFd(), IRCErrors::ERR_UNKNOWNCOMMAND(_arguments[0]));
 	}
 	_arguments.clear();
 }
