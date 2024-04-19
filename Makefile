@@ -31,8 +31,14 @@ DEPS		:=	${addprefix ${HEADER},	IrcIncludes.hpp \
 										Client.hpp \
 										Server.hpp \
 										IRCReplies.hpp \
-										Command.hpp \
-										Channel.hpp}
+										Channel.hpp} \
+				${addprefix ${HEADER}commands/,	ACommand.hpp \
+												CAP.hpp \
+												PASS.hpp \
+												NICK.hpp \
+												USER.hpp \
+												JOIN.hpp \
+												PING.hpp}
 
 # Files
 SRCS	=	${addprefix ${SRCS_DIR},	main.cpp \
@@ -42,12 +48,12 @@ SRCS	=	${addprefix ${SRCS_DIR},	main.cpp \
 											runner.cpp \
 											message.cpp \
 											handleClient.cpp} \
-			${addprefix ${SRCS_DIR}commands/,	Command.cpp \
-												CAP.cpp \
+			${addprefix ${SRCS_DIR}commands/,	CAP.cpp \
 												PASS.cpp \
 												NICK.cpp \
 												USER.cpp \
-												JOIN.cpp} \
+												JOIN.cpp \
+												PING.cpp} \
 			${addprefix ${SRCS_DIR}channel/, Channel.cpp}
 
 OBJS	=	${SRCS:.cpp=.o}

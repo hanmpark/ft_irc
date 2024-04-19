@@ -44,14 +44,14 @@ void	Server::acceptNewClient() {
 		return ;
 	}
 
-	Client	client; // Create a new instance of the client
+	Client	*client = new Client(); // Create a new instance of the client
 
-	client.setFd(clientFd);
-	client.setIpAddr(inet_ntoa(cliAddr.sin_addr)); // inet_ntoa() converts the client address to a string.
-	_clients.push_back(&client);
+	client->setFd(clientFd);
+	client->setIpAddr(inet_ntoa(cliAddr.sin_addr)); // inet_ntoa() converts the client address to a string.
+	_clients.push_back(client);
 	_pollFds.push_back(createSocket(clientFd));
 
-	cout << GREEN "New connection from: " << client.getIpAddr() << RESET << endl;
+	cout << GREEN "New connection from: " << client->getIpAddr() << RESET << endl;
 }
 
 struct pollfd	Server::createSocket(int fd) const {

@@ -1,12 +1,17 @@
-#include "Command.hpp"
+#include "commands/USER.hpp"
 
-void	Command::USER(Client *client) {
-	if (_arguments.size() < 4) {
-		sendMessage(client->getFd(), IRCErrors::ERR_NEEDMOREPARAMS("USER"));
+USER::USER() : ACommand() {}
+
+USER::~USER() {}
+
+void	USER::execute(Server &server, Client *client, vector<string> &args) const {
+	static_cast<void>(server);
+	if (args.size() < 4) {
+		Server::sendMessage(client->getFd(), IRCErrors::ERR_NEEDMOREPARAMS("USER"));
 		return;
 	}
-	client->setUsername(_arguments[0]);
-	cout << "INFO: Client " << client->getFd() << ": set username to " << _arguments[0] << endl;
-	client->setRealname(_arguments[3]);
-	cout << "INFO: Client " << client->getFd() << ": set realname to " << _arguments[3] << endl;
+	client->setUsername(args[0]);
+	cout << "INFO: Client " << client->getFd() << ": set username to " << args[0] << endl;
+	client->setRealname(args[3]);
+	cout << "INFO: Client " << client->getFd() << ": set realname to " << args[3] << endl;
 }

@@ -80,4 +80,8 @@ struct IRCErrors {
 	static string const ERR_NOSUCHCHANNEL(string const &channel) {
 		return ": 403 " + channel + " :No such channel\r\n";
 	}
+
+	static string const ERR_BADCHANMASK() {
+		return ": 476 : Bad Channel Mask\r\n";
+	}
 };

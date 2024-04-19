@@ -1,20 +1,23 @@
-#include "Command.hpp"
+#include "commands/NICK.hpp"
 
-// ERR_ERRONEUSNICKNAME
-bool	Command::isValidNickname(string &nickname) const {
-	if (nickname.empty()) {
+NICK::NICK() : ACommand() {}
+
+NICK::~NICK() {}
+
+bool	NICK::_isValidNickname(string &nick) const {
+	if (nick.empty()) {
 		return false;
 	}
-	size_t	len = nickname.length();
+	size_t	len = nick.length();
 	if (len > 9) {
 		len = 9;
 	}
-	nickname = nickname.substr(0, len);
-	if (isdigit(nickname[0]) || nickname[0] == '-' || (!isalpha(nickname[0]) && !strchr(SPECIAL_CHARACTERS, nickname[0]))) {
+	nick = nick.substr(0, len);
+	if (isdigit(nick[0]) || nick[0] == '-' || (!isalpha(nick[0]) && !strchr(SPECIAL_CHARACTERS, nick[0]))) {
 		return false;
 	}
 	for (size_t i = 1; i < len; i++) {
-		if (!isalnum(nickname[i]) && !strchr(SPECIAL_CHARACTERS, nickname[i]) && nickname[i] != '-') {
+		if (!isalnum(nick[i]) && !strchr(SPECIAL_CHARACTERS, nick[i]) && nick[i] != '-') {
 			return false;
 		}
 	}
@@ -22,30 +25,29 @@ bool	Command::isValidNickname(string &nickname) const {
 }
 
 // ERR_NICKNAMEINUSE
-bool	Command::isNicknameInUse(string const &nickname) const {
-	for (size_t i = 0; i < _clients.size(); i++) {
-		if (_clients[i]->getNickname() == nickname) {
+bool	NICK::_isNicknameInUse(vector<Client*> const &clients, string const &nickname) const {
+	for (size_t i = 0; i < clients.size(); i++) {
+		if (clients[i]->getNickname() == nickname) {
 			return true;
 		}
 	}
 	return false;
 }
 
-void	Command::NICK(Client *client) {
-	if (client->getNickname().empty() && _arguments.empty()) {
-		sendMessage(client->getFd(), IRCErrors::ERR_NONICKNAMEGIVEN());
-	} else if (!isValidNickname(_arguments[0])) {
-		sendMessage(client->getFd(), IRCErrors::ERR_ERRONEUSNICKNAME(_arguments[0]));
-	} else if (isNicknameInUse(_arguments[0])) {
-		sendMessage(client->getFd(), IRCErrors::ERR_NICKNAMEINUSE(_arguments[0]));
+void	NICK::execute(Server &server, Client *client, vector<string> &args) const {
+	if (client->getNickname().empty() && args.empty()) {
+		Server::sendMessage(client->getFd(), IRCErrors::ERR_NONICKNAMEGIVEN());
+	} else if (!_isValidNickname(args[0])) {
+		Server::sendMessage(client->getFd(), IRCErrors::ERR_ERRONEUSNICKNAME(args[0]));
+	} else if (_isNicknameInUse(server.getClients(), args[0])) {
+		Server::sendMessage(client->getFd(), IRCErrors::ERR_NICKNAMEINUSE(args[0]));
 	} else {
 		if (client->getNickname().empty()) {
-			cout << "INFO: Client " << client->getFd() << ": set nickname to " << _arguments[0] << endl; // setting nickname
-		} else if (client->getNickname() != _arguments[0]) {
-			cout << "INFO: Client " << client->getFd() << ": changed nickname to " << _arguments[0] << endl; // changing nickname
+			cout << "INFO: Client " << client->getFd() << ": set nickname to " << args[0] << endl; // setting nickname
+		} else if (client->getNickname() != args[0]) {
+			cout << "INFO: Client " << client->getFd() << ": changed nickname to " << args[0] << endl; // changing nickname
 		}
-		client->setNickname(_arguments[0]);
-		sendMessage(client->getFd(), ": NICK " + client->getNickname() + "\r\n");
-		_arguments.clear();
+		client->setNickname(args[0]);
+		Server::sendMessage(client->getFd(), ": NICK " + client->getNickname() + "\r\n");
 	}
 }

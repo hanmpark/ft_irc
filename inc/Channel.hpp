@@ -5,11 +5,11 @@
 
 class Channel {
 private:
-	string			_name;
-	string			_topic;
-	string			_key;
-	string			_creator;
-	vector<Client>	_clients;
+	string						_name;
+	string						_topic;
+	string						_key;
+	string						_creator;
+	vector<Client*>				_clients;
 
 public:
 	Channel();

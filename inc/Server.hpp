@@ -2,10 +2,13 @@
 
 # include "IrcIncludes.hpp"
 # include "IRCReplies.hpp"
+# include "commands/ACommand.hpp"
 # include "Client.hpp"
 # include "Channel.hpp"
 
 # define BUFFER_SIZE 1024
+
+class ACommand;
 
 /*
  * Server class:
@@ -19,47 +22,53 @@
  * Which prevents the block events.
  */
 class Server {
-protected:
-	vector<Client*>	_clients;	// vector of clients
-	vector<string>	_channels;	// vector of channels
-	string			_password;
-
-	typedef vector<Client>::iterator	clientIt;
-
-	void	sendMessage(int fd, string const &message) const;
-
 private:
-	int						_port;
-	int						_sockfd;
+	map<string, ACommand*>	_commands;	// map of commands
+	vector<Client*>			_clients;	// vector of clients
+	map<string, Channel*>	_channels;	// map of channels
+	string					_password;
+	string					_name;
+	int						_port, _sockfd;
 	vector<struct pollfd>	_pollFds;	// vector of pollfds
 	static bool				_signalReceived;
 
+	typedef vector<Client*>::iterator			clientIt;
+	typedef map<string, ACommand*>::iterator	commandIt;
+	typedef map<string, Channel*>::iterator		channelIt;
+
 	static void		signalHandler(int signum);
 
-	struct pollfd	createSocket(int fd) const;
 	void			initServerSocket();
+	struct pollfd	createSocket(int fd) const;
 	int				runServer();
 	void			acceptNewClient();
 	void			receiveData(int clientFd);
 	Client			*getClientByFd(int fd);
-	void			handleCommand(Client *client);
+
+	void			handleClient(Client *client);
+	vector<string>	splitCommand(string const &buffer) const;
+	void			selectCommand(Client *client, string const &buffer);
 
 	void			closeFileDescriptors();
 	void			removeClient(int fd);
 
+	Server();
+
 public:
 	Server(string const &portString, string const &password);
-	Server();
-	virtual ~Server();
+	~Server();
+
+	static void		sendMessage(int fd, string const &message);
 
 	/* Accessors */
 
 	int				getPort() const;
 	int				getSockfd() const;
+	string const 	&getName() const;
 	vector<Client*>	&getClients();
 	string			&getPassword();
 
-
+	Channel	*getChannelByName(string const &channel);
 
 	/* Server method */
 

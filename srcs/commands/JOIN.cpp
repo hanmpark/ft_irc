@@ -1,12 +1,25 @@
-#include "Command.hpp"
+#include "commands/JOIN.hpp"
 #include "Channel.hpp"
+#include "IRCReplies.hpp"
 
-void	Command::JOIN(Client *client) {
-	if (_arguments.size() < 2) {
-		sendMessage(client->getFd(), IRCErrors::ERR_NEEDMOREPARAMS("JOIN"));
+JOIN::JOIN() : ACommand() {}
+
+JOIN::~JOIN() {}
+
+void	JOIN::execute(Server &server, Client *client, vector<string> &args) const {
+	if (args.size() < 2) {
+		Server::sendMessage(client->getFd(), IRCErrors::ERR_NEEDMOREPARAMS(args[0]));
 		return ;
 	}
-	//* JOIN #caca1,#caca2,#caca3 => _arguments[0] = #caca1,#caca2,#caca3
-	cout << "_arguments[0]: " << _arguments[0] << endl;
-	cout << "_arguments[1]: " << _arguments[1] << endl;
+	else if (args[1][0] != '#') {
+		Server::sendMessage(client->getFd(), IRCErrors::ERR_BADCHANMASK());
+		return ;
+	}
+	Channel	*channel = server.getChannelByName(args[1]);
+	if (channel == NULL) {
+		Channel	*newChannel = new(nothrow) Channel(args[1]);
+		if (newChannel == NULL)
+			return ;
+		
+	}
 }

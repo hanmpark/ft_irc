@@ -2,7 +2,7 @@
 
 /* Constructors / Destructors */
 
-Client::Client() : _fd(0), _password(false), _registered(false) {}
+Client::Client() : _fd(0), _gotPasswordRight(false), _registered(false) {}
 
 Client::~Client() {}
 
@@ -27,7 +27,7 @@ string	Client::getIpAddr() const { return _ipAddr; }
 
 string	Client::getBuffer() const { return _buffer; }
 
-bool	Client::getPassword() const { return _password; }
+bool	Client::getGotPasswordRight() const { return _gotPasswordRight; }
 
 bool	Client::getRegistered() const { return _registered; }
 
@@ -47,7 +47,7 @@ void	Client::setIpAddr(string const &ipAddr) { _ipAddr = ipAddr; }
 
 void	Client::setBuffer(string const &command) { _buffer = command; }
 
-void	Client::setPassword(bool password) { _password = password; }
+void	Client::setGotPasswordRight(bool password) { _gotPasswordRight = password; }
 
 void	Client::setRegistered(bool registered) { _registered = registered; }
 

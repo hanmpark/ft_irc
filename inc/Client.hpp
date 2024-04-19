@@ -18,7 +18,7 @@ private:
 	string	_realname;
 	string	_ipAddr;
 	string	_buffer;
-	bool	_password, _registered;
+	bool	_gotPasswordRight, _registered;
 
 public:
 	Client();
@@ -35,7 +35,7 @@ public:
 	string	getRealname() const;
 	string	getIpAddr() const;
 	string	getBuffer() const;
-	bool	getPassword() const;
+	bool	getGotPasswordRight() const;
 	bool	getRegistered() const;
 
 	void	setFd(int fd);
@@ -45,7 +45,7 @@ public:
 	void	setRealname(string const &realname);
 	void	setIpAddr(string const &ipAddr);
 	void	setBuffer(string const &command);
-	void	setPassword(bool password);
+	void	setGotPasswordRight(bool password);
 	void	setRegistered(bool registered);
 
 	void	addToBuffer(string const &buffer);

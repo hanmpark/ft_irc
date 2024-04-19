@@ -1,17 +1,21 @@
-#include "Command.hpp"
+#include "commands/PASS.hpp"
 
-void	Command::PASS(Client *client) {
-	if (_arguments.empty()) {
-		sendMessage(client->getFd(), IRCErrors::ERR_NEEDMOREPARAMS("PASS"));
+PASS::PASS() : ACommand() {}
+
+PASS::~PASS() {}
+
+void	PASS::execute(Server &server, Client *client, vector<string> &args) const {
+	if (args.empty()) {
+		Server::sendMessage(client->getFd(), IRCErrors::ERR_NEEDMOREPARAMS("PASS"));
 	} else if (client->getRegistered() == true) {
-		sendMessage(client->getFd(), IRCErrors::ERR_ALREADYREGISTRED());
-	} else if (_arguments[0] != _password) {
-		cout << "INFO: password mismatch : " << _arguments[0] << endl;
-		sendMessage(client->getFd(), IRCErrors::ERR_PASSWDMISMATCH());
+		Server::sendMessage(client->getFd(), IRCErrors::ERR_ALREADYREGISTRED());
+	} else if (args[0] != server.getPassword()) {
+		cout << "INFO: password mismatch : " << args[0] << endl;
+		Server::sendMessage(client->getFd(), IRCErrors::ERR_PASSWDMISMATCH());
 		throw exception();
 	} else {
 		cout << "INFO: Client " << client->getFd() << ": got the right password" << endl;
-		client->setPassword(true);
-		_arguments.clear();
+		client->setGotPasswordRight(true);
+		args.clear();
 	}
 }
