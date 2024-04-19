@@ -1,6 +1,0 @@
-<< CAP LS
-<< PASS password
-<< NICK kquetat-
-<< USER kquetat- kquetat- localhost :Kian Quetat-Riou
->> : 001 kquetat- :Welcome to the I
-<< MODE kquetat- +i
