@@ -15,7 +15,7 @@
  * 2. 1024 to 49151 can be registered for specific purposes
  * 3. 49152-65535 used by client apps for outgoing conncections.
  */
-Server::Server(string const &portString, string const &password) : _name("yobouhle"), _sockfd(-1) {
+Server::Server(string const &portString, string const &password) : _name("yobouhle.chat"), _sockfd(-1) {
 	if (portString.find_last_not_of("0123456789") != string::npos || atoi(portString.c_str()) < 0 || atoi(portString.c_str()) > 65535) { // Check Range
 		throw runtime_error("Invalid port\n");
 	}

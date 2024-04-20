@@ -2,7 +2,7 @@
 
 /* Constructors / Destructors */
 
-Client::Client() : _fd(0), _gotPasswordRight(false), _registered(false) {}
+Client::Client() : _fd(0), _hostname("localhost"), _gotPasswordRight(false), _registered(false) {}
 
 Client::~Client() {}
 

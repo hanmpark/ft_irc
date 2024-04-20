@@ -31,19 +31,19 @@ bool	NICK::_isNicknameInUse(vector<Client*> const &clients, string const &nickna
 }
 
 void	NICK::execute(Server &server, Client *client, vector<string> &args) const {
-	if (client->getNickname().empty() && args.empty()) {
+	if (client->getNickname().empty() && args.size() == 1) {
 		Server::sendMessage(client->getFd(), IRCErrors::ERR_NONICKNAMEGIVEN());
-	} else if (!_isValidNickname(args[0])) {
-		Server::sendMessage(client->getFd(), IRCErrors::ERR_ERRONEUSNICKNAME(args[0]));
-	} else if (_isNicknameInUse(server.getClients(), args[0])) {
-		Server::sendMessage(client->getFd(), IRCErrors::ERR_NICKNAMEINUSE(args[0]));
+	} else if (!_isValidNickname(args[1])) {
+		Server::sendMessage(client->getFd(), IRCErrors::ERR_ERRONEUSNICKNAME(args[1]));
+	} else if (_isNicknameInUse(server.getClients(), args[1])) {
+		Server::sendMessage(client->getFd(), IRCErrors::ERR_NICKNAMEINUSE(args[1]));
 	} else {
 		if (client->getNickname().empty()) {
-			cout << "INFO: Client " << client->getFd() << ": set nickname to " << args[0] << endl; // setting nickname
-		} else if (client->getNickname() != args[0]) {
-			cout << "INFO: Client " << client->getFd() << ": changed nickname to " << args[0] << endl; // changing nickname
+			cout << "INFO: Client " << client->getFd() << ": set nickname to " << args[1] << endl; // setting nickname
+		} else if (client->getNickname() != args[1]) {
+			cout << "INFO: Client " << client->getFd() << ": changed nickname to " << args[1] << endl; // changing nickname
 		}
-		client->setNickname(args[0]);
+		client->setNickname(args[1]);
 		Server::sendMessage(client->getFd(), ": NICK " + client->getNickname() + "\r\n");
 	}
 }

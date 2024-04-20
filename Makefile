@@ -18,7 +18,11 @@ ifdef STRICT
 endif
 
 ifdef DEBUG
-	CFLAGS	+=	-fsanitize=address -g3
+	CFLAGS	+=	-fsanitize=address -g3 
+endif
+
+ifdef WLOGS
+	CFLAGS	+=	-D WLOGS=1
 endif
 
 # === Sources & Objects === #
@@ -86,6 +90,9 @@ strict:
 debug:
 	@${MAKE} DEBUG=1
 
+wlogs:
+	@${MAKE} WLOGS=1
+
 clean:
 	@printf "${PROMPT} ${RED}Cleaning${RESET} objects\n"
 	@rm -f ${OBJS}
@@ -96,4 +103,4 @@ fclean:		clean
 
 re:			fclean all
 
-.PHONY:		all clean fclean re strict
+.PHONY:		all strict debug wlogs clean fclean re

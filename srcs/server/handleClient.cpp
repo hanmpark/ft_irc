@@ -4,16 +4,17 @@ char	to_upper(unsigned char c) {
 	return static_cast<char>(toupper(c));
 }
 
-vector<string>	Server::splitCommand(string const &buffer) const {
+/*
+ TODO:
+	- keep whole argument after ":" in one string
+*/
+vector<string>	Server::splitBuffer(string const &buffer, string const &limiter) const {
 	vector<string>	args;
 	size_t			pos = 0;
 	size_t			nextPos = 0;
 
-	while ((nextPos = buffer.find(" ", pos)) != string::npos) {
+	while ((nextPos = buffer.find(limiter, pos)) != string::npos) {
 		string	arg = buffer.substr(pos, nextPos - pos);
-		if (args.empty()) {
-			transform(arg.begin(), arg.end(), arg.begin(), ::toupper);
-		}
 		args.push_back(arg);
 		pos = nextPos + 1;
 	}
@@ -22,7 +23,10 @@ vector<string>	Server::splitCommand(string const &buffer) const {
 }
 
 void	Server::selectCommand(Client *client, string const &buffer) {
-	vector<string>	args = splitCommand(buffer);
+	sendDebugLogs(buffer);
+
+	vector<string>	args = splitBuffer(buffer, " ");
+	transform(args[0].begin(), args[0].end(), args[0].begin(), to_upper);
 
 	for (size_t i = 0; i < args.size(); i++) {
 		cout << BLUE "ARGUMENTS[" << i << "]: " << args[i] << RESET << endl;
@@ -30,21 +34,17 @@ void	Server::selectCommand(Client *client, string const &buffer) {
 	commandIt	command = _commands.find(args[0]);
 	cout << "INFO: Command " << args[0] << endl;
 	if (command != _commands.end() && client->getRegistered()) {
-		cout << RED "1: LAUNCHING COMMAND: " << args[0] << RESET << endl;
-		args.erase(args.begin());
 		command->second->execute(*this, client, args);
 	} else if (command != _commands.end() && !client->getRegistered()) {
 		if (args[0] != "CAP" && args[0] != "PASS" && args[0] != "NICK" && args[0] != "USER") {
-			sendMessage(client->getFd(), IRCErrors::ERR_NOTREGISTERED());
+			sendMessage(*this, client->getFd(), IRCErrors::ERR_NOTREGISTERED(), SERVER);
 		} else {
-			args.erase(args.begin());
 			if (command->second != NULL) {
 				command->second->execute(*this, client, args);
 			}
 		}
 	} else {
-		cout << "FUCK" << endl;
-		sendMessage(client->getFd(), IRCErrors::ERR_UNKNOWNCOMMAND(args[0]));
+		sendMessage(*this, client->getFd(), IRCErrors::ERR_UNKNOWNCOMMAND(args[0]), SERVER);
 	}
 	args.clear();
 }
@@ -63,7 +63,7 @@ void	Server::handleClient(Client *client) {
 				client->setRegistered(true);
 				cout << GREEN "INFO: Client " << client->getFd() << ": is registered" RESET << endl;
 				cout << RED << IRCReplies::RPL_WELCOME(client->getNickname(), client->getUsername()) << RESET << endl;
-				sendMessage(client->getFd(), IRCReplies::RPL_WELCOME(client->getNickname(), client->getUsername()));
+				sendMessage(*this, client->getFd(), IRCReplies::RPL_WELCOME(client->getNickname(), client->getUsername()), SERVER);
 			}
 		}
 		buffer.erase(0, pos + 2);

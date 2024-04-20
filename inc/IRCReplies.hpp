@@ -2,6 +2,11 @@
 
 # include "IrcIncludes.hpp"
 
+enum e_endpoint {
+	CLIENT,
+	SERVER
+};
+
 struct IRCReplies {
 	static string const RPL_WELCOME(string const &nick, string const &user) {
 		return ": 001 " + nick + " :Welcome to the Internet Relay Network " + user + "\r\n";

@@ -44,7 +44,7 @@ private:
 	Client			*getClientByFd(int fd);
 
 	void			handleClient(Client *client);
-	vector<string>	splitCommand(string const &buffer) const;
+	vector<string>	splitBuffer(string const &buffer, string const &limiter) const;
 	void			selectCommand(Client *client, string const &buffer);
 
 	void			closeFileDescriptors();
@@ -56,7 +56,9 @@ public:
 	Server(string const &portString, string const &password);
 	~Server();
 
-	static void		sendMessage(int fd, string const &message);
+	static void		sendMessage(Server &server, int fd, string const &message, e_endpoint side);
+	static void		sendDebugLogs(string const &message);
+	static void		sendDebugLogs(Client *client, vector<string> const &message);
 
 	/* Accessors */
 
