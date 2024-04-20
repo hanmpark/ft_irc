@@ -10,6 +10,8 @@ private:
 	string						_key;
 	string						_creator;
 	vector<Client*>				_clients;
+	vector<Client*>				_operators;
+	size_t						_limitClients;
 
 public:
 	Channel();
@@ -21,5 +23,17 @@ public:
 	string	getKey() const;
 	string	getCreator() const;
 
-	
+	void	setCreator(string const &creator);
+	void	setTopic(string const &topic);
+	void	setKey(string const &key);
+
+	void	addClient(Client *client);
+	void	removeClient(Client *client);
+	void	addOperator(Client *client);
+	void	removeOperator(Client *client);
+
+	// Needed ?
+	vector<Client*>	&getClients();
+	vector<Client*>	&getOperators();
+
 };

@@ -37,10 +37,16 @@ Server::Server(string const &portString, string const &password) : _name("yobouh
 
 Server::~Server() {
 	for (commandIt it = _commands.begin(); it != _commands.end(); it++) {
-		delete it->second;
+		if (it->second != NULL)
+			delete it->second;
 	}
 	for (clientIt it = _clients.begin(); it != _clients.end(); it++) {
-		delete *it;
+		if (*it != NULL)
+			delete *it;
+	}
+	for (channelIt it = _channels.begin(); it != _channels.end(); it++) {
+		if (it->second != NULL)
+			delete it->second;
 	}
 	_commands.clear();
 	_clients.clear();
@@ -64,4 +70,8 @@ Channel	*Server::getChannelByName(string const &channel) {
 	if (it == _channels.end())
 		return NULL;
 	return it->second;
+}
+
+void	Server::addChannel(string const &channelName, Channel *channel) {
+	_channels[channelName] = channel;
 }

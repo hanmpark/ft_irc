@@ -7,6 +7,18 @@ struct IRCReplies {
 		return ": 001 " + nick + " :Welcome to the Internet Relay Network " + user + "\r\n";
 	}
 
+	static string const RPL_NAMREPLY(string const &nick, string const &channel, string const &names) {
+		return ": 353 " + nick + " = " + channel + " :" + names + "\r\n";
+	}
+
+	static string const RPL_ENDOFNAMES(string const &nick, string const &channel) {
+		return ": 366 " + nick + " " + channel + " :End of /NAMES list\r\n";
+	}
+
+	static string const RPL_CHANNELMODEIS(string const &channel, string const &mode) {
+		return ": 324 " + channel + " " + mode + "\r\n";
+	}
+
 	static string const RPL_YOUREOPER() {
 		return ": 381 :You are now an IRC operator\r\n";
 	}
