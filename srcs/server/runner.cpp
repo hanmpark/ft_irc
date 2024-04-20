@@ -35,7 +35,7 @@ void Server::removeClient(int fd)
 	}
 }
 
-int	Server::runServer()
+void	Server::runServer()
 {
 	signal(SIGINT, &signalHandler);
 	signal(SIGQUIT, &signalHandler);
@@ -44,7 +44,7 @@ int	Server::runServer()
 	while (_signalReceived == false) {
 		// Poll for incoming events
 		if (poll(&_pollFds[0], _pollFds.size(), -1) < 0) {
-			return -1;
+			throw runtime_error("Failed at trying to run the server\n");
 		}
 		// Check if the server socket has an event
 		for (size_t i = 0; i < _pollFds.size(); i++) {
@@ -59,14 +59,4 @@ int	Server::runServer()
 	}
 
 	closeFileDescriptors(); // Close the server socket and all client sockets if they are still open
-
-	return 0;
-}
-
-void	Server::initServer() {
-	initServerSocket();
-	if (_sockfd == -1)
-		throw runtime_error("Could not run server\n");
-	else if (runServer() == -1)
-		throw runtime_error("Failed trying to run the server\n");
 }

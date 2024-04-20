@@ -52,6 +52,7 @@ int main(int argc, char **argv) {
 		Server	server(static_cast<string>(argv[1]), static_cast<string>(argv[2]));
 
 		server.initServer();
+		server.runServer();
 	} catch (runtime_error &e) {
 		cerr << RED "Error: " << e.what() << RESET << endl;
 		return 1;

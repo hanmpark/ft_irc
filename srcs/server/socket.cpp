@@ -1,7 +1,7 @@
 #include "Server.hpp"
 
 // https://www.geeksforgeeks.org/socket-programming-cc/
-void	Server::initServerSocket() {
+void	Server::initServer() {
 	int	opt = 1;
 
 	_sockfd = socket(AF_INET, SOCK_STREAM, 0);

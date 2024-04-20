@@ -38,9 +38,7 @@ private:
 
 	static void		signalHandler(int signum);
 
-	void			initServerSocket();
 	struct pollfd	createSocket(int fd) const;
-	int				runServer();
 	void			acceptNewClient();
 	void			receiveData(int clientFd);
 	Client			*getClientByFd(int fd);
@@ -73,4 +71,5 @@ public:
 	/* Server method */
 
 	void	initServer();
+	void	runServer();
 };

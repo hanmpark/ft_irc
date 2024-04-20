@@ -1,4 +1,4 @@
-#include "PING.hpp"
+#include "commands/PING.hpp"
 
 PING::PING() {}
 
