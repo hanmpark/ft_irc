@@ -8,16 +8,12 @@ bool	NICK::_isValidNickname(string &nick) const {
 	if (nick.empty()) {
 		return false;
 	}
-	size_t	len = nick.length();
-	if (len > 9) {
-		len = 9;
-	}
+	size_t	len = (nick.length() > 9 ? 9 : nick.length());
 	nick = nick.substr(0, len);
-	if (isdigit(nick[0]) || nick[0] == '-' || (!isalpha(nick[0]) && !strchr(SPECIAL_CHARACTERS, nick[0]))) {
-		return false;
-	}
-	for (size_t i = 1; i < len; i++) {
-		if (!isalnum(nick[i]) && !strchr(SPECIAL_CHARACTERS, nick[i]) && nick[i] != '-') {
+	for (size_t i = 0; i < len; i++) {
+		if (i == 0 && (isdigit(nick[0]) || nick[0] == '-' || (!isalpha(nick[0]) && !strchr(SPECIAL_CHARACTERS, nick[0])))) {
+			return false;
+		} else if (!isalnum(nick[i]) && !strchr(SPECIAL_CHARACTERS, nick[i]) && nick[i] != '-') {
 			return false;
 		}
 	}
