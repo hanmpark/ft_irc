@@ -32,7 +32,7 @@ private:
 	vector<struct pollfd>	_pollFds;	// vector of pollfds
 	static bool				_signalReceived;
 
-	typedef vector<Client*>::iterator			clientIt;
+	typedef vector<Client*>::iterator			clientIt;USER_IDENTIFIER
 	typedef map<string, ACommand*>::iterator	commandIt;
 	typedef map<string, Channel*>::iterator		channelIt;
 
@@ -71,7 +71,9 @@ public:
 	vector<Client*>	&getClients();
 	string			&getPassword();
 
+	/* Channel methods */
 	Channel	*getChannelByName(string const &channel);
+	void	addChannel(string const &channelName, Channel *channel);
 
 	/* Server method */
 
