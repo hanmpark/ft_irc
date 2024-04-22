@@ -12,5 +12,5 @@ public:
 	PRIVMSG();
 	~PRIVMSG();
 
-	
+	void	execute(Server &server, Client *client, vector<string> &args) const;
 };

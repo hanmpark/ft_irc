@@ -40,6 +40,7 @@ struct IRCReplies {
 	static string const RPL_UMODEIS(string const &userModeString) {
 		return "221 :" + userModeString + "\r\n";
 	}
+
 };
 
 struct IRCErrors {
@@ -99,8 +100,16 @@ struct IRCErrors {
 		return "451 :You have not registered\r\n";
 	}
 
+	static string const ERR_NOSUCHNICK(string const &nick) {
+		return ": 401 " + nick + " :No such nick/channel\r\n";
+	}
+
 	static string const ERR_NOSUCHCHANNEL(string const &channel) {
 		return "403 " + channel + " :No such channel\r\n";
+	}
+
+	static string const ERR_CANNOTSENDTOCHAN(string const &channel) {
+		return ": 404 " + channel + " :Cannot send to channel\r\n";
 	}
 
 	static string const ERR_BADCHANMASK() {
