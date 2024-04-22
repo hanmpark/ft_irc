@@ -66,6 +66,8 @@ vector<Client*>	&Server::getClients() { return _clients; }
 
 string	&Server::getPassword() { return _password; }
 
+bool	&Server::getSignalReceived() const { return _signalReceived; }
+
 Channel	*Server::getChannelByName(string const &channel) {
 	channelIt	it = _channels.find(channel);
 

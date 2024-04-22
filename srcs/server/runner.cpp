@@ -59,5 +59,7 @@ void	Server::runServer()
 		}
 	}
 
+	// send broadcast message to all clients that server is shutting down using QUIT command
+	
 	closeFileDescriptors(); // Close the server socket and all client sockets if they are still open
 }

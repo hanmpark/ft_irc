@@ -65,6 +65,7 @@ public:
 	string const 	&getName() const;
 	vector<Client*>	&getClients();
 	string			&getPassword();
+	bool			&getSignalReceived() const;
 
 	/* Channel methods */
 	Channel	*getChannelByName(string const &channel);
