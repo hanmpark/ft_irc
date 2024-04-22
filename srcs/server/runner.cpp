@@ -6,6 +6,7 @@ void Server::signalHandler(int signum)
 {
 	(void)signum;
 	_signalReceived = true;
+	//! when signal is received, need to call QUIT command and close all file descriptors
 }
 
 void Server::closeFileDescriptors() {
