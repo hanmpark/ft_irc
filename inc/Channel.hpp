@@ -9,9 +9,9 @@ private:
 	string						_topic;
 	string						_key;
 	string						_creator;
-	vector<Client*>				_clients;
+	vector<Client*>				_users;
 	vector<Client*>				_operators;
-	size_t						_limitClients;
+	size_t						_limit;
 
 public:
 	Channel();
@@ -22,6 +22,7 @@ public:
 	string	getTopic() const;
 	string	getKey() const;
 	string	getCreator() const;
+	size_t	getLimit() const;
 
 	void	setCreator(string const &creator);
 	void	setTopic(string const &topic);
@@ -33,7 +34,7 @@ public:
 	void	removeOperator(Client *client);
 
 	// Needed ?
-	vector<Client*>	&getClients();
+	vector<Client*>	&getUsers();
 	vector<Client*>	&getOperators();
 
 };

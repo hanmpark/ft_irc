@@ -1,0 +1,17 @@
+<< CAP LS
+<< PASS password
+<< NICK kquetat-
+<< USER kquetat- kquetat- localhost :Kian Quetat-Riou
+>> CAP * LS :
+<< CAP END
+>> : NICK kquetat-
+>> : 001 kquetat- :Welcome to the Internet Relay Network kquetat-
+<< MODE kquetat- +i
+>> CAP * LS :
+>> : 421 MODE :Unknown command
+<< PING 
+<< JOIN #mychannel
+>> : 461 #mychannel :Not enough parameters
+<< PART #mychannel
+>> : 421 PART :Unknown command
+<< QUIT :leaving

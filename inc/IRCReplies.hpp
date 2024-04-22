@@ -106,4 +106,8 @@ struct IRCErrors {
 	static string const ERR_BADCHANMASK() {
 		return "476 : Bad Channel Mask\r\n";
 	}
+
+	static string const ERR_CHANNELISFULL(string const &channel) {
+		return ": 471 " + channel + " :Cannot join channel (+l)\r\n";
+	}
 };
