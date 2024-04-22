@@ -22,7 +22,14 @@ void	Channel::setTopic(string const &topic) { _topic = topic; }
 
 void	Channel::setKey(string const &key) { _key = key; }
 
-void	Channel::addClient(Client *client) { _users.push_back(client); }
+void	Channel::addClient(Client *client) {
+	// check if the client is already in the channel
+	vector<Client*>::iterator it = find(_users.begin(), _users.end(), client);
+
+	if (it != _users.end())
+		return ;
+	_users.push_back(client);
+}
 
 void	Channel::removeClient(Client *client) {
 	vector<Client*>::iterator it = find(_users.begin(), _users.end(), client);

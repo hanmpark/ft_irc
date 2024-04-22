@@ -69,8 +69,12 @@ public:
 	/* Channel methods */
 	Channel	*getChannelByName(string const &channel);
 	void	addChannel(string const &channelName, Channel *channel);
+	void	removeChannel(string const &channelName);
+	void	sendPrivMessage(string const &nickname, string const &message, int fd);
+	void	broadcastMessage(string const &channelName, string const &message, int fd);
 
 	/* Server method */
+	Client	*getClientByNickname(string const &nickname);
 
 	void	initServer();
 	void	runServer();

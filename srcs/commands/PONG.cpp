@@ -1,16 +1,16 @@
-#include "commands/PING.hpp"
+#include "commands/PONG.hpp"
 
-PING::PING() {}
+PONG::PONG() {}
 
-PING::~PING() {}
+PONG::~PONG() {}
 
-void	PING::execute(Server &server, Client *client, vector<string> &args) const {
+void	PONG::execute(Server &server, Client *client, vector<string> &args) const {
 	static_cast<void>(server);
 	if (args.size() < 2)
 		return ;
 	string	message = ":" + client->getNickname() + "!" \
 						+ client->getUsername() + "@" \
-						+ client->getHostname() + " PONG " \
+						+ client->getHostname() + " PING " \
 						+ client->getNickname() + " :" + message + "\r\n";
 	Server::sendMessage(client->getFd(), message);
 }
