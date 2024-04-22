@@ -14,12 +14,12 @@ void	QUIT::execute(Server &server, Client *client, vector<string> &args) const {
 	string	message = ":" + client->getNickname() + "!" \
 						+ client->getUsername() + "@" \
 						+ client->getHostname() + " QUIT :" + args[0] + "\r\n";
-	if (server.getClients().size() > 1 && server.getSignalReceived()) { // if signal received, broadcast QUIT
-		for (size_t i = 0; i < server.getClients().size(); i++) {
-			Server::sendMessage(server.getClients()[i]->getFd(), message);
-		}
-		return ;
+
+	// * broadcast the message to all the users in the server
+	vector<Client*>::iterator	it;
+	for(it = server.getClients().begin(); it != server.getClients().end(); it++) {
+		if ((*it)->getFd() == client->getFd()) // skip the sender as they will automatically be removed
+			continue ;
+		server.sendMessage((*it)->getFd(), message);
 	}
-	// 
-	Server::sendMessage(client->getFd(), message);
 }
