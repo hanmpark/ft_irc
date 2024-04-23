@@ -45,8 +45,6 @@ void	JOIN::execute(Server &server, Client *client, vector<string> &args) const {
 		}
 	}
 
-	// TODO Add the User to broadcast message.
-
 	Server::sendMessage(client->getFd(), IRCReplies::RPL_NAMREPLY(client->getNickname(), args[1], ""));
 	Server::sendMessage(client->getFd(), IRCReplies::RPL_ENDOFNAMES(client->getNickname(), args[1]));
 	Server::sendMessage(client->getFd(), IRCReplies::RPL_CHANNELMODEIS(args[1], ""));
