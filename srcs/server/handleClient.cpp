@@ -23,25 +23,21 @@ vector<string>	Server::splitBuffer(string const &buffer, string const &limiter) 
 }
 
 void	Server::selectCommand(Client *client, string const &buffer) {
-	sendDebugLogs(buffer);
-
 	vector<string>	args = splitBuffer(buffer, " ");
-	transform(args[0].begin(), args[0].end(), args[0].begin(), to_upper);
+	transform(args[0].begin(), args[0].end(), args[0].begin(), ::to_upper);
 
-	for (size_t i = 0; i < args.size(); i++) {
-		cout << BLUE "ARGUMENTS[" << i << "]: " << args[i] << RESET << endl;
-	}
 	commandIt	command = _commands.find(args[0]);
-	cout << "INFO: Command " << args[0] << endl;
-	if (command != _commands.end() && client->getRegistered()) {
-		command->second->execute(*this, client, args);
-	} else if (command != _commands.end() && !client->getRegistered()) {
-		if (args[0] != "CAP" && args[0] != "PASS" && args[0] != "NICK" && args[0] != "USER") {
-			sendMessage(*this, client->getFd(), IRCErrors::ERR_NOTREGISTERED(), SERVER);
-		} else {
-			if (command->second != NULL) {
-				command->second->execute(*this, client, args);
+	if (command != _commands.end()) {
+		if (!client->getRegistered()) {
+			if (args[0] != "CAP" && args[0] != "PASS" && args[0] != "NICK" && args[0] != "USER") {
+				sendMessage(*this, client->getFd(), IRCErrors::ERR_NOTREGISTERED(), SERVER);
+				args.clear();
+				return;
 			}
+		}
+		if (command->second != NULL) {
+			sendDebugLogs(args);
+			command->second->execute(*this, client, args);
 		}
 	} else {
 		sendMessage(*this, client->getFd(), IRCErrors::ERR_UNKNOWNCOMMAND(args[0]), SERVER);
@@ -55,14 +51,9 @@ void	Server::handleClient(Client *client) {
 
 	while ((pos = buffer.find("\r\n")) != string::npos) {
 		selectCommand(client, buffer.substr(0, pos));
-		cout << "register: " << client->getRegistered() << endl; // "register: 0" or "register: 1
-		cout << "nickname: " << client->getNickname() << endl; // "nickname:
-		cout << "username: " << client->getUsername() << endl; // "username:
 		if (client->getRegistered() == false) {
 			if (client->getGotPasswordRight() && !client->getNickname().empty() && !client->getUsername().empty()) {
 				client->setRegistered(true);
-				cout << GREEN "INFO: Client " << client->getFd() << ": is registered" RESET << endl;
-				cout << RED << IRCReplies::RPL_WELCOME(client->getNickname(), client->getUsername()) << RESET << endl;
 				sendMessage(*this, client->getFd(), IRCReplies::RPL_WELCOME(client->getNickname(), client->getUsername()), SERVER);
 			}
 		}

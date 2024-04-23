@@ -57,8 +57,10 @@ public:
 	~Server();
 
 	static void		sendMessage(Server &server, int fd, string const &message, e_endpoint side);
-	static void		sendDebugLogs(string const &message);
+	static void		sendMessage(Server &server, int fd, vector<string> const &message, e_endpoint side);
+	static void		sendDebugLogs(string const &message, e_transmit transmitMode);
 	static void		sendDebugLogs(Client *client, vector<string> const &message);
+	static void		sendDebugLogs(vector<string> const &message);
 
 	/* Accessors */
 

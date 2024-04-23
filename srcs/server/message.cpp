@@ -10,12 +10,34 @@ void	Server::sendMessage(Server &server, int fd, string const &message, e_endpoi
 	}
 	log += message;
 	send(fd, log.c_str(), log.length(), 0);
-	sendDebugLogs(log);
+	sendDebugLogs(log, SEND);
 }
 
-void	Server::sendDebugLogs(string const &message) {
+void	Server::sendMessage(Server &server, int fd, vector<string> const &message, e_endpoint side) {
+	string	log = ":";
+
+	if (side == SERVER) {
+		
+	}
+}
+
+void	Server::sendDebugLogs(string const &message, e_transmit transmitMode) {
 #ifdef WLOGS
-	cout << "<< " << message << endl;
+	if (transmitMode == RECEIVE) {
+		cout << "<< " << message << endl;
+	} else if (transmitMode == SEND) {
+		cout << ">> " << message << endl;
+	}
+#endif
+}
+
+void	Server::sendDebugLogs(vector<string> const &message) {
+#ifdef WLOGS
+	cout << "<< ";
+	for (size_t i = 0; i < message.size(); i++) {
+		cout << message.at(i) << (i == n - 1 ? "" : " ");
+	}
+	cout << endl;
 #endif
 }
 
