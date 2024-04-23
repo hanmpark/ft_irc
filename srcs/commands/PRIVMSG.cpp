@@ -36,7 +36,7 @@ void	PRIVMSG::execute(Server &server, Client *client, vector<string> &args) cons
 				server.broadcastMessage(*it, message, client->getFd());
 			}
 		}
-		// ierrorf (server.getChannelByName(channelName) == NULL) {
+		// if (server.getChannelByName(channelName) == NULL) {
 		// 	Server::sendMessage(client->getFd(), IRCErrors::ERR_NOSUCHCHANNEL(channelName));
 		// }
 		// else {
@@ -56,4 +56,3 @@ void	PRIVMSG::execute(Server &server, Client *client, vector<string> &args) cons
 		}
 	}
 }
-error
