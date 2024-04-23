@@ -42,7 +42,6 @@ public:
 	void	addOperator(Client *client);
 	void	removeOperator(Client *client);
 
-	// Needed ?
 	vector<Client*>	&getUsers();
 	vector<Client*>	&getOperators();
 
