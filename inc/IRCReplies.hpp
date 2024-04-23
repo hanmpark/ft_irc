@@ -17,6 +17,18 @@ struct IRCReplies {
 		return "001 " + nick + " :Welcome to the Internet Relay Network " + user + "\r\n";
 	}
 
+	static string const RPL_NAMREPLY(string const &nick, string const &channel, string const &names) {
+		return ": 353 " + nick + " = " + channel + " :" + names + "\r\n";
+	}
+
+	static string const RPL_ENDOFNAMES(string const &nick, string const &channel) {
+		return ": 366 " + nick + " " + channel + " :End of /NAMES list\r\n";
+	}
+
+	static string const RPL_CHANNELMODEIS(string const &channel, string const &mode) {
+		return ": 324 " + channel + " " + mode + "\r\n";
+	}
+
 	static string const RPL_YOUREOPER() {
 		return "381 :You are now an IRC operator\r\n";
 	}
@@ -28,6 +40,7 @@ struct IRCReplies {
 	static string const RPL_UMODEIS(string const &userModeString) {
 		return "221 :" + userModeString + "\r\n";
 	}
+
 };
 
 struct IRCErrors {
@@ -87,11 +100,23 @@ struct IRCErrors {
 		return "451 :You have not registered\r\n";
 	}
 
+	static string const ERR_NOSUCHNICK(string const &nick) {
+		return ": 401 " + nick + " :No such nick/channel\r\n";
+	}
+
 	static string const ERR_NOSUCHCHANNEL(string const &channel) {
 		return "403 " + channel + " :No such channel\r\n";
 	}
 
+	static string const ERR_CANNOTSENDTOCHAN(string const &channel) {
+		return ": 404 " + channel + " :Cannot send to channel\r\n";
+	}
+
 	static string const ERR_BADCHANMASK() {
 		return "476 : Bad Channel Mask\r\n";
+	}
+
+	static string const ERR_CHANNELISFULL(string const &channel) {
+		return ": 471 " + channel + " :Cannot join channel (+l)\r\n";
 	}
 };

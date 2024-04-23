@@ -6,6 +6,7 @@ void Server::signalHandler(int signum)
 {
 	(void)signum;
 	_signalReceived = true;
+	//! when signal is received, need to call QUIT command and close all file descriptors
 }
 
 void Server::closeFileDescriptors() {
@@ -58,5 +59,7 @@ void	Server::runServer()
 		}
 	}
 
+	// send broadcast message to all clients that server is shutting down using QUIT command
+	
 	closeFileDescriptors(); // Close the server socket and all client sockets if they are still open
 }
