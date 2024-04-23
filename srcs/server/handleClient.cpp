@@ -28,19 +28,19 @@ void	Server::selectCommand(Client *client, string const &buffer) {
 
 	commandIt	command = _commands.find(args[0]);
 	if (command != _commands.end()) {
+		debugLog(args);
 		if (!client->getRegistered()) {
 			if (args[0] != "CAP" && args[0] != "PASS" && args[0] != "NICK" && args[0] != "USER") {
-				sendMessage(*this, client->getFd(), IRCErrors::ERR_NOTREGISTERED(), SERVER);
+				sendRPL(*this, client->getFd(), IRCErrors::ERR_NOTREGISTERED());
 				args.clear();
 				return;
 			}
 		}
 		if (command->second != NULL) {
-			sendDebugLogs(args);
 			command->second->execute(*this, client, args);
 		}
 	} else {
-		sendMessage(*this, client->getFd(), IRCErrors::ERR_UNKNOWNCOMMAND(args[0]), SERVER);
+		sendRPL(*this, client->getFd(), IRCErrors::ERR_UNKNOWNCOMMAND(args[0]));
 	}
 	args.clear();
 }
@@ -54,7 +54,7 @@ void	Server::handleClient(Client *client) {
 		if (client->getRegistered() == false) {
 			if (client->getGotPasswordRight() && !client->getNickname().empty() && !client->getUsername().empty()) {
 				client->setRegistered(true);
-				sendMessage(*this, client->getFd(), IRCReplies::RPL_WELCOME(client->getNickname(), client->getUsername()), SERVER);
+				sendRPL(*this, client->getFd(), IRCReplies::RPL_WELCOME(client->getNickname(), client->getUsername()));
 			}
 		}
 		buffer.erase(0, pos + 2);
@@ -82,13 +82,11 @@ void	Server::receiveData(int clientFd) {
 		close(clientFd);
 		return ;
 	}
-	cout << "INFO: Client " << clientFd << ": " << buff;
 	client->addToBuffer(static_cast<string>(buff));
 	if (client->getBuffer().find("\r\n") != string::npos) {
 		try {
 			handleClient(client);
 		} catch (exception &e) { // This is when the client's password mismatches
-			cout << "INFO: Client " << clientFd << ": password mismatch" << endl;
 			removeClient(clientFd);
 			close(clientFd);
 		}

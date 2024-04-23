@@ -1,51 +1,69 @@
 #include "Server.hpp"
 
-void	Server::sendMessage(Server &server, int fd, string const &message, e_endpoint side) {
-	string	log = ":";
+string	Server::findPrefix(Server &server, int fd, e_endpoint side) {
+	string	prefix = ":";
 
 	if (side == SERVER) {
-		log += server.getName() + " ";
+		prefix += server.getName() + " ";
 	} else if (side == CLIENT) {
-		log += server.getClientByFd(fd)->getNickname() + "!" + server.getClientByFd(fd)->getUsername() + "@" + server.getClientByFd(fd)->getHostname() + " ";
+		prefix += server.getClientByFd(fd)->getNickname() + "!" + server.getClientByFd(fd)->getUsername() + "@" + server.getClientByFd(fd)->getHostname() + " ";
 	}
-	log += message;
+	return prefix;
+}
+
+// Sends server replies to the client
+void	Server::sendRPL(Server &server, int fd, string const &message) {
+	string	log = Server::findPrefix(server, fd, SERVER) + message;
+
 	send(fd, log.c_str(), log.length(), 0);
-	sendDebugLogs(log, SEND);
+	debugLog(log);
 }
 
-void	Server::sendMessage(Server &server, int fd, vector<string> const &message, e_endpoint side) {
-	string	log = ":";
+void	Server::sendRPL(Server &server, int fd, vector<string> const &args) {
+	string	log = Server::findPrefix(server, fd, CLIENT);
 
-	if (side == SERVER) {
-		
+	for (vector<string>::const_iterator it = args.begin(); it != args.end(); it++) {
+		if (it == args.begin()) {
+			log += *it + " :";
+		} else {
+			log += *it + (it + 1 == args.end() ? "\r\n" : " ");
+		}
 	}
+	send(fd, log.c_str(), log.length(), 0);
+	debugLog(log);
 }
 
-void	Server::sendDebugLogs(string const &message, e_transmit transmitMode) {
+void	Server::debugLog(string const &log) {
 #ifdef WLOGS
-	if (transmitMode == RECEIVE) {
-		cout << "<< " << message << endl;
-	} else if (transmitMode == SEND) {
-		cout << ">> " << message << endl;
-	}
+	cout << ">> " << log;
+#else
+	static_cast<void>(log);
 #endif
 }
 
-void	Server::sendDebugLogs(vector<string> const &message) {
+void	Server::debugLog(vector<string> const &args) {
 #ifdef WLOGS
 	cout << "<< ";
-	for (size_t i = 0; i < message.size(); i++) {
-		cout << message.at(i) << (i == n - 1 ? "" : " ");
+	for (vector<string>::const_iterator it = args.begin(); it != args.end(); it++) {
+		cout << *it << (it + 1 == args.end() ? "" : " ");
 	}
 	cout << endl;
+#else
+	static_cast<void>(args);
 #endif
 }
 
-void	Server::sendDebugLogs(Client *client, vector<string> const &message) {
+void	Server::debugLog(Server &server, int fd, vector<string> const &args, e_endpoint endPoint) {
 #ifdef WLOGS
-	cout << ">> :" + client->getNickname() + "!" + client->getUsername() + "@" + client->getHostname() << " ";
-	for (vector<string>::const_iterator it = message.begin(); it != message.end(); it++) {
-		cout << *it << (it + 1 == message.end() ? "" : " ");
+	string	log = Server::findPrefix(server, fd, endPoint);
+	cout << ">> " << log;
+	for (vector<string>::const_iterator it = args.begin(); it != args.end(); it++) {
+		cout << *it << (it + 1 == args.end() ? "" : " ");
 	}
+	cout << endl;
+#else
+	static_cast<void>(server);
+	static_cast<void>(fd);
+	static_cast<void>(args);
 #endif
 }

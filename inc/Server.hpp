@@ -56,11 +56,12 @@ public:
 	Server(string const &portString, string const &password);
 	~Server();
 
-	static void		sendMessage(Server &server, int fd, string const &message, e_endpoint side);
-	static void		sendMessage(Server &server, int fd, vector<string> const &message, e_endpoint side);
-	static void		sendDebugLogs(string const &message, e_transmit transmitMode);
-	static void		sendDebugLogs(Client *client, vector<string> const &message);
-	static void		sendDebugLogs(vector<string> const &message);
+	static string	findPrefix(Server &server, int fd, e_endpoint side);
+	static void		sendRPL(Server &server, int fd, string const &message);
+	static void		sendRPL(Server &server, int fd, vector<string> const &args);
+	static void		debugLog(string const &errorLog);
+	static void		debugLog(vector<string> const &args);
+	static void		debugLog(Server &server, int fd, vector<string> const &args, e_endpoint endPoint);
 
 	/* Accessors */
 

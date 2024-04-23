@@ -7,7 +7,7 @@
 class NICK : public ACommand {
 private:
 	bool	_isValidNickname(string &nick) const;
-	bool	_isNicknameInUse(vector<Client*> const &clients, string const &nick) const;
+	bool	_isNicknameInUse(vector<Client*> const &clients, int fd, string const &nick) const;
 
 public:
 	NICK();
