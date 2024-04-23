@@ -21,9 +21,11 @@ bool	NICK::_isValidNickname(string &nick) const {
 }
 
 // ERR_NICKNAMEINUSE
-bool	NICK::_isNicknameInUse(vector<Client*> const &clients, string const &nickname) const {
+bool	NICK::_isNicknameInUse(vector<Client*> const &clients, int fd, string const &nickname) const {
 	for (size_t i = 0; i < clients.size(); i++) {
-		if (clients[i]->getNickname() == nickname) {
+		if (fd == clients[i]->getFd()) {
+			continue;
+		} else if (clients[i]->getNickname() == nickname) {
 			return true;
 		}
 	}
@@ -32,13 +34,15 @@ bool	NICK::_isNicknameInUse(vector<Client*> const &clients, string const &nickna
 
 void	NICK::execute(Server &server, Client *client, vector<string> &args) const {
 	if (client->getNickname().empty() && args.size() == 1) {
-		Server::sendMessage(server, client->getFd(), IRCErrors::ERR_NONICKNAMEGIVEN(), SERVER);
+		Server::sendRPL(server, client->getFd(), IRCErrors::ERR_NONICKNAMEGIVEN());
 	} else if (!_isValidNickname(args[1])) {
-		Server::sendMessage(server, client->getFd(), IRCErrors::ERR_ERRONEUSNICKNAME(args[1]), SERVER);
-	} else if (_isNicknameInUse(server.getClients(), args[1])) {
-		Server::sendMessage(server, client->getFd(), IRCErrors::ERR_NICKNAMEINUSE(args[1]), SERVER);
+		Server::sendRPL(server, client->getFd(), IRCErrors::ERR_ERRONEUSNICKNAME(args[1]));
+	} else if (_isNicknameInUse(server.getClients(), client->getFd(), args[1])) {
+		Server::sendRPL(server, client->getFd(), IRCErrors::ERR_NICKNAMEINUSE(args[1]));
 	} else {
+		if (!client->getNickname().empty() && client->getNickname() != args[1]) {
+			Server::sendRPL(server, client->getFd(), args);
+		}
 		client->setNickname(args[1]);
-		Server::sendMessage(server, client->getFd(), "NICK :" + client->getNickname() + "\r\n", CLIENT);
 	}
 }
