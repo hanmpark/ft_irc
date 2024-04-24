@@ -4,8 +4,8 @@
 
 class USER : public ACommand {
 public:
-	USER();
+	USER(Server &server);
 	~USER();
 
-	void	execute(Server &server, Client *client, vector<string> &args) const;
+	void	execute(Client *client, vector<string> &args) const;
 };

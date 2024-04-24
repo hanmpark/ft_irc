@@ -1,26 +1,26 @@
 #pragma once
 
-# include "IrcIncludes.hpp"
+# include "IRCIncludes.hpp"
 # include "Client.hpp"
 
 class Channel {
 private:
-	string						_name;
-	string						_topic;
-	string						_key;
-	string						_creator;
-	vector<Client*>				_users; // conflicts with var in Server Class. So changed to _users
-	vector<Client*>				_operators;
-	size_t						_limit;
+	string			_name;
+	string			_topic;
+	string			_key;
+	string			_creator;
+	vector<Client*>	_users; // conflicts with var in Server Class. So changed to _users
+	vector<Client*>	_operators;
+	size_t			_limit;
 
-	struct ChannelMODES {
-		bool	inviteOnly; // +i => invite only
-		bool	topicReserved; // +t => reserved to operators only
-		bool	keyProtected; // +k => key is needed to join the channel
-		bool	limitSet; // +l => limit of users in the channel
-	};
+	// struct ChannelMODES {
+	// 	bool	inviteOnly; // +i => invite only
+	// 	bool	topicReserved; // +t => reserved to operators only
+	// 	bool	keyProtected; // +k => key is needed to join the channel
+	// 	bool	limitSet; // +l => limit of users in the channel
+	// };
 
-	ChannelMODES				_modes;
+	// ChannelMODES				_modes;
 
 public:
 	Channel();

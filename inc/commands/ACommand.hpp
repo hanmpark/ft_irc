@@ -1,16 +1,19 @@
 #pragma once
 
-# include "IrcIncludes.hpp"
-# include "IRCReplies.hpp"
+# include "IRCIncludes.hpp"
 # include "Server.hpp"
 # include "Client.hpp"
+# include "IRCReplies.hpp"
 
 class Server;
 
 class ACommand {
-public:
-	ACommand() {}
-	virtual ~ACommand() {}
+protected:
+	Server	&_server;
 
-	virtual void	execute(Server &server, Client *client, vector<string> &args) const = 0;
+public:
+	ACommand(Server &server) : _server(server) {}
+	virtual	~ACommand() {}
+
+	virtual void	execute(Client *client, vector<string> &args) const = 0;
 };

@@ -48,7 +48,7 @@ void	Server::acceptNewClient() {
 
 	client->setFd(clientFd);
 	client->setIpAddr(inet_ntoa(cliAddr.sin_addr)); // inet_ntoa() converts the client address to a string.
-	_clients.push_back(client);
+	_clients.addClient(client);
 	_pollFds.push_back(createSocket(clientFd));
 
 	cout << GREEN "New connection from: " << client->getIpAddr() << RESET << endl;

@@ -10,8 +10,8 @@ private:
 	bool	_isNicknameInUse(vector<Client*> const &clients, int fd, string const &nick) const;
 
 public:
-	NICK();
+	NICK(Server &server);
 	~NICK();
 
-	void	execute(Server &server, Client *client, vector<string> &args) const;
+	void	execute(Client *client, vector<string> &args) const;
 };

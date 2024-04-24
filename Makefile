@@ -31,34 +31,42 @@ endif
 SRCS_DIR	:=	./srcs/
 OBJS_DIR	:=	./objs/ # Add objects to a separate directory?
 HEADER		:=	./inc/
-DEPS		:=	${addprefix ${HEADER},	IrcIncludes.hpp \
+DEPS		:=	${addprefix ${HEADER},	IRCIncludes.hpp \
 										Client.hpp \
 										Server.hpp \
 										IRCReplies.hpp \
 										Channel.hpp} \
 				${addprefix ${HEADER}commands/,	ACommand.hpp \
+												CommandList.hpp \
 												CAP.hpp \
 												PASS.hpp \
 												NICK.hpp \
 												USER.hpp \
 												JOIN.hpp \
-												PING.hpp}
+												PING.hpp \
+												TOPIC.hpp \
+												KICK.hpp}
 
 # Files
 SRCS	=	${addprefix ${SRCS_DIR},	main.cpp \
-										Client.cpp} \
+										RPL.cpp} \
 			${addprefix ${SRCS_DIR}server/,	Server.cpp \
 											socket.cpp \
 											runner.cpp \
-											message.cpp \
 											handleClient.cpp} \
+			${addprefix ${SRCS_DIR}client/,		Client.cpp \
+												ClientList.cpp} \
+			${addprefix ${SRCS_DIR}channel/,	Channel.cpp \
+												ChannelList.cpp} \
 			${addprefix ${SRCS_DIR}commands/,	CAP.cpp \
 												PASS.cpp \
 												NICK.cpp \
 												USER.cpp \
 												JOIN.cpp \
-												PING.cpp} \
-			${addprefix ${SRCS_DIR}channel/, Channel.cpp}
+												PING.cpp \
+												TOPIC.cpp \
+												KICK.cpp \
+												CommandList.cpp}
 
 OBJS	=	${SRCS:.cpp=.o}
 

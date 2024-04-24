@@ -1,0 +1,44 @@
+#include "ChannelList.hpp"
+
+ChannelList::ChannelList() {}
+
+ChannelList::ChannelList(ChannelList const &copy) {
+	*this = copy;
+}
+
+ChannelList	&ChannelList::operator=(ChannelList const &rhs) {
+	if (this != &rhs) {
+		_channels = rhs._channels;
+	}
+	return *this;
+}
+
+ChannelList::~ChannelList() {
+	for (map<string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++) {
+		delete it->second;
+	}
+	_channels.clear();
+}
+
+void	ChannelList::addChannel(string const &channelName, Channel *channel) {
+	_channels[channelName] = channel;
+}
+
+void	ChannelList::removeChannel(string const &name) {
+	for (map<string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++) {
+		if (it->second->getName() == name) {
+			delete it->second;
+			_channels.erase(it);
+			break;
+		}
+	}
+}
+
+Channel	*ChannelList::getChannelByName(string const &name) const {
+	for (map<string, Channel*>::const_iterator it = _channels.begin(); it != _channels.end(); it++) {
+		if (it->second->getName() == name) {
+			return it->second;
+		}
+	}
+	return NULL;
+}

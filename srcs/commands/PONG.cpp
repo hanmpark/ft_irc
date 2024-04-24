@@ -1,16 +1,11 @@
 #include "commands/PONG.hpp"
 
-PONG::PONG() {}
+PONG::PONG(Server &server) : ACommand(server) {}
 
 PONG::~PONG() {}
 
-void	PONG::execute(Server &server, Client *client, vector<string> &args) const {
-	static_cast<void>(server);
+void	PONG::execute(Client *client, vector<string> &args) const {
 	if (args.size() < 2)
 		return ;
-	string	message = ":" + client->getNickname() + "!" \
-						+ client->getUsername() + "@" \
-						+ client->getHostname() + " PING " \
-						+ client->getNickname() + " :" + message + "\r\n";
-	Server::sendMessage(client->getFd(), message);
+	RPL::sendRPL(_server, client, "PONG " + _server.getName() + "\r\n");
 }

@@ -1,11 +1,11 @@
 #include "commands/PING.hpp"
 
-PING::PING() {}
+PING::PING(Server &server) : ACommand(server) {}
 
 PING::~PING() {}
 
-void	PING::execute(Server &server, Client *client, vector<string> &args) const {
+void	PING::execute(Client *client, vector<string> &args) const {
 	if (args.size() < 2)
 		return ;
-	Server::sendRPL(server, client->getFd(), "PONG " + server.getName() + "\r\n");
+	RPL::sendRPL(_server, client, "PONG " + _server.getName() + "\r\n");
 }

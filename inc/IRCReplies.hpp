@@ -1,6 +1,10 @@
 #pragma once
 
-# include "IrcIncludes.hpp"
+# include "IRCIncludes.hpp"
+# include "Server.hpp"
+# include "Client.hpp"
+
+class Server;
 
 enum e_endpoint {
 	CLIENT,
@@ -10,6 +14,19 @@ enum e_endpoint {
 enum e_transmit {
 	SEND,
 	RECEIVE
+};
+
+class RPL {
+private:
+	RPL();
+
+public:
+	static string	findPrefix(Server &server, Client *client, e_endpoint const &side);
+	static void		sendRPL(Server &server, Client *client, string const &message);
+	static void		sendRPL(Server &server, Client *client, vector<string> const &args);
+	static void		debugLog(string const &errorLog, bool const &debug);
+	static void		debugLog(vector<string> const &args, bool const &debug);
+	static void		debugLog(Server &server, Client *client, vector<string> const &args, e_endpoint const &endPoint, bool const &debug);
 };
 
 struct IRCReplies {
@@ -40,7 +57,6 @@ struct IRCReplies {
 	static string const RPL_UMODEIS(string const &userModeString) {
 		return "221 :" + userModeString + "\r\n";
 	}
-
 };
 
 struct IRCErrors {

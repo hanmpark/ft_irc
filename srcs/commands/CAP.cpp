@@ -1,12 +1,10 @@
 #include "commands/CAP.hpp"
-#include "Server.hpp"
 
-CAP::CAP() {}
+CAP::CAP(Server &server) : ACommand(server) {}
 
 CAP::~CAP() {}
 
-void	CAP::execute(Server &server, Client *client, vector<string> &args) const {
-	static_cast<void>(server);
+void	CAP::execute(Client *client, vector<string> &args) const {
 	static_cast<void>(args);
 	static_cast<void>(client);
 }

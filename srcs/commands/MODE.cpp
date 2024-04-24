@@ -1,4 +1,4 @@
-#include "MODE.hpp"
+#include "commands/MODE.hpp"
 
 MODE::MODE() {}
 

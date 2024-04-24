@@ -1,6 +1,4 @@
 #include "commands/JOIN.hpp"
-#include "Channel.hpp"
-#include "IRCReplies.hpp"
 
 JOIN::JOIN() : ACommand() {}
 

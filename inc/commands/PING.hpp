@@ -4,8 +4,8 @@
 
 class PING : public ACommand {
 public:
-	PING();
+	PING(Server &server);
 	~PING();
 
-	void	execute(Server &server, Client *client, vector<string> &args) const;
+	void	execute(Client *client, vector<string> &args) const;
 };

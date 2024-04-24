@@ -7,6 +7,12 @@
 # define YELLOW "\033[1;33m"
 # define RESET "\033[0m"
 
+# ifdef WLOGS
+#  define DEBUG true
+# else
+#  define DEBUG false
+# endif
+
 /* Includes */
 # include <iostream>
 # include <string>

@@ -4,8 +4,8 @@
 
 class QUIT : public ACommand {
 public:
-	QUIT();
+	QUIT(Server &server);
 	~QUIT();
 
-	void	execute(Server &server, Client *client, vector<string> &args) const;
+	void	execute(Client *client, vector<string> &args) const;
 };
