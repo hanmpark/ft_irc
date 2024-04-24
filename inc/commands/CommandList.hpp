@@ -1,17 +1,10 @@
 #pragma once
 
-# include "CAP.hpp"
-// # include "JOIN.hpp"
-// # include "KICK.hpp"
-// # include "MODE.hpp"
-# include "NICK.hpp"
-# include "PASS.hpp"
-# include "PING.hpp"
-# include "PONG.hpp"
-// # include "PRIVMSG.hpp"
-# include "QUIT.hpp"
-// # include "TOPIC.hpp"
-# include "USER.hpp"
+#include "IRCIncludes.hpp"
+
+class Server;
+class ACommand;
+class Client;
 
 class CommandList {
 private:
@@ -19,10 +12,10 @@ private:
 
 	typedef map<string, ACommand*>::const_iterator	commandIt;
 
-	vector<string>	_splitBuffer(string const &buffer, string const &limiter) const;
+	vector<string>	_split(string const &buffer, string const &limiter) const;
 
 public:
-	CommandList(Server &server);
+	CommandList();
 	~CommandList();
 
 	ACommand	*getCommandByName(string const &command) const;

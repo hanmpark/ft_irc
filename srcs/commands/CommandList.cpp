@@ -1,13 +1,18 @@
 #include "commands/CommandList.hpp"
+#include "commands/CAP.hpp"
+#include "commands/NICK.hpp"
+#include "commands/PASS.hpp"
+#include "commands/USER.hpp"
+#include "commands/PING.hpp"
+#include "commands/CAP.hpp"
 
-CommandList::CommandList(Server &server) {
-	_commands["CAP"] = new CAP(server);
+CommandList::CommandList() {
+	_commands["CAP"] = new CAP();
 	// _commands["JOIN"] = new JOIN();
-	_commands["NICK"] = new NICK(server);
-	_commands["PASS"] = new PASS(server);
-	_commands["USER"] = new USER(server);
-	_commands["PING"] = new PING(server);
-	_commands["PONG"] = new PONG(server);
+	_commands["NICK"] = new NICK();
+	_commands["PASS"] = new PASS();
+	_commands["USER"] = new USER();
+	_commands["PING"] = new PING();
 	// _commands["PRIVMSG"] = new PRIVMSG();
 	// _commands["TOPIC"] = new TOPIC();
 }
@@ -32,7 +37,7 @@ ACommand	*CommandList::getCommandByName(string const &commandName) const {
  TODO:
 	- keep whole argument after ":" in one string
 */
-vector<string>	CommandList::_splitBuffer(string const &buffer, string const &limiter) const {
+vector<string>	CommandList::_split(string const &buffer, string const &limiter) const {
 	vector<string>	args;
 	size_t			pos = 0;
 	size_t			nextPos = 0;
@@ -47,7 +52,7 @@ vector<string>	CommandList::_splitBuffer(string const &buffer, string const &lim
 }
 
 void	CommandList::select(Server &server, Client *client, string const &buffer) {
-	vector<string>	args = _splitBuffer(buffer, " ");
+	vector<string>	args = _split(buffer, " ");
 	transform(args[0].begin(), args[0].end(), args[0].begin(), to_upper);
 
 	ACommand	*cmd = getCommandByName(args[0]);
@@ -61,7 +66,7 @@ void	CommandList::select(Server &server, Client *client, string const &buffer) {
 			}
 		}
 		if (cmd != NULL) {
-			cmd->execute(client, args);
+			cmd->execute(server, client, args);
 		}
 	} else {
 		RPL::sendRPL(server, client, IRCErrors::ERR_UNKNOWNCOMMAND(args[0]));

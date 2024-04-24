@@ -4,8 +4,8 @@
 
 class CAP : public ACommand {
 public:
-	CAP(Server &server);
+	CAP();
 	~CAP();
 
-	void	execute(Client *client, vector<string> &args) const;
+	void	execute(Server &server, Client *client, vector<string> &args) const;
 };

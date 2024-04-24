@@ -1,11 +1,11 @@
 #include "commands/QUIT.hpp"
 
-QUIT::QUIT(Server &server) : ACommand(server) {}
+QUIT::QUIT() : ACommand() {}
 
 QUIT::~QUIT() {}
 
-void	QUIT::execute(Client *client, vector<string> &args) const {
-	if (_server.getClientList().getClients().empty())
+void	QUIT::execute(Server &server, Client *client, vector<string> &args) const {
+	if (server.getClientList().getClients().empty())
 		return ;
 	// * quit message can have a reason as parameter
 	if (!args.size())

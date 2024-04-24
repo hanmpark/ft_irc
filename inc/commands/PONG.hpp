@@ -4,8 +4,8 @@
 
 class PONG : public ACommand {
 public:
-	PONG(Server &server);
+	PONG();
 	~PONG();
 
-	void	execute(Client *client, vector<string> &args) const;
+	void	execute(Server &server, Client *client, vector<string> &args) const;
 };

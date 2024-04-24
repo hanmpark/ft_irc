@@ -8,12 +8,9 @@
 class Server;
 
 class ACommand {
-protected:
-	Server	&_server;
-
 public:
-	ACommand(Server &server) : _server(server) {}
+	ACommand() {}
 	virtual	~ACommand() {}
 
-	virtual void	execute(Client *client, vector<string> &args) const = 0;
+	virtual void	execute(Server &server, Client *client, vector<string> &args) const = 0;
 };

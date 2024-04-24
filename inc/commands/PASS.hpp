@@ -4,8 +4,8 @@
 
 class PASS : public ACommand {
 public:
-	PASS(Server &server);
+	PASS();
 	~PASS();
 
-	void	execute(Client *client, vector<string> &args) const;
+	void	execute(Server &server, Client *client, vector<string> &args) const;
 };

@@ -1,11 +1,11 @@
 #include "commands/PONG.hpp"
 
-PONG::PONG(Server &server) : ACommand(server) {}
+PONG::PONG() : ACommand() {}
 
 PONG::~PONG() {}
 
-void	PONG::execute(Client *client, vector<string> &args) const {
+void	PONG::execute(Server &server, Client *client, vector<string> &args) const {
 	if (args.size() < 2)
 		return ;
-	RPL::sendRPL(_server, client, "PONG " + _server.getName() + "\r\n");
+	RPL::sendRPL(server, client, "PONG " + server.getName() + "\r\n");
 }

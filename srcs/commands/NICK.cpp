@@ -1,6 +1,6 @@
 #include "commands/NICK.hpp"
 
-NICK::NICK(Server &server) : ACommand(server) {}
+NICK::NICK() : ACommand() {}
 
 NICK::~NICK() {}
 
@@ -31,16 +31,16 @@ bool	NICK::_isNicknameInUse(vector<Client*> const &clients, int fd, string const
 	return false;
 }
 
-void	NICK::execute(Client *client, vector<string> &args) const {
+void	NICK::execute(Server &server, Client *client, vector<string> &args) const {
 	if (client->getNickname().empty() && args.size() == 1) {
-		RPL::sendRPL(_server, client, IRCErrors::ERR_NONICKNAMEGIVEN());
+		RPL::sendRPL(server, client, IRCErrors::ERR_NONICKNAMEGIVEN());
 	} else if (!_isValidNickname(args[1])) {
-		RPL::sendRPL(_server, client, IRCErrors::ERR_ERRONEUSNICKNAME(args[1]));
-	} else if (_isNicknameInUse(_server.getClientList().getClients(), client->getFd(), args[1])) {
-		RPL::sendRPL(_server, client, IRCErrors::ERR_NICKNAMEINUSE(args[1]));
+		RPL::sendRPL(server, client, IRCErrors::ERR_ERRONEUSNICKNAME(args[1]));
+	} else if (_isNicknameInUse(server.getClientList().getClients(), client->getFd(), args[1])) {
+		RPL::sendRPL(server, client, IRCErrors::ERR_NICKNAMEINUSE(args[1]));
 	} else {
 		if (!client->getNickname().empty() && client->getNickname() != args[1]) {
-			RPL::sendRPL(_server, client, args);
+			RPL::sendRPL(server, client, args);
 		}
 		client->setNickname(args[1]);
 	}
