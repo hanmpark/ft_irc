@@ -24,7 +24,7 @@ void	Server::receiveData(int clientFd) {
 	ssize_t	bytesReceived = recv(clientFd, buff, BUFFER_SIZE - 1, 0);
 	if (bytesReceived <= 0) {
 		removePollFd(clientFd);
-		_clients.removeClient(clientFd);
+		_clients.deleteClient(_clients.getClientByFd(clientFd));
 		close(clientFd);
 		return ;
 	}
@@ -34,7 +34,7 @@ void	Server::receiveData(int clientFd) {
 			handleClient(client);
 		} catch (exception &e) { // This is when the client's password mismatches
 			removePollFd(clientFd);
-			_clients.removeClient(clientFd);
+			_clients.deleteClient(_clients.getClientByFd(clientFd));
 			close(clientFd);
 		}
 	}

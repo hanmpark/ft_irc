@@ -13,7 +13,8 @@ public:
 	~ClientList();
 
 	void			addClient(Client *client);
-	void			removeClient(int fd);
+	void			removeClient(Client *client);
+	void			deleteClient(Client *client);
 
 	Client			*getClientByFd(int fd) const;
 	Client			*getClientByNickname(string const &nickname) const;

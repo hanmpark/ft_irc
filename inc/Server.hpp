@@ -48,6 +48,7 @@ public:
 	int				getSockfd() const;
 	string const 	&getName() const;
 	ClientList		&getClientList();
+	ChannelList		&getChannelList();
 	string			&getPassword();
 	bool			&getSignalReceived() const;
 

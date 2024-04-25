@@ -35,15 +35,15 @@ struct IRCReplies {
 	}
 
 	static string const RPL_NAMREPLY(string const &nick, string const &channel, string const &names) {
-		return ": 353 " + nick + " = " + channel + " :" + names + "\r\n";
+		return "353 " + nick + " = " + channel + " :" + names + "\r\n";
 	}
 
 	static string const RPL_ENDOFNAMES(string const &nick, string const &channel) {
-		return ": 366 " + nick + " " + channel + " :End of /NAMES list\r\n";
+		return "366 " + nick + " " + channel + " :End of /NAMES list\r\n";
 	}
 
 	static string const RPL_CHANNELMODEIS(string const &channel, string const &mode) {
-		return ": 324 " + channel + " " + mode + "\r\n";
+		return "324 " + channel + " " + mode + "\r\n";
 	}
 
 	static string const RPL_YOUREOPER() {
@@ -117,7 +117,7 @@ struct IRCErrors {
 	}
 
 	static string const ERR_NOSUCHNICK(string const &nick) {
-		return ": 401 " + nick + " :No such nick/channel\r\n";
+		return "401 " + nick + " :No such nick/channel\r\n";
 	}
 
 	static string const ERR_NOSUCHCHANNEL(string const &channel) {
@@ -125,7 +125,7 @@ struct IRCErrors {
 	}
 
 	static string const ERR_CANNOTSENDTOCHAN(string const &channel) {
-		return ": 404 " + channel + " :Cannot send to channel\r\n";
+		return "404 " + channel + " :Cannot send to channel\r\n";
 	}
 
 	static string const ERR_BADCHANMASK() {
@@ -133,6 +133,10 @@ struct IRCErrors {
 	}
 
 	static string const ERR_CHANNELISFULL(string const &channel) {
-		return ": 471 " + channel + " :Cannot join channel (+l)\r\n";
+		return "471 " + channel + " :Cannot join channel (+l)\r\n";
+	}
+
+	static string const ERR_UNKNOWNMODE(string const &mode) {
+		return "472 " + mode + " :is unknown mode char to me\r\n";
 	}
 };

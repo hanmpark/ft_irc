@@ -14,9 +14,6 @@ ClientList	&ClientList::operator=(ClientList const &rhs) {
 }
 
 ClientList::~ClientList() {
-	for (vector<Client*>::iterator it = _clients.begin(); it != _clients.end(); it++) {
-		delete *it;
-	}
 	_clients.clear();
 }
 
@@ -24,9 +21,18 @@ void	ClientList::addClient(Client *client) {
 	_clients.push_back(client);
 }
 
-void	ClientList::removeClient(int fd) {
+void	ClientList::removeClient(Client *client) {
 	for (vector<Client*>::iterator it = _clients.begin(); it != _clients.end(); it++) {
-		if ((*it)->getFd() == fd) {
+		if (*it == client) {
+			_clients.erase(it);
+			break;
+		}
+	}
+}
+
+void	ClientList::deleteClient(Client *client) {
+	for (vector<Client*>::iterator it = _clients.begin(); it != _clients.end(); it++) {
+		if (*it == client) {
 			delete *it;
 			_clients.erase(it);
 			break;

@@ -19,6 +19,12 @@ Server::Server(string const &portString, string const &password) : _name("irc.yo
 }
 
 Server::~Server() {
+	for (vector<Client*>::iterator it = _clients.getClients().begin(); it != _clients.getClients().end(); it++) {
+		if (*it) {
+			delete *it;
+		}
+	}
+	_clients.getClients().clear();
 	_pollFds.clear();
 }
 
@@ -29,6 +35,8 @@ int	Server::getSockfd() const { return _sockfd; }
 string const	&Server::getName() const { return _name; }
 
 ClientList	&Server::getClientList() { return _clients; }
+
+ChannelList	&Server::getChannelList() { return _channels; }
 
 string	&Server::getPassword() { return _password; }
 
