@@ -1,6 +1,7 @@
 #pragma once
 
 # include "IRCIncludes.hpp"
+# include "ClientList.hpp"
 
 class ClientList;
 
