@@ -4,7 +4,7 @@
 #include "commands/PASS.hpp"
 #include "commands/USER.hpp"
 #include "commands/PING.hpp"
-#include "commands/CAP.hpp"
+#include "commands/MODE.hpp"
 
 CommandList::CommandList() {
 	_commands["CAP"] = new CAP();
@@ -13,6 +13,7 @@ CommandList::CommandList() {
 	_commands["PASS"] = new PASS();
 	_commands["USER"] = new USER();
 	_commands["PING"] = new PING();
+	_commands["MODE"] = new MODE();
 	// _commands["PRIVMSG"] = new PRIVMSG();
 	// _commands["TOPIC"] = new TOPIC();
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 # include "IRCIncludes.hpp"
+# include "ClientList.hpp"
 
 class ClientList;
 
@@ -13,7 +14,7 @@ private:
 	ClientList		_operators;
 	ClientList		_invited;
 	size_t			_limit;
-	unsigned int	_modes = NOMODE;
+	unsigned int	_modes;
 
 public:
 	Channel();
