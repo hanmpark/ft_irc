@@ -6,7 +6,7 @@ JOIN::JOIN() : ACommand() {}
 
 JOIN::~JOIN() {}
 
-map<string, string>	JOIN::tokenizeChannels(Server &server, Client *client, vector<string> &args) const {
+map<string, string>	JOIN::_tokenizeChannels(Server &server, Client *client, vector<string> &args) const {
 	istringstream	ss(args[1]);
 	string			channelToken;
 	map<string, string>	tokenizedChannels;
@@ -60,7 +60,7 @@ void	JOIN::execute(Server &server, Client *client, vector<string> &args) const {
 		return;
 	}
 
-	tokenizedChannels = tokenizeChannels(server, client, args);
+	tokenizedChannels = _tokenizeChannels(server, client, args);
 
 	map<string, string>::iterator	it = tokenizedChannels.begin();
 	for (; it != tokenizedChannels.end(); it++) {

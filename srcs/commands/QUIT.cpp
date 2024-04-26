@@ -11,10 +11,6 @@ void	QUIT::execute(Server &server, Client *client, vector<string> &args) const {
 	if (!args.size())
 		args.push_back("Leaving");
 
-	// string	message = ":" + client->getNickname() + "!" \
-	// 					+ client->getUsername() + "@" \
-	// 					+ client->getHostname() + " QUIT :" + args[0] + "\r\n";
-
 	// * broadcast the message to all the users in the server
 	// vector<Client*>::iterator	it;
 	// for(it = server.getClients().begin(); it != server.getClients().end(); it++) {

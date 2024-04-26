@@ -5,27 +5,22 @@ KICK::KICK() : ACommand() {}
 KICK::~KICK() {}
 
 void	KICK::execute(Server &server, Client *client, vector<string> &args) const {
+	if (args.size() < 3) {
+		RPL::sendRPL(server, client, IRCErrors::ERR_NEEDMOREPARAMS(args[0]));
+		return;
+	}
+	string	error;
 	Channel	*channel = server.getChannelList().getChannelByName(args[1]);
-	static_cast<void>(client);
-	// 1. Check if the channel exists
-	if (channel == NULL) {
-		// send(client->getFd(), IRCErrors::ERR_NOSUCHCHANNEL(args[1])); // >> 403 No such channel
-		return ;
+	if (channel == NULL) { // 1. Check if the channel exists
+		error = IRCErrors::ERR_NOSUCHCHANNEL(client->getNickname() + " " + args[1]);
+	} else if (channel->getUsers().getClientByNickname(args[2]) == NULL) { // 2. Check if the client is in the channel
+		error = IRCErrors::ERR_NOSUCHNICK(client->getNickname() + " " + args[1]);
+	} else if (channel->getOperators().getClientByNickname(args[2]) == NULL) { // 3. Check if the client is an operator
+		error = IRCErrors::ERR_CHANOPRIVSNEEDED(client->getNickname() + " " + args[1]);
 	}
-	// 2. Check if the client is in the channel
-	Client	*target = channel->getUsers().getClientByNickname(args[3]);
-	if (target == NULL) {
-		// send(); // >> 401 No such nick/channel
-		return ;
+	if (!error.empty()) {
+		RPL::sendRPL(server, client, error);
+	} else {
+		channel->getUsers().removeClient(channel->getUsers().getClientByNickname(args[2]));
 	}
-
-	// 3. Check if the client is an operator
-	if (channel->getOperators().getClientByNickname(args[3]) == NULL) {
-		// send(); // >> 482 You're not channel operator
-		return ;
-	}
-
-	// 4. Kick the client
-	channel->getUsers().removeClient(target);
-
 }
