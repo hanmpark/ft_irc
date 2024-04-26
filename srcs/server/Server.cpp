@@ -41,5 +41,3 @@ ChannelList	&Server::getChannelList() { return _channels; }
 string	&Server::getPassword() { return _password; }
 
 bool	&Server::getSignalReceived() const { return _signalReceived; }
-
-bool	&Server::getSignalReceived() const { return _signalReceived; }
