@@ -40,7 +40,7 @@ struct IRCReplies {
 	static string const RPL_YOUREOPER() { return "381 :You are now an IRC operator\r\n"; }
 };
 
-class IRCErrors : public exception {
+class IRCErrors {
 private:
 	IRCErrors();
 

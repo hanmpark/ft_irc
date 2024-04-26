@@ -185,7 +185,8 @@ string const	MODE::_applyModeSetting(Server &server, Client *client, Channel *ch
 	string	modeStringApplied, modeString = args[2];
 
 	if (!_formatModeArgs(modeString, args)) {
-		throw IRCErrors::ERR_NEEDMOREPARAMS(client->getNickname() + " " + args[0]);
+		RPL::sendRPL(server, client, IRCErrors::ERR_NEEDMOREPARAMS(client->getNickname() + " " + args[0]));
+		return "";
 	}
 	deque<string>	modeArgs = _getModeArgs(args);
 	for (size_t i = 0; i < modeString.length(); i++) {
@@ -202,7 +203,8 @@ string const	MODE::_applyModeSetting(Server &server, Client *client, Channel *ch
 				}
 			}
 		} else {
-			throw IRCErrors::ERR_UNKNOWNCOMMAND(client->getNickname() + " " + modeString.substr(i, 1));
+			RPL::sendRPL(server, client, IRCErrors::ERR_UNKNOWNMODE(client->getNickname() + " " + modeString.substr(i, 1)));\
+			return "";
 		}
 	}
 	return modeStringApplied;
@@ -210,7 +212,7 @@ string const	MODE::_applyModeSetting(Server &server, Client *client, Channel *ch
 
 void	MODE::execute(Server &server, Client *client, vector<string> &args) const {
 	if (args.size() < 2) {
-		throw IRCErrors::ERR_NEEDMOREPARAMS(args[0]);
+		RPL::sendRPL(server, client, IRCErrors::ERR_NEEDMOREPARAMS(args[0]));
 	} else if (args.size() > 2) {
 		Channel	*channel = server.getChannelList().getChannelByName(args[1]);
 
@@ -222,7 +224,7 @@ void	MODE::execute(Server &server, Client *client, vector<string> &args) const {
 				RPL::sendRPL(server, client, args);
 			}
 		} else {
-			throw IRCErrors::ERR_NOSUCHCHANNEL(args[1]);
+			RPL::sendRPL(server, client, IRCErrors::ERR_NOSUCHCHANNEL(args[1]));
 		}
 	}
 }

@@ -70,11 +70,7 @@ void	CommandList::select(Server &server, Client *client, string const &buffer) {
 			}
 		}
 		if (cmd != NULL) {
-			try {
-				cmd->execute(server, client, args);
-			} catch (IRCErrors &e) {
-				RPL::sendRPL(server, client, e.what());
-			}
+			cmd->execute(server, client, args);
 		}
 	} else {
 		RPL::sendRPL(server, client, IRCErrors::ERR_UNKNOWNCOMMAND(args[0]));
