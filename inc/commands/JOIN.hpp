@@ -8,4 +8,6 @@ public:
 	~JOIN();
 
 	void	execute(Server &server, Client *client, vector<string> &args) const;
+
+	map<string, string>	tokenizeChannels(Server &server, Client *client, vector<string> &args) const;
 };

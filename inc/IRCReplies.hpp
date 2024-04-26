@@ -61,6 +61,8 @@ public:
 	static string const ERR_PASSWDMISMATCH() { return "464 :Password incorrect\r\n"; }
 	static string const ERR_CHANNELISFULL(string const &channel) { return "471 " + channel + " :Cannot join channel (+l)\r\n"; }
 	static string const ERR_UNKNOWNMODE(string const &mode) { return "472 " + mode + " :is unknown mode char to me\r\n"; }
+	static string const ERR_INVITEONLYCHAN(string const &channel) { return "473 " + channel + " :Cannot join channel (+i)\r\n"; }
+	static string const ERR_BADCHANNELKEY(string const &channel) { return "475 " + channel + " :Cannot join channel (+k)\r\n"; }
 	static string const ERR_BADCHANMASK(string const &channel) { return "476 " + channel + ": Bad Channel Mask\r\n"; }
 	static string const ERR_CHANOPRIVSNEEDED(string const &channel) { return "482 " + channel + " :You're not channel operator\r\n"; }
 	static string const ERR_RESTRICTED() { return "484 :Your connection is restricted!\r\n"; }
