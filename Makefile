@@ -45,7 +45,8 @@ DEPS		:=	${addprefix ${HEADER},	IRCIncludes.hpp \
 												JOIN.hpp \
 												PING.hpp \
 												TOPIC.hpp \
-												MODE.hpp}
+												MODE.hpp \
+												INVITE.hpp}
 
 # Files
 SRCS	=	${addprefix ${SRCS_DIR},	main.cpp \
@@ -67,6 +68,7 @@ SRCS	=	${addprefix ${SRCS_DIR},	main.cpp \
 												TOPIC.cpp \
 												KICK.cpp \
 												MODE.cpp \
+												INVITE.cpp \
 												CommandList.cpp}
 
 OBJS	=	${SRCS:.cpp=.o}

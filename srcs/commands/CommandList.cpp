@@ -5,6 +5,8 @@
 #include "commands/USER.hpp"
 #include "commands/PING.hpp"
 #include "commands/MODE.hpp"
+#include "commands/TOPIC.hpp"
+#include "commands/INVITE.hpp"
 
 CommandList::CommandList() {
 	_commands["CAP"] = new CAP();
@@ -14,8 +16,9 @@ CommandList::CommandList() {
 	_commands["USER"] = new USER();
 	_commands["PING"] = new PING();
 	_commands["MODE"] = new MODE();
+	_commands["TOPIC"] = new TOPIC();
+	_commands["INVITE"] = new INVITE();
 	// _commands["PRIVMSG"] = new PRIVMSG();
-	// _commands["TOPIC"] = new TOPIC();
 }
 
 CommandList::~CommandList() {
@@ -34,16 +37,16 @@ ACommand	*CommandList::getCommandByName(string const &commandName) const {
 	return it->second;
 }
 
-/*
- TODO:
-	- keep whole argument after ":" in one string
-*/
 vector<string>	CommandList::_split(string const &buffer, string const &limiter) const {
 	vector<string>	args;
 	size_t			pos = 0;
 	size_t			nextPos = 0;
 
 	while ((nextPos = buffer.find(limiter, pos)) != string::npos) {
+		if (buffer[pos] == ':') {
+			pos++;
+			break;
+		}
 		string	arg = buffer.substr(pos, nextPos - pos);
 		args.push_back(arg);
 		pos = nextPos + 1;
@@ -67,7 +70,11 @@ void	CommandList::select(Server &server, Client *client, string const &buffer) {
 			}
 		}
 		if (cmd != NULL) {
-			cmd->execute(server, client, args);
+			try {
+				cmd->execute(server, client, args);
+			} catch (IRCErrors &e) {
+				RPL::sendRPL(server, client, e.what());
+			}
 		}
 	} else {
 		RPL::sendRPL(server, client, IRCErrors::ERR_UNKNOWNCOMMAND(args[0]));
