@@ -1,14 +1,12 @@
-# pragma once
+#pragma once
 
-# include "IrcIncludes.hpp"
+# include "IRCIncludes.hpp"
 # include "IRCReplies.hpp"
-# include "commands/ACommand.hpp"
-# include "Client.hpp"
-# include "Channel.hpp"
+# include "commands/CommandList.hpp"
+# include "ChannelList.hpp"
+# include "ClientList.hpp"
 
 # define BUFFER_SIZE 1024
-
-class ACommand;
 
 /*
  * Server class:
@@ -23,32 +21,21 @@ class ACommand;
  */
 class Server {
 private:
-	map<string, ACommand*>	_commands;	// map of commands
-	vector<Client*>			_clients;	// vector of clients
-	map<string, Channel*>	_channels;	// map of channels
-	string					_password;
-	string					_name;
+	CommandList				_commands;
+	ClientList				_clients;
+	ChannelList				_channels;
+	string					_name, _password;
 	int						_port, _sockfd;
-	vector<struct pollfd>	_pollFds;	// vector of pollfds
+	vector<struct pollfd>	_pollFds;
 	static bool				_signalReceived;
 
-	typedef vector<Client*>::iterator			clientIt;
-	typedef map<string, ACommand*>::iterator	commandIt;
-	typedef map<string, Channel*>::iterator		channelIt;
-
 	static void		signalHandler(int signum);
-
 	struct pollfd	createSocket(int fd) const;
 	void			acceptNewClient();
 	void			receiveData(int clientFd);
-	Client			*getClientByFd(int fd);
-
 	void			handleClient(Client *client);
-	vector<string>	splitBuffer(string const &buffer, string const &limiter) const;
-	void			selectCommand(Client *client, string const &buffer);
-
 	void			closeFileDescriptors();
-	void			removeClient(int fd);
+	void			removePollFd(int fd);
 
 	Server();
 
@@ -56,31 +43,14 @@ public:
 	Server(string const &portString, string const &password);
 	~Server();
 
-	static string	findPrefix(Server &server, int fd, e_endpoint side);
-	static void		sendRPL(Server &server, int fd, string const &message);
-	static void		sendRPL(Server &server, int fd, vector<string> const &args);
-	static void		debugLog(string const &errorLog);
-	static void		debugLog(vector<string> const &args);
-	static void		debugLog(Server &server, int fd, vector<string> const &args, e_endpoint endPoint);
-
 	/* Accessors */
-
 	int				getPort() const;
 	int				getSockfd() const;
 	string const 	&getName() const;
-	vector<Client*>	&getClients();
+	ClientList		&getClientList();
+	ChannelList		&getChannelList();
 	string			&getPassword();
 	bool			&getSignalReceived() const;
-
-	/* Channel methods */
-	Channel	*getChannelByName(string const &channel);
-	void	addChannel(string const &channelName, Channel *channel);
-	void	removeChannel(string const &channelName);
-	void	sendPrivMessage(string const &nickname, string const &message, int fd);
-	void	broadcastMessage(string const &channelName, string const &message, int fd);
-
-	/* Server method */
-	Client	*getClientByNickname(string const &nickname);
 
 	void	initServer();
 	void	runServer();

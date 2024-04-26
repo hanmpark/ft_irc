@@ -1,8 +1,9 @@
 #include "Channel.hpp"
+#include "ClientList.hpp"
 
-Channel::Channel() {}
+Channel::Channel() : _modes(NOMODE) {}
 
-Channel::Channel(string const &name) : _name(name) {}
+Channel::Channel(string const &name) : _name(name), _limit(0), _modes(TOPIC) {}
 
 Channel::~Channel() {}
 
@@ -12,41 +13,22 @@ string	Channel::getTopic() const { return _topic; }
 
 string	Channel::getKey() const { return _key; }
 
-string	Channel::getCreator() const { return _creator; }
-
 size_t	Channel::getLimit() const { return _limit; }
 
-void	Channel::setCreator(string const &creator) { _creator = creator; }
+unsigned int	Channel::getModes() const { return _modes; }
+
+ClientList	&Channel::getUsers() { return _users; }
+
+ClientList	&Channel::getOperators() { return _operators; }
+
+ClientList	&Channel::getInvited() { return _invited; }
 
 void	Channel::setTopic(string const &topic) { _topic = topic; }
 
 void	Channel::setKey(string const &key) { _key = key; }
 
-void	Channel::addClient(Client *client) {
-	// check if the client is already in the channel
-	vector<Client*>::iterator it = find(_users.begin(), _users.end(), client);
+void	Channel::setLimit(int limit) { _limit = limit; }
 
-	if (it != _users.end())
-		return ;
-	_users.push_back(client);
-}
+void	Channel::addMode(e_modes mode) { _modes |= mode; }
 
-void	Channel::removeClient(Client *client) {
-	vector<Client*>::iterator it = find(_users.begin(), _users.end(), client);
-
-	if (it != _users.end())
-		_users.erase(it);
-}
-
-void	Channel::addOperator(Client *client) { _operators.push_back(client); }
-
-void	Channel::removeOperator(Client *client) {
-	vector<Client*>::iterator it = find(_operators.begin(), _operators.end(), client);
-
-	if (it != _operators.end())
-		_operators.erase(it);
-}
-
-vector<Client*>	&Channel::getUsers() { return _users; }
-
-vector<Client*>	&Channel::getOperators() { return _operators; }
+void	Channel::removeMode(e_modes mode) { _modes &= ~mode; }

@@ -10,27 +10,18 @@ void Server::signalHandler(int signum)
 }
 
 void Server::closeFileDescriptors() {
-	for (size_t i = 0; i < _clients.size(); i++) {
-		cout << RED << "Client: " << _clients[i]->getFd() << " Disconnected" << RESET << endl;
-		close(_clients[i]->getFd());
-	}
+	_clients.closeFileDescriptors();
 	if (_sockfd != -1) {
 		cout << RED << "Server: " << _sockfd << " Disconnected" << RESET << endl;
 		close(_sockfd);
 	}
 }
 
-void Server::removeClient(int fd)
+void Server::removePollFd(int fd)
 {
 	for (size_t i = 0; i < _pollFds.size(); i++) {
 		if (_pollFds[i].fd == fd) {
 			_pollFds.erase(_pollFds.begin() + i);
-			break;
-		}
-	}
-	for (size_t i = 0; i < _clients.size(); i++) {
-		if (_clients[i]->getFd() == fd) {
-			_clients.erase(_clients.begin() + i);
 			break;
 		}
 	}

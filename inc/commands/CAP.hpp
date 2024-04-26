@@ -2,8 +2,6 @@
 
 # include "ACommand.hpp"
 
-# define CAP_LS_RETURN "CAP * LS :\r\n"
-
 class CAP : public ACommand {
 public:
 	CAP();

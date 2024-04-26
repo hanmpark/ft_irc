@@ -2,14 +2,10 @@
 
 # include "ACommand.hpp"
 
-class PRIVMSG : public ACommand {
-private:
-	string		_target;
-	string		_message;
-
+class INVITE : public ACommand {
 public:
-	PRIVMSG();
-	~PRIVMSG();
+	INVITE();
+	~INVITE();
 
 	void	execute(Server &server, Client *client, vector<string> &args) const;
 };

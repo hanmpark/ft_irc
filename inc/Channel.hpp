@@ -1,48 +1,48 @@
 #pragma once
 
-# include "IrcIncludes.hpp"
-# include "Client.hpp"
+# include "IRCIncludes.hpp"
+# include "ClientList.hpp"
+
+class ClientList;
 
 class Channel {
 private:
-	string						_name;
-	string						_topic;
-	string						_key;
-	string						_creator;
-	vector<Client*>				_users; // conflicts with var in Server Class. So changed to _users
-	vector<Client*>				_operators;
-	size_t						_limit;
-
-	struct ChannelMODES {
-		bool	inviteOnly; // +i => invite only
-		bool	topicReserved; // +t => reserved to operators only
-		bool	keyProtected; // +k => key is needed to join the channel
-		bool	limitSet; // +l => limit of users in the channel
-	};
-
-	ChannelMODES				_modes;
+	string			_name;
+	string			_topic;
+	string			_key;
+	ClientList		_users;
+	ClientList		_operators;
+	ClientList		_invited;
+	size_t			_limit;
+	unsigned int	_modes;
 
 public:
 	Channel();
 	Channel(string const &name);
 	~Channel();
 
-	string	getName() const;
-	string	getTopic() const;
-	string	getKey() const;
-	string	getCreator() const;
-	size_t	getLimit() const;
+	enum e_modes {
+		NOMODE	= 0,
+		INVITE	= 1,
+		TOPIC	= 1 << 1,
+		KEY		= 1 << 2,
+		LIMIT	= 1 << 3
+	};
 
-	void	setCreator(string const &creator);
+	string			getName() const;
+	string			getTopic() const;
+	string			getKey() const;
+	size_t			getLimit() const;
+	unsigned int	getModes() const;
+
+	ClientList		&getUsers();
+	ClientList		&getOperators();
+	ClientList		&getInvited();
+
+	void	addMode(e_modes mode);
+	void	removeMode(e_modes mode);
+
 	void	setTopic(string const &topic);
 	void	setKey(string const &key);
-
-	void	addClient(Client *client); //? change to addUsers
-	void	removeClient(Client *client); //? change to removeUsers
-	void	addOperator(Client *client);
-	void	removeOperator(Client *client);
-
-	vector<Client*>	&getUsers();
-	vector<Client*>	&getOperators();
-
+	void	setLimit(int limit);
 };

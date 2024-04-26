@@ -1,9 +1,8 @@
-#include "PRIVMSG.hpp"
+#include "commands/PRIVMSG.hpp"
 
 PRIVMSG::PRIVMSG() : ACommand() {}
 
 PRIVMSG::~PRIVMSG() {}
-
 
 /*
 * Possible cases: args[0] = #channel | args[0] = <nickname>
@@ -28,7 +27,7 @@ void	PRIVMSG::execute(Server &server, Client *client, vector<string> &args) cons
 		}
 		vector<string>::iterator	it = tokens.begin();
 		while (it != tokens.end()) {
-			if (server.getChannelByName(*it) == NULL) {
+			if (server.getChannels().Chan(*it) == NULL) {
 				Server::sendMessage(client->getFd(), IRCErrors::ERR_NOSUCHCHANNEL(*it));
 			}
 			else {

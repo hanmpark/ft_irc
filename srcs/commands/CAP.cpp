@@ -1,7 +1,6 @@
 #include "commands/CAP.hpp"
-#include "Server.hpp"
 
-CAP::CAP() {}
+CAP::CAP() : ACommand() {}
 
 CAP::~CAP() {}
 
