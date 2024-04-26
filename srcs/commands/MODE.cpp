@@ -177,18 +177,18 @@ string const	MODE::_applyModeSetting(Server &server, Client *client, Channel *ch
 			applyMode = modeString[i] == '+';
 			i++;
 		}
-		if (_modeMap.find({modeString.substr(i, 1), applyMode}) != _modeMap.end()) {
-			if ((this->*_modeMap.at({modeString.substr(i, 1), applyMode}))(channel, client, modeArgs)) {
-				if (_addFlagToModeArgs(modeStringApplied, applyMode)) {
-					modeStringApplied += (applyMode == true ? "+" : "-") + modeString.substr(i, 1);
-				} else {
-					modeStringApplied += modeString.substr(i, 1);
-				}
-			}
-		} else {
-			RPL::sendRPL(server, client, IRCErrors::ERR_UNKNOWNMODE(modeString.substr(i, 1)));
-			return "";
-		}
+		// if (_modeMap.find({modeString.substr(i, 1), applyMode}) != _modeMap.end()) {
+		// 	if ((this->*_modeMap.at({modeString.substr(i, 1), applyMode}))(channel, client, modeArgs)) {
+		// 		if (_addFlagToModeArgs(modeStringApplied, applyMode)) {
+		// 			modeStringApplied += (applyMode == true ? "+" : "-") + modeString.substr(i, 1);
+		// 		} else {
+		// 			modeStringApplied += modeString.substr(i, 1);
+		// 		}
+		// 	}
+		// } else {
+		// 	RPL::sendRPL(server, client, IRCErrors::ERR_UNKNOWNMODE(modeString.substr(i, 1)));
+		// 	return "";
+		// }
 	}
 	return modeStringApplied;
 }

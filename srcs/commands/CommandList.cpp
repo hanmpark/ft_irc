@@ -4,11 +4,12 @@
 #include "commands/PASS.hpp"
 #include "commands/USER.hpp"
 #include "commands/PING.hpp"
+#include "commands/JOIN.hpp"
 #include "commands/CAP.hpp"
 
 CommandList::CommandList() {
 	_commands["CAP"] = new CAP();
-	// _commands["JOIN"] = new JOIN();
+	_commands["JOIN"] = new JOIN();
 	_commands["NICK"] = new NICK();
 	_commands["PASS"] = new PASS();
 	_commands["USER"] = new USER();

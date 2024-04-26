@@ -3,7 +3,7 @@
 
 Channel::Channel() {}
 
-Channel::Channel(string const &name) : _name(name), _limit(0), _modes(_modes | TOPIC) {}
+Channel::Channel(string const &name) : _name(name), _limit(0), _modes(TOPIC) {}
 
 Channel::~Channel() {}
 
