@@ -8,8 +8,6 @@ private:
 
 public:
 	ChannelList();
-	ChannelList(ChannelList const &copy);
-	ChannelList	&operator=(ChannelList const &rhs);
 	~ChannelList();
 
 	void	addChannel(string const &channelName, Channel *channel);

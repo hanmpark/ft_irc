@@ -29,7 +29,7 @@ endif
 
 # Directories
 SRCS_DIR	:=	./srcs/
-OBJS_DIR	:=	./objs/ # Add objects to a separate directory?
+OBJS_DIR	:=	./objs/
 HEADER		:=	./inc/
 DEPS		:=	${addprefix ${HEADER},	IRCIncludes.hpp \
 										Client.hpp \
@@ -39,14 +39,18 @@ DEPS		:=	${addprefix ${HEADER},	IRCIncludes.hpp \
 				${addprefix ${HEADER}commands/,	ACommand.hpp \
 												CommandList.hpp \
 												CAP.hpp \
-												PASS.hpp \
-												NICK.hpp \
-												USER.hpp \
+												INVITE.hpp \
 												JOIN.hpp \
-												PING.hpp \
-												TOPIC.hpp \
+												KICK.hpp \
 												MODE.hpp \
-												INVITE.hpp}
+												NICK.hpp \
+												PASS.hpp \
+												PING.hpp \
+												PONG.hpp \
+												PRIVMSG.hpp \
+												QUIT.hpp \
+												TOPIC.hpp \
+												USER.hpp}
 
 # Files
 SRCS	=	${addprefix ${SRCS_DIR},	main.cpp \
@@ -55,21 +59,24 @@ SRCS	=	${addprefix ${SRCS_DIR},	main.cpp \
 											socket.cpp \
 											runner.cpp \
 											handleClient.cpp} \
-			${addprefix ${SRCS_DIR}client/,		Client.cpp \
-												ClientList.cpp} \
+			${addprefix ${SRCS_DIR}client/,	Client.cpp \
+											ClientList.cpp} \
 			${addprefix ${SRCS_DIR}channel/,	Channel.cpp \
 												ChannelList.cpp} \
-			${addprefix ${SRCS_DIR}commands/,	CAP.cpp \
-												PASS.cpp \
-												NICK.cpp \
-												USER.cpp \
+			${addprefix ${SRCS_DIR}commands/,	CommandList.cpp \
+												CAP.cpp \
+												INVITE.cpp \
 												JOIN.cpp \
-												PING.cpp \
-												TOPIC.cpp \
 												KICK.cpp \
 												MODE.cpp \
-												INVITE.cpp \
-												CommandList.cpp}
+												NICK.cpp \
+												PASS.cpp \
+												PING.cpp \
+												PONG.cpp \
+												PRIVMSG.cpp \
+												QUIT.cpp \
+												TOPIC.cpp \
+												USER.cpp}
 
 OBJS	=	${SRCS:.cpp=.o}
 

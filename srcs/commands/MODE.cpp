@@ -15,10 +15,11 @@ MODE::MODE() {
 
 MODE::~MODE() { _modeMap.clear(); }
 
-bool	MODE::INVITE(Server &server, Channel *channel, Client *client, deque<string> &modeArgs) const {
+bool	MODE::INVITE(Server &server, Channel *channel, Client *client, vector<string> &modeArgs, size_t *modeArgsIndex) const {
 	static_cast<void>(server);
 	static_cast<void>(client);
 	static_cast<void>(modeArgs);
+	static_cast<void>(modeArgsIndex);
 	if (!(channel->getModes() & Channel::INVITE)) {
 		channel->addMode(Channel::INVITE);
 		return true;
@@ -26,10 +27,11 @@ bool	MODE::INVITE(Server &server, Channel *channel, Client *client, deque<string
 	return false;
 }
 
-bool	MODE::UNINVITE(Server &server, Channel *channel, Client *client, deque<string> &modeArgs) const {
+bool	MODE::UNINVITE(Server &server, Channel *channel, Client *client, vector<string> &modeArgs, size_t *modeArgsIndex) const {
 	static_cast<void>(server);
 	static_cast<void>(client);
 	static_cast<void>(modeArgs);
+	static_cast<void>(modeArgsIndex);
 	if (channel->getModes() & Channel::INVITE) {
 		channel->removeMode(Channel::INVITE);
 		return true;
@@ -37,10 +39,11 @@ bool	MODE::UNINVITE(Server &server, Channel *channel, Client *client, deque<stri
 	return false;
 }
 
-bool	MODE::TOPIC(Server &server, Channel *channel, Client *client, deque<string> &modeArgs) const {
+bool	MODE::TOPIC(Server &server, Channel *channel, Client *client, vector<string> &modeArgs, size_t *modeArgsIndex) const {
 	static_cast<void>(server);
 	static_cast<void>(client);
 	static_cast<void>(modeArgs);
+	static_cast<void>(modeArgsIndex);
 	if (!(channel->getModes() & Channel::TOPIC)) {
 		channel->addMode(Channel::TOPIC);
 		return true;
@@ -48,10 +51,11 @@ bool	MODE::TOPIC(Server &server, Channel *channel, Client *client, deque<string>
 	return false;
 }
 
-bool	MODE::UNTOPIC(Server &server, Channel *channel, Client *client, deque<string> &modeArgs) const {
+bool	MODE::UNTOPIC(Server &server, Channel *channel, Client *client, vector<string> &modeArgs, size_t *modeArgsIndex) const {
 	static_cast<void>(server);
 	static_cast<void>(client);
 	static_cast<void>(modeArgs);
+	static_cast<void>(modeArgsIndex);
 	if (channel->getModes() & Channel::TOPIC) {
 		channel->removeMode(Channel::TOPIC);
 		return true;
@@ -59,52 +63,53 @@ bool	MODE::UNTOPIC(Server &server, Channel *channel, Client *client, deque<strin
 	return false;
 }
 
-bool	MODE::KEY(Server &server, Channel *channel, Client *client, deque<string> &modeArgs) const {
+bool	MODE::KEY(Server &server, Channel *channel, Client *client, vector<string> &modeArgs, size_t *modeArgsIndex) const {
 	static_cast<void>(server);
 	static_cast<void>(client);
 	if (modeArgs.empty()) {
 		return false;
 	}
 	channel->addMode(Channel::KEY);
-	channel->setKey(modeArgs.front());
-	modeArgs.pop_front();
+	channel->setKey(modeArgs[*modeArgsIndex]);
+	(*modeArgsIndex)++;
 	return true;
 }
 
-bool	MODE::UNKEY(Server &server, Channel *channel, Client *client, deque<string> &modeArgs) const {
+bool	MODE::UNKEY(Server &server, Channel *channel, Client *client, vector<string> &modeArgs, size_t *modeArgsIndex) const {
 	static_cast<void>(server);
 	static_cast<void>(client);
 	if (modeArgs.empty()) {
 		return false;
 	} else if (!(channel->getModes() & Channel::KEY)) {
-		modeArgs.pop_front();
+		modeArgs.erase(modeArgs.begin());
 		return false;
 	}
 	channel->removeMode(Channel::KEY);
-	modeArgs.pop_front();
+	modeArgs[*modeArgsIndex] = "*";
+	(*modeArgsIndex)++;
 	return true;
 }
 
-bool	MODE::OP(Server &server, Channel *channel, Client *client, deque<string> &modeArgs) const {
-	if (server.getClientList().getClientByNickname(modeArgs.front()) == NULL) {
-		RPL::sendRPL(server, client, IRCErrors::ERR_NOSUCHNICK(client->getNickname() + " " + modeArgs.front()));
-		modeArgs.pop_front();
+bool	MODE::OP(Server &server, Channel *channel, Client *client, vector<string> &modeArgs, size_t *modeArgsIndex) const {
+	if (server.getClientList().getClientByNickname(modeArgs[*modeArgsIndex]) == NULL) {
+		RPL::sendRPL(server, client, IRCErrors::ERR_NOSUCHNICK(client->getNickname(), modeArgs[*modeArgsIndex]), SERVER);
+		modeArgs.erase(modeArgs.begin());
 		return false;
 	} else {
-		channel->getOperators().addClient(server.getClientList().getClientByNickname(modeArgs.front()));
-		modeArgs.pop_front();
+		channel->getOperators().addClient(server.getClientList().getClientByNickname(modeArgs[*modeArgsIndex]));
+		(*modeArgsIndex)++;
 	}
 	return true;
 }
 
-bool	MODE::DEOP(Server &server, Channel *channel, Client *client, deque<string> &modeArgs) const {
-	if (server.getClientList().getClientByNickname(modeArgs.front()) == NULL) {
-		RPL::sendRPL(server, client, IRCErrors::ERR_NOSUCHNICK(client->getNickname() + " " + modeArgs.front()));
-		modeArgs.pop_front();
+bool	MODE::DEOP(Server &server, Channel *channel, Client *client, vector<string> &modeArgs, size_t *modeArgsIndex) const {
+	if (server.getClientList().getClientByNickname(modeArgs[*modeArgsIndex]) == NULL) {
+		RPL::sendRPL(server, client, IRCErrors::ERR_NOSUCHNICK(client->getNickname(), modeArgs[*modeArgsIndex]), SERVER);
+		modeArgs.erase(modeArgs.begin());
 		return false;
 	} else {
-		channel->getOperators().removeClient(server.getClientList().getClientByNickname(modeArgs.front()));
-		modeArgs.pop_front();
+		channel->getOperators().removeClient(server.getClientList().getClientByNickname(modeArgs[*modeArgsIndex]));
+		(*modeArgsIndex)++;
 	}
 	return true;
 }
@@ -118,23 +123,24 @@ bool	MODE::_checkLimitArg(string const &arg) const {
 	return true;
 }
 
-bool	MODE::LIMIT(Server &server, Channel *channel, Client *client, deque<string> &modeArgs) const {
+bool	MODE::LIMIT(Server &server, Channel *channel, Client *client, vector<string> &modeArgs, size_t *modeArgsIndex) const {
 	static_cast<void>(server);
 	static_cast<void>(client);
-	if (!_checkLimitArg(modeArgs.front())) {
-		modeArgs.pop_front();
+	if (!_checkLimitArg(modeArgs[*modeArgsIndex])) {
+		modeArgs.erase(modeArgs.begin());
 		return false;
 	}
 	channel->addMode(Channel::LIMIT);
-	channel->setLimit(atoi(modeArgs.front().c_str()));
-	modeArgs.pop_front();
+	channel->setLimit(atoi(modeArgs[*modeArgsIndex].c_str()));
+	(*modeArgsIndex)++;
 	return true;
 }
 
-bool	MODE::UNLIMIT(Server &server, Channel *channel, Client *client, deque<string> &modeArgs) const {
+bool	MODE::UNLIMIT(Server &server, Channel *channel, Client *client, vector<string> &modeArgs, size_t *modeArgsIndex) const {
 	static_cast<void>(server);
 	static_cast<void>(client);
 	static_cast<void>(modeArgs);
+	static_cast<void>(modeArgsIndex);
 	if (!(channel->getModes() & Channel::LIMIT)) {
 		return false;
 	}
@@ -146,22 +152,22 @@ bool	MODE::_addFlagToModeArgs(string const &modeArgs, bool flag) const {
 	size_t	plus = modeArgs.find_last_of("+");
 	size_t	minus = modeArgs.find_last_of("-");
 
-	if (plus == string::npos && minus == string::npos) {
-		return true;
+	if ((plus != string::npos && minus == string::npos) || plus > minus) {
+		return true != flag;
+	} else if ((minus != string::npos && plus == string::npos) || minus > plus) {
+		return false != flag;
 	}
-	return (plus > minus) != flag;
+	return true;
 }
 
-bool	MODE::_formatModeArgs(string const &modeString, vector<string> &args) const {
-	size_t	count = 0, modeArgsSize = (args.size() - 3 < 0 ? 0 : args.size() - 3);
+bool	MODE::_formatModeArgs(string const &modeString, size_t modeArgsSize) const {
+	size_t	count = 0;
 	bool	applyMode = true;
 
 	for (size_t i = 0; i < modeString.length(); i++) {
 		if (modeString[i] == '+' || modeString[i] == '-') {
 			applyMode = modeString[i] == '+';
 			continue;
-		} else if (modeString[i] == 'k') {
-			args[count] = "*";
 		}
 		count += modeString[i] == 'o' || (modeString[i] == 'l' && applyMode == true) || modeString[i] == 'k';
 		if ((modeString[i] == 'o' || (modeString[i] == 'l' && applyMode == true)) && count > modeArgsSize) {
@@ -171,60 +177,64 @@ bool	MODE::_formatModeArgs(string const &modeString, vector<string> &args) const
 	return true;
 }
 
-deque<string>	MODE::_getModeArgs(vector<string> const &args) const {
-	deque<string>	modeArgs;
+vector<string>	MODE::_getModeArgs(vector<string> const &args) const {
+	vector<string>	modeArgs;
 
-	for (size_t i = 2; i < args.size(); i++) {
+	for (size_t i = 3; i < args.size(); i++) {
 		modeArgs.push_back(args[i]);
 	}
 	return modeArgs;
 }
 
-string const	MODE::_applyModeSetting(Server &server, Client *client, Channel *channel, vector<string> &args) const {
-	bool	applyMode = true;
-	string	modeStringApplied, modeString = args[2];
+void	MODE::_applyModeSetting(Server &server, Client *client, Channel *channel, vector<string> &args) const {
+	bool			applyMode = true;
+	string			modeString = args[2];
+	string			modeStringApplied;
+	vector<string>	modeArgs;
 
-	if (!_formatModeArgs(modeString, args)) {
-		RPL::sendRPL(server, client, IRCErrors::ERR_NEEDMOREPARAMS(client->getNickname() + " " + args[0]));
-		return "";
-	}
-	deque<string>	modeArgs = _getModeArgs(args);
-	for (size_t i = 0; i < modeString.length(); i++) {
-		if (modeString[i] == '+' || modeString[i] == '-') {
-			applyMode = modeString[i] == '+';
-			continue;
-		}
-		if (_modeMap.find(make_pair(modeString.substr(i, 1), applyMode)) != _modeMap.end()) {
-			if ((this->*_modeMap.at(make_pair(modeString.substr(i, 1), applyMode)))(server, channel, client, modeArgs)) {
-				if (_addFlagToModeArgs(modeStringApplied, applyMode)) {
-					modeStringApplied += (applyMode == true ? "+" : "-") + modeString.substr(i, 1);
-				} else {
-					modeStringApplied += modeString.substr(i, 1);
-				}
+	if (!_formatModeArgs(modeString, (args.size() - 3 < 0 ? 0 : args.size() - 3))) {
+		RPL::sendRPL(server, client, IRCErrors::ERR_NEEDMOREPARAMS(client->getNickname(), args[0]), SERVER);
+	} else {
+		modeArgs = _getModeArgs(args);
+		size_t	modeArgsIndex = 0;
+		for (size_t i = 0; i < modeString.length(); i++) {
+			if (modeString[i] == '+' || modeString[i] == '-') {
+				applyMode = modeString[i] == '+';
+				continue;
 			}
-		} else {
-			RPL::sendRPL(server, client, IRCErrors::ERR_UNKNOWNMODE(client->getNickname() + " " + modeString.substr(i, 1)));\
-			return "";
+			if (_modeMap.find(make_pair(modeString.substr(i, 1), applyMode)) != _modeMap.end()) {
+				if ((this->*_modeMap.at(make_pair(modeString.substr(i, 1), applyMode)))(server, channel, client, modeArgs, &modeArgsIndex)) {
+					if (_addFlagToModeArgs(modeStringApplied, applyMode)) {
+						modeStringApplied += (applyMode == true ? "+" : "-") + modeString.substr(i, 1);
+					} else {
+						modeStringApplied += modeString.substr(i, 1);
+					}
+				}
+			} else {
+				RPL::sendRPL(server, client, IRCErrors::ERR_UNKNOWNMODE(client->getNickname(), modeString.substr(i, 1)), SERVER);
+			}
 		}
 	}
-	return modeStringApplied;
+	if (!modeStringApplied.empty()) {
+		string	appliedArgs;
+
+		for (vector<string>::const_iterator it = modeArgs.begin(); it != modeArgs.end(); it++) {
+			appliedArgs += *it + (it + 1 != modeArgs.end() ? " " : "");
+		}
+		RPL::sendRPL(server, client, "MODE " + channel->getName() + " " + modeStringApplied + " " + appliedArgs + "\r\n", CLIENT);
+	}
 }
 
 void	MODE::execute(Server &server, Client *client, vector<string> &args) const {
 	if (args.size() < 2) {
-		RPL::sendRPL(server, client, IRCErrors::ERR_NEEDMOREPARAMS(args[0]));
-	} else if (args.size() > 2) {
+		RPL::sendRPL(server, client, IRCErrors::ERR_NEEDMOREPARAMS(client->getNickname(), args[0]), SERVER);
+	} else if (args.size() > 2 && args[1][0] == '#') {
 		Channel	*channel = server.getChannelList().getChannelByName(args[1]);
 
 		if (channel) {
-			string	modeStringApplied = _applyModeSetting(server, client, channel, args);
-			if (!modeStringApplied.empty()) {
-				args.erase(args.begin() + 2);
-				args.insert(args.begin() + 2, modeStringApplied);
-				RPL::sendRPL(server, client, args);
-			}
+			_applyModeSetting(server, client, channel, args);
 		} else {
-			RPL::sendRPL(server, client, IRCErrors::ERR_NOSUCHCHANNEL(args[1]));
+			RPL::sendRPL(server, client, IRCErrors::ERR_NOSUCHCHANNEL(client->getNickname(), args[1]), SERVER);
 		}
 	}
 }

@@ -21,7 +21,3 @@ public:
 	ACommand	*getCommandByName(string const &command) const;
 	void		select(Server &server, Client *client, string const &buffer);
 };
-
-static inline char	to_upper(unsigned char c) {
-	return static_cast<char>(toupper(c));
-}

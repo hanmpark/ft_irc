@@ -14,7 +14,7 @@ map<string, string>	JOIN::_tokenizeChannels(Server &server, Client *client, vect
 
 	while (getline(ss, channelToken, ',')) {
 		if (channelToken.at(0) != '#') {
-			RPL::sendRPL(server, client, IRCErrors::ERR_NOSUCHCHANNEL(channelToken));
+			RPL::sendRPL(server, client, IRCErrors::ERR_NOSUCHCHANNEL(client->getNickname(), channelToken), SERVER);
 			continue ;
 		}
 		tokenizedChannels.insert(pair<string, string>(channelToken, ""));
@@ -34,11 +34,11 @@ map<string, string>	JOIN::_tokenizeChannels(Server &server, Client *client, vect
 	return tokenizedChannels;
 }
 
-string	getNamesChannel(vector<Client*> &clients) {
+string	getNamesChannel(Channel *channel, vector<Client*> &clients) {
 	string	namesChannel;
 
 	for (size_t i = 0; i < clients.size(); i++) {
-		namesChannel += clients[i]->getNickname();
+		namesChannel += (channel->getOperators().getClientByFd(clients[i]->getFd()) != NULL ? "@" : "") + clients[i]->getNickname();
 		if (i + 1 < clients.size())
 			namesChannel += " ";
 	}
@@ -56,7 +56,7 @@ void	JOIN::execute(Server &server, Client *client, vector<string> &args) const {
 	map<string, string>	tokenizedChannels; // channelName, key
 
 	if (args.size() < 2) {
-		RPL::sendRPL(server, client, IRCErrors::ERR_NEEDMOREPARAMS(args[0]));
+		RPL::sendRPL(server, client, IRCErrors::ERR_NEEDMOREPARAMS(client->getNickname(), args[0]), SERVER);
 		return;
 	}
 
@@ -69,75 +69,36 @@ void	JOIN::execute(Server &server, Client *client, vector<string> &args) const {
 		if (channel == NULL) {
 			channel = new Channel(it->first);
 
-			channel->getUsers().addClient(client);
 			channel->getOperators().addClient(client);
 			server.getChannelList().addChannel(it->first, channel);
 		}
 		else {
+			if (channel->getModes() & Channel::KEY) {
+				if (channel->getKey() != it->second) {
+					RPL::sendRPL(server, client, IRCErrors::ERR_BADCHANNELKEY(client->getNickname(), it->first), SERVER);
+					continue ;
+				}
+			}
 			if (channel->getModes() & Channel::INVITE) {
 				if (channel->getInvited().getClientByNickname(client->getNickname()) == NULL) {
-					RPL::sendRPL(server, client, IRCErrors::ERR_INVITEONLYCHAN(it->first));
+					RPL::sendRPL(server, client, IRCErrors::ERR_INVITEONLYCHAN(client->getNickname(), it->first), SERVER);
 					continue ;
 				} else {
 					channel->getInvited().removeClient(client);
 				}
 			}
-			if (channel->getModes() & Channel::KEY) {
-				if (channel->getKey() != it->second) {
-					RPL::sendRPL(server, client, IRCErrors::ERR_BADCHANNELKEY(it->first));
-					continue ;
-				}
-			}
 			if (channel->getModes() & Channel::LIMIT) {
 				if (channel->getUsers().getClients().size() >= channel->getLimit()) {
-					RPL::sendRPL(server, client, IRCErrors::ERR_CHANNELISFULL(it->first));
+					RPL::sendRPL(server, client, IRCErrors::ERR_CHANNELISFULL(client->getNickname(), it->first), SERVER);
 					continue ;
 				}
 			}
 		}
 
-		RPL::sendRPL(server, client, "JOIN :" + it->first);
-		string namesChannel = getNamesChannel(channel->getUsers().getClients());
-		RPL::sendRPL(server, client, IRCReplies::RPL_NAMREPLY(client->getNickname(), it->first, namesChannel));
-		RPL::sendRPL(server, client, IRCReplies::RPL_ENDOFNAMES(client->getNickname(), it->first));
+		channel->getUsers().addClient(client);
+		RPL::sendRPL(server, client, "JOIN " + it->first + "\r\n", CLIENT);
+		string namesChannel = getNamesChannel(channel, channel->getUsers().getClients());
+		RPL::sendRPL(server, client, IRCReplies::RPL_NAMREPLY(client->getNickname(), it->first, namesChannel), SERVER);
+		RPL::sendRPL(server, client, IRCReplies::RPL_ENDOFNAMES(client->getNickname(), it->first), SERVER);
 	}
-// 	if (args[0].empty() || args.size() > 2) {
-// 		Server::sendMessage(client->getFd(), IRCErrors::ERR_NEEDMOREPARAMS(args[0]));
-// 		return ;
-// 	}
-// 	// find if within args[1] there is more than one channel.
-// 	// args[0] = /JOIN | args[1] = #channel1,#channel2,#channel3 | args[2] = key | args[2] = key,key2,key3
-
-// 	istringstream	ss(args[0]);
-// 	string			channelToken; // tokenize the channels
-
-// 	while (getline(ss, channelToken, ',')) {
-// 		cout << GREEN "channelToken: " << RESET << channelToken << endl;
-// 		if (channelToken.at(0) != '#') {
-// 			Server::sendMessage(client->getFd(), IRCErrors::ERR_BADCHANMASK());
-// 			return ;
-// 		}
-// 		// Channel	*channel = server.getChannelByName(channelToken);
-// 		if (channel == NULL) {
-// 			Channel	*newChannel = new(nothrow) Channel(channelToken);
-// 			if (newChannel == NULL)
-// 				return ;
-// 			newChannel->setCreator(client->getNickname());
-// 			newChannel->addOperator(client);
-// 			newChannel->addClient(client);
-// 			// server.addChannel(channelToken, newChannel);
-// 		}
-// 		else {
-// 			if (channel->getLimit() != 0 && channel->getUsers().size() >= channel->getLimit()) {
-// 				// Server::sendMessage(client->getFd(), IRCErrors::ERR_CHANNELISFULL(channelToken));
-// 				return ;
-// 			}
-// 			channel->addClient(client);
-// 		}
-// 	}
-
-// 	// Server::sendMessage(client->getFd(), IRCReplies::RPL_NAMREPLY(client->getNickname(), args[1], ""));
-// 	// Server::sendMessage(client->getFd(), IRCReplies::RPL_ENDOFNAMES(client->getNickname(), args[1]));
-// 	// Server::sendMessage(client->getFd(), IRCReplies::RPL_CHANNELMODEIS(args[1], ""));
-
 }

@@ -2,17 +2,6 @@
 
 ChannelList::ChannelList() {}
 
-ChannelList::ChannelList(ChannelList const &copy) {
-	*this = copy;
-}
-
-ChannelList	&ChannelList::operator=(ChannelList const &rhs) {
-	if (this != &rhs) {
-		_channels = rhs._channels;
-	}
-	return *this;
-}
-
 ChannelList::~ChannelList() {
 	for (map<string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++) {
 		delete it->second;

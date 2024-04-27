@@ -1,25 +1,32 @@
 #include "commands/CommandList.hpp"
 #include "commands/CAP.hpp"
+#include "commands/INVITE.hpp"
+#include "commands/JOIN.hpp"
+#include "commands/KICK.hpp"
+#include "commands/MODE.hpp"
 #include "commands/NICK.hpp"
 #include "commands/PASS.hpp"
-#include "commands/USER.hpp"
 #include "commands/PING.hpp"
-#include "commands/JOIN.hpp"
-#include "commands/MODE.hpp"
+#include "commands/PONG.hpp"
+#include "commands/PRIVMSG.hpp"
+#include "commands/QUIT.hpp"
 #include "commands/TOPIC.hpp"
-#include "commands/INVITE.hpp"
+#include "commands/USER.hpp"
 
 CommandList::CommandList() {
 	_commands["CAP"] = new CAP();
+	_commands["INVITE"] = new INVITE();
 	_commands["JOIN"] = new JOIN();
+	_commands["KICK"] = new KICK();
+	_commands["MODE"] = new MODE();
 	_commands["NICK"] = new NICK();
 	_commands["PASS"] = new PASS();
-	_commands["USER"] = new USER();
 	_commands["PING"] = new PING();
-	_commands["MODE"] = new MODE();
+	_commands["PONG"] = new PONG();
+	_commands["PRIVMSG"] = new PRIVMSG();
+	_commands["QUIT"] = new QUIT();
 	_commands["TOPIC"] = new TOPIC();
-	_commands["INVITE"] = new INVITE();
-	// _commands["PRIVMSG"] = new PRIVMSG();
+	_commands["USER"] = new USER();
 }
 
 CommandList::~CommandList() {
@@ -58,14 +65,13 @@ vector<string>	CommandList::_split(string const &buffer, string const &limiter) 
 
 void	CommandList::select(Server &server, Client *client, string const &buffer) {
 	vector<string>	args = _split(buffer, " ");
-	transform(args[0].begin(), args[0].end(), args[0].begin(), to_upper);
 
 	ACommand	*cmd = getCommandByName(args[0]);
 	if (cmd != NULL) {
 		RPL::debugLog(args, DEBUG);
 		if (!client->getRegistered()) {
 			if (args[0] != "CAP" && args[0] != "PASS" && args[0] != "NICK" && args[0] != "USER") {
-				RPL::sendRPL(server, client, IRCErrors::ERR_NOTREGISTERED());
+				RPL::sendRPL(server, client, IRCErrors::ERR_NOTREGISTERED(client->getNickname()), SERVER);
 				args.clear();
 				return;
 			}
@@ -74,7 +80,7 @@ void	CommandList::select(Server &server, Client *client, string const &buffer) {
 			cmd->execute(server, client, args);
 		}
 	} else {
-		RPL::sendRPL(server, client, IRCErrors::ERR_UNKNOWNCOMMAND(args[0]));
+		RPL::sendRPL(server, client, IRCErrors::ERR_UNKNOWNCOMMAND(client->getNickname(), args[0]), SERVER);
 	}
 	args.clear();
 }

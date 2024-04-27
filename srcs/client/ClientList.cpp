@@ -58,7 +58,7 @@ Client	*ClientList::getClientByNickname(string const &nickname) const {
 	return NULL;
 }
 
-vector<Client *> &ClientList::getClients() { return _clients; }
+vector<Client *>	&ClientList::getClients() { return _clients; }
 
 void	ClientList::closeFileDescriptors() {
 	for (size_t i = 0; i < _clients.size(); i++) {

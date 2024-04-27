@@ -5,6 +5,7 @@ QUIT::QUIT() : ACommand() {}
 QUIT::~QUIT() {}
 
 void	QUIT::execute(Server &server, Client *client, vector<string> &args) const {
+	static_cast<void>(client);
 	if (server.getClientList().getClients().empty())
 		return ;
 	// * quit message can have a reason as parameter

@@ -4,8 +4,9 @@
 
 class PRIVMSG : public ACommand {
 private:
-	string		_target;
-	string		_message;
+	vector<string>	_splitChannels(string const &channelArg) const;
+	void			_sendToChannel(Server &server, Client *client, string const &channelName, string const &message) const;
+	void			_sendToClient(Server &server, Client *client, string const &ClientNickname, string const &message) const;
 
 public:
 	PRIVMSG();
