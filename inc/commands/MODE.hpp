@@ -19,7 +19,7 @@ private:
 	bool	UNLIMIT(Server &server, Channel *channel, Client *client, vector<string> &modeArgs, size_t *modeArgsIndex) const;
 
 	bool			_addFlagToModeArgs(string const &modeArgs, bool flag) const;
-	bool			_formatModeArgs(string const &modeString, size_t modeArgsSize) const;
+	bool			_checkFormatModeArgs(string const &modeString, size_t modeArgsSize) const;
 	vector<string>	_getModeArgs(vector<string> const &args) const;
 	void			_applyModeSetting(Server &server, Client *client, Channel *channel, vector<string> &args) const;
 

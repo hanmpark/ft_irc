@@ -4,6 +4,13 @@ NICK::NICK() : ACommand() {}
 
 NICK::~NICK() {}
 
+bool	NICK::_checkFirstChar(char const &c) const {
+	if (isdigit(c) || c == '-' || c == '#' || c == ':' || (!isalpha(c) && !strchr(SPECIAL_CHARACTERS, c))) {
+		return false;
+	}
+	return true;
+}
+
 bool	NICK::_isValidNickname(string &nick) const {
 	if (nick.empty()) {
 		return false;
@@ -11,18 +18,16 @@ bool	NICK::_isValidNickname(string &nick) const {
 	size_t	len = (nick.length() > 9 ? 9 : nick.length());
 	nick = nick.substr(0, len);
 	for (size_t i = 0; i < len; i++) {
-		if (i == 0 && (isdigit(nick[0]) || nick[0] == '-' || (!isalpha(nick[0]) && !strchr(SPECIAL_CHARACTERS, nick[0])))) {
-			return false;
-		} else if (!isalnum(nick[i]) && !strchr(SPECIAL_CHARACTERS, nick[i]) && nick[i] != '-') {
+		if ((i == 0 && !_checkFirstChar(nick[i])) || (!isalnum(nick[i]) && !strchr(SPECIAL_CHARACTERS, nick[i]) && nick[i] != '-')) {
 			return false;
 		}
 	}
 	return true;
 }
 
-bool	NICK::_isNicknameInUse(vector<Client*> const &clients, int fd, string const &nickname) const {
+bool	NICK::_isNicknameInUse(vector<Client*> const &clients, Client *client, string const &nickname) const {
 	for (size_t i = 0; i < clients.size(); i++) {
-		if (fd == clients[i]->getFd()) {
+		if (clients[i] == client) {
 			continue;
 		} else if (clients[i]->getNickname() == nickname) {
 			return true;
@@ -31,7 +36,7 @@ bool	NICK::_isNicknameInUse(vector<Client*> const &clients, int fd, string const
 	return false;
 }
 
-void	NICK::setNewNick(Client *client, string const &nick) const {
+void	NICK::_setNewNick(Client *client, string const &nick) const {
 	static long	nickNumber = 1;
 
 	stringstream iss;
@@ -49,12 +54,15 @@ void	NICK::execute(Server &server, Client *client, vector<string> &args) const {
 		RPL::sendRPL(server, client, IRCErrors::ERR_NONICKNAMEGIVEN(client->getNickname()), SERVER);
 	} else if (!_isValidNickname(args[1])) {
 		RPL::sendRPL(server, client, IRCErrors::ERR_ERRONEUSNICKNAME(args[1]), SERVER);
-	} else if (_isNicknameInUse(server.getClientList().getClients(), client->getFd(), args[1])) {
-		setNewNick(client, args[1]);
-		// RPL::sendRPL(server, client, "NICK :" + client->getNickname(), SERVER);
+	} else if (_isNicknameInUse(server.getClientList().getClients(), client, args[1])) {
+		if (!client->getRegistered()) {
+			_setNewNick(client, args[1]);
+		} else {
+			RPL::sendRPL(server, client, IRCErrors::ERR_NICKNAMEINUSE(args[1]), SERVER);
+		}
 	} else {
-		if (!client->getNickname().empty() && client->getNickname() != args[1]) {
-			RPL::sendRPL(server, client, "NICK :" + args[1], SERVER);
+		if (client->getRegistered() && client->getNickname() != args[1]) {
+			RPL::sendRPL(server, client, IRCCommands::NICK(args[1]), SERVER);
 		}
 		client->setNickname(args[1]);
 	}

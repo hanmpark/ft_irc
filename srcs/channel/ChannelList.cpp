@@ -37,7 +37,7 @@ vector<Channel*>	ChannelList::getChannelsFromClient(Client *client) const{
 	map<string, Channel*>::const_iterator	it;
 
 	for (it = _channels.begin(); it != _channels.end(); it++) {
-		if (it->second->getUsers().getClientByNickname(client->getNickname())) {
+		if (it->second->getClientsList().getClientByNickname(client->getNickname())) {
 			channels.push_back(it->second);
 		}
 	}

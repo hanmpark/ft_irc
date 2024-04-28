@@ -11,11 +11,6 @@ enum e_endpoint {
 	SERVER
 };
 
-enum e_transmit {
-	SEND,
-	RECEIVE
-};
-
 class RPL {
 private:
 	RPL();
@@ -29,7 +24,11 @@ public:
 	static void		debugLog(Server &server, Client *client, vector<string> const &args, e_endpoint const &endPoint, bool const &debug);
 };
 
-struct IRCReplies {
+class IRCReplies {
+private:
+	IRCReplies();
+
+public:
 	static string const RPL_WELCOME(string const &nick, string const &user) { return "001 " + nick + " :Welcome to the Internet Relay Network " + user + "\r\n"; }
 	static string const RPL_NOTOPIC(string const &nick, string const &channel) { return "331 " + nick + " " + channel + " :No topic is set\r\n"; }
 	static string const RPL_TOPIC(string const &nick, string const &channel, string const &topic) { return "332 " + nick + " " + channel + " :" + topic + "\r\n"; }
@@ -64,4 +63,19 @@ public:
 	static string const ERR_INVITEONLYCHAN(string const &nick, string const &channel) { return "473 " + nick + " " + channel + " :Cannot join channel (+i)\r\n"; }
 	static string const ERR_BADCHANNELKEY(string const &nick, string const &channel) { return "475 " + nick + " " + channel + " :Cannot join channel (+k)\r\n"; }
 	static string const ERR_CHANOPRIVSNEEDED(string const &nick, string const &channel) { return "482 " + nick + " " + channel + " :You're not channel operator\r\n"; }
+};
+
+class IRCCommands {
+private:
+	IRCCommands();
+
+public:
+	static string const INVITE(string const &nick, string const &channel) { return "INVITE " + nick + " :" + channel + "\r\n"; }
+	static string const JOIN(string const &channel) { return "JOIN " + channel + "\r\n"; }
+	static string const KICK(string const &channel, string const &nick) { return "KICK " + channel + " " + nick + " :" + nick + "\r\n"; }
+	static string const MODE(string const &channel, string const &modeString, string const &modeArgs) { return "MODE " + channel + " " + modeString + " " + modeArgs + "\r\n"; }
+	static string const NICK(string const &nick) { return "NICK :" + nick + "\r\n"; }
+	static string const PRIVMSG(string const &target, string const &message) { return "PRIVMSG " + target + " " + message + "\r\n"; }
+	static string const QUIT(string const &message) { return "QUIT :" + message + "\r\n"; }
+	static string const TOPIC(string const &channel, string const &topic) { return "TOPIC " + channel + " :" + topic + "\r\n"; }
 };

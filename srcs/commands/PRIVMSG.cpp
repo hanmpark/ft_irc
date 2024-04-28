@@ -21,13 +21,13 @@ void	PRIVMSG::_sendToChannel(Server &server, Client *client, string const &chann
 	if (channel == NULL) {
 		RPL::sendRPL(server, client, IRCErrors::ERR_NOSUCHCHANNEL(client->getNickname(), channelName), SERVER);
 	} else {
-		if (channel->getUsers().getClientByFd(client->getFd()) == NULL) {
+		if (channel->getClientsList().getClientByFd(client->getFd()) == NULL) {
 			RPL::sendRPL(server, client, IRCErrors::ERR_CANNOTSENDTOCHAN(client->getNickname(), channelName), SERVER);
 		} else {
-			vector<Client*>	clients = channel->getUsers().getClients();
+			vector<Client*>	clients = channel->getClientsList().getClients();
 			for (vector<Client*>::const_iterator it = clients.begin(); it != clients.end(); it++) {
 				if ((*it)->getFd() != client->getFd()) {
-					RPL::sendRPL(server, client, *it, "PRIVMSG " + channel->getName() + " " + message + "\r\n", CLIENT);
+					RPL::sendRPL(server, client, *it, IRCCommands::PRIVMSG(channel->getName(), message), CLIENT);
 				}
 			}
 		}
@@ -40,7 +40,7 @@ void	PRIVMSG::_sendToClient(Server &server, Client *client, string const &client
 	if (target == NULL) {
 		RPL::sendRPL(server, client, IRCErrors::ERR_NOSUCHNICK(client->getNickname(), clientNickname), SERVER);
 	} else {
-		RPL::sendRPL(server, client, target, "PRIVMSG " + target->getNickname() + " " + message + "\r\n", CLIENT);
+		RPL::sendRPL(server, client, target, IRCCommands::PRIVMSG(target->getNickname(), message), CLIENT);
 	}
 }
 

@@ -7,25 +7,25 @@ JOIN::JOIN() : ACommand() {}
 JOIN::~JOIN() {}
 
 map<string, string>	JOIN::_tokenizeChannels(Server &server, Client *client, vector<string> &args) const {
-	istringstream	ss(args[1]);
-	string			channelToken;
 	map<string, string>	tokenizedChannels;
-	string		keyToken;
+	istringstream		ssChannel(args[1]);
+	string				channelToken;
 
-	while (getline(ss, channelToken, ',')) {
+	while (getline(ssChannel, channelToken, ',')) {
 		if (channelToken.at(0) != '#') {
 			RPL::sendRPL(server, client, IRCErrors::ERR_NOSUCHCHANNEL(client->getNickname(), channelToken), SERVER);
 			continue ;
 		}
-		tokenizedChannels.insert(pair<string, string>(channelToken, ""));
+		tokenizedChannels.insert(make_pair(channelToken, ""));
 	}
 
 	// check if there is a key for the channel
 	if (args.size() == 3) {
 		map<string, string>::iterator	it = tokenizedChannels.begin();
-		istringstream	ss(args[2]);
+		istringstream					ssKey(args[2]);
+		string							keyToken;
 
-		while (it != tokenizedChannels.end() && getline(ss, keyToken, ',')) {
+		while (it != tokenizedChannels.end() && getline(ssKey, keyToken, ',')) {
 			it->second = keyToken;
 			it++;
 		}
@@ -34,17 +34,57 @@ map<string, string>	JOIN::_tokenizeChannels(Server &server, Client *client, vect
 	return tokenizedChannels;
 }
 
-string	getNamesChannel(Channel *channel, vector<Client*> &clients) {
+string const	JOIN::_getNamesChannel(Channel *channel, vector<Client*> const &clients) const {
 	string	namesChannel;
 
 	for (size_t i = 0; i < clients.size(); i++) {
-		namesChannel += (channel->getOperators().getClientByFd(clients[i]->getFd()) != NULL ? "@" : "") + clients[i]->getNickname();
-		if (i + 1 < clients.size())
+		namesChannel += (channel->getOperatorsList().getClientByFd(clients[i]->getFd()) != NULL ? "@" : "") + clients[i]->getNickname();
+		if (i + 1 < clients.size()) {
 			namesChannel += " ";
+		}
 	}
 	return namesChannel;
 }
 
+void	JOIN::_sendJOIN(Server &server, Client *client, Channel *channel) const {
+	channel->getClientsList().addClient(client);
+	RPL::sendRPL(server, client, IRCCommands::JOIN(channel->getName()), CLIENT);
+
+	string const namesChannel = _getNamesChannel(channel, channel->getClientsList().getClients());
+	RPL::sendRPL(server, client, IRCReplies::RPL_NAMREPLY(client->getNickname(), channel->getName(), namesChannel), SERVER);
+	RPL::sendRPL(server, client, IRCReplies::RPL_ENDOFNAMES(client->getNickname(), channel->getName()), SERVER);
+
+}
+
+bool	JOIN::_checkChannel(Server &server, Client *client, Channel *channel, string const &key) const {
+	if (channel == NULL) {
+		channel = new Channel(channel->getName());
+		channel->getOperatorsList().addClient(client);
+		server.getChannelList().addChannel(channel->getName(), channel);
+	} else {
+		if (channel->getModes() & Channel::KEY) {
+			if (channel->getKey() != key) {
+				RPL::sendRPL(server, client, IRCErrors::ERR_BADCHANNELKEY(client->getNickname(), channel->getName()), SERVER);
+				return false;
+			}
+		}
+		if (channel->getModes() & Channel::INVITE) {
+			if (channel->getInvitedList().getClientByFd(client->getFd())) {
+				channel->getInvitedList().removeClient(client);
+			} else {
+				RPL::sendRPL(server, client, IRCErrors::ERR_INVITEONLYCHAN(client->getNickname(), channel->getName()), SERVER);
+				return false;
+			}
+		}
+		if (channel->getModes() & Channel::LIMIT) {
+			if (channel->getClientsList().getClients().size() >= channel->getLimit()) {
+				RPL::sendRPL(server, client, IRCErrors::ERR_CHANNELISFULL(client->getNickname(), channel->getName()), SERVER);
+				return false;
+			}
+		}
+	}
+	return true;
+}
 
 /*
 	JOIN #caca
@@ -53,52 +93,18 @@ string	getNamesChannel(Channel *channel, vector<Client*> &clients) {
 	:bitcoin.uk.eu.dal.net 366 KQUE #caca :End of /NAMES list.
 */
 void	JOIN::execute(Server &server, Client *client, vector<string> &args) const {
-	map<string, string>	tokenizedChannels; // channelName, key
-
 	if (args.size() < 2) {
 		RPL::sendRPL(server, client, IRCErrors::ERR_NEEDMOREPARAMS(client->getNickname(), args[0]), SERVER);
-		return;
-	}
+	} else {
+		map<string, string>	tokenizedChannels = _tokenizeChannels(server, client, args); // channelName, key
 
-	tokenizedChannels = _tokenizeChannels(server, client, args);
+		for (map<string, string>::iterator it = tokenizedChannels.begin(); it != tokenizedChannels.end(); it++) {
+			Channel	*channel = server.getChannelList().getChannelByName(it->first);
 
-	map<string, string>::iterator	it = tokenizedChannels.begin();
-	for (; it != tokenizedChannels.end(); it++) {
-		Channel	*channel = server.getChannelList().getChannelByName(it->first);
-
-		if (channel == NULL) {
-			channel = new Channel(it->first);
-
-			channel->getOperators().addClient(client);
-			server.getChannelList().addChannel(it->first, channel);
-		}
-		else {
-			if (channel->getModes() & Channel::KEY) {
-				if (channel->getKey() != it->second) {
-					RPL::sendRPL(server, client, IRCErrors::ERR_BADCHANNELKEY(client->getNickname(), it->first), SERVER);
-					continue ;
-				}
-			}
-			if (channel->getModes() & Channel::INVITE) {
-				if (channel->getInvited().getClientByNickname(client->getNickname()) == NULL) {
-					RPL::sendRPL(server, client, IRCErrors::ERR_INVITEONLYCHAN(client->getNickname(), it->first), SERVER);
-					continue ;
-				} else {
-					channel->getInvited().removeClient(client);
-				}
-			}
-			if (channel->getModes() & Channel::LIMIT) {
-				if (channel->getUsers().getClients().size() >= channel->getLimit()) {
-					RPL::sendRPL(server, client, IRCErrors::ERR_CHANNELISFULL(client->getNickname(), it->first), SERVER);
-					continue ;
-				}
+			if (_checkChannel(server, client, channel, it->second)) {
+				_sendJOIN(server, client, channel);
 			}
 		}
-
-		channel->getUsers().addClient(client);
-		RPL::sendRPL(server, client, "JOIN " + it->first + "\r\n", CLIENT);
-		string namesChannel = getNamesChannel(channel, channel->getUsers().getClients());
-		RPL::sendRPL(server, client, IRCReplies::RPL_NAMREPLY(client->getNickname(), it->first, namesChannel), SERVER);
-		RPL::sendRPL(server, client, IRCReplies::RPL_ENDOFNAMES(client->getNickname(), it->first), SERVER);
 	}
+
 }

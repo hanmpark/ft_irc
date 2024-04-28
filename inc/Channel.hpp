@@ -10,7 +10,7 @@ private:
 	string			_name;
 	string			_topic;
 	string			_key;
-	ClientList		_users;
+	ClientList		_clients;
 	ClientList		_operators;
 	ClientList		_invited;
 	size_t			_limit;
@@ -35,12 +35,13 @@ public:
 	size_t			getLimit() const;
 	unsigned int	getModes() const;
 
-	ClientList		&getUsers();
-	ClientList		&getOperators();
-	ClientList		&getInvited();
+	ClientList		&getClientsList();
+	ClientList		&getOperatorsList();
+	ClientList		&getInvitedList();
 
 	void	addMode(e_modes mode);
 	void	removeMode(e_modes mode);
+	void	removeClient(Client *client);
 
 	void	setTopic(string const &topic);
 	void	setKey(string const &key);

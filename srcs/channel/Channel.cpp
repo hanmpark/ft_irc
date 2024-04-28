@@ -18,18 +18,30 @@ size_t	Channel::getLimit() const { return _limit; }
 
 unsigned int	Channel::getModes() const { return _modes; }
 
-ClientList	&Channel::getUsers() { return _users; }
+ClientList	&Channel::getClientsList() { return _clients; }
 
-ClientList	&Channel::getOperators() { return _operators; }
+ClientList	&Channel::getOperatorsList() { return _operators; }
 
-ClientList	&Channel::getInvited() { return _invited; }
+ClientList	&Channel::getInvitedList() { return _invited; }
+
+void	Channel::addMode(e_modes mode) { _modes |= mode; }
+
+void	Channel::removeMode(e_modes mode) { _modes &= ~mode; }
+
+void	Channel::removeClient(Client *client) {
+	if (_clients.getClientByFd(client->getFd())) {
+		_clients.removeClient(client);
+	}
+	if (_operators.getClientByFd(client->getFd())) {
+		_operators.removeClient(client);
+	}
+	if (_invited.getClientByFd(client->getFd())) {
+		_invited.removeClient(client);
+	}
+}
 
 void	Channel::setTopic(string const &topic) { _topic = topic; }
 
 void	Channel::setKey(string const &key) { _key = key; }
 
 void	Channel::setLimit(int limit) { _limit = limit; }
-
-void	Channel::addMode(e_modes mode) { _modes |= mode; }
-
-void	Channel::removeMode(e_modes mode) { _modes &= ~mode; }

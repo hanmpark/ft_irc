@@ -14,7 +14,7 @@ void	TOPIC::execute(Server &server, Client *client, vector<string> &args) const 
 				if (channel->getTopic().empty()) { // no topic
 					RPL::sendRPL(server, client, IRCReplies::RPL_NOTOPIC(client->getNickname(), args[1]), SERVER);
 				} else { // topic exists
-					if (channel->getUsers().getClientByFd(client->getFd())) { // client is in channel
+					if (channel->getClientsList().getClientByFd(client->getFd())) { // client is in channel
 						RPL::sendRPL(server, client, IRCReplies::RPL_TOPIC(client->getNickname(), args[1], channel->getTopic()), SERVER);
 					} else { // client is not in channel
 						RPL::sendRPL(server, client, IRCErrors::ERR_NOTONCHANNEL(client->getNickname(), args[1]), SERVER);
@@ -22,12 +22,12 @@ void	TOPIC::execute(Server &server, Client *client, vector<string> &args) const 
 				}
 			} else { // set TOPIC
 				if (channel->getModes() & Channel::TOPIC) { // check if client is operator to set TOPIC
-					if (channel->getOperators().getClientByFd(client->getFd()) == NULL) {
+					if (channel->getOperatorsList().getClientByFd(client->getFd()) == NULL) {
 						RPL::sendRPL(server, client, IRCErrors::ERR_CHANOPRIVSNEEDED(client->getNickname(), args[1]), SERVER);
 						return;
 					}
 					channel->setTopic(args[2]);
-					RPL::sendRPL(server, client, "TOPIC " + args[1] + " :" + args[2], CLIENT);
+					RPL::sendRPL(server, client, IRCCommands::TOPIC(args[1], args[2]), CLIENT);
 				}
 			}
 		} else {
