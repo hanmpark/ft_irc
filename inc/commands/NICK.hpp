@@ -8,6 +8,7 @@ class NICK : public ACommand {
 private:
 	bool	_isValidNickname(string &nick) const;
 	bool	_isNicknameInUse(vector<Client*> const &clients, int fd, string const &nick) const;
+	void	setNewNick(Client *client, string const &nick) const;
 
 public:
 	NICK();

@@ -51,14 +51,15 @@ vector<string>	CommandList::_split(string const &buffer, string const &limiter) 
 	size_t			nextPos = 0;
 
 	while ((nextPos = buffer.find(limiter, pos)) != string::npos) {
+		string	arg = buffer.substr(pos, nextPos - pos);
+		args.push_back(arg);
+		pos = nextPos + 1;
 		if (buffer[pos] == ':') {
 			pos++;
 			break;
 		}
-		string	arg = buffer.substr(pos, nextPos - pos);
-		args.push_back(arg);
-		pos = nextPos + 1;
 	}
+	cout << "ICI LA OUAIS: " << buffer.substr(pos) << endl;
 	args.push_back(buffer.substr(pos));
 	return args;
 }

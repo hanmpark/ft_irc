@@ -31,8 +31,10 @@ void	ClientList::removeClient(Client *client) {
 }
 
 void	ClientList::deleteClient(Client *client) {
+	if (!client) 
+		return ;
 	for (vector<Client*>::iterator it = _clients.begin(); it != _clients.end(); it++) {
-		if (*it == client) {
+		if (client && *it == client) {
 			delete *it;
 			_clients.erase(it);
 			break;

@@ -31,13 +31,27 @@ bool	NICK::_isNicknameInUse(vector<Client*> const &clients, int fd, string const
 	return false;
 }
 
+void	NICK::setNewNick(Client *client, string const &nick) const {
+	static long	nickNumber = 1;
+
+	stringstream iss;
+	string		nickNumberStr;
+
+	iss << nickNumber;
+	iss >> nickNumberStr;
+
+	client->setNickname(nick + nickNumberStr);
+	nickNumber++;
+}
+
 void	NICK::execute(Server &server, Client *client, vector<string> &args) const {
 	if (client->getNickname().empty() && args.size() == 1) {
 		RPL::sendRPL(server, client, IRCErrors::ERR_NONICKNAMEGIVEN(client->getNickname()), SERVER);
 	} else if (!_isValidNickname(args[1])) {
 		RPL::sendRPL(server, client, IRCErrors::ERR_ERRONEUSNICKNAME(args[1]), SERVER);
 	} else if (_isNicknameInUse(server.getClientList().getClients(), client->getFd(), args[1])) {
-		RPL::sendRPL(server, client, IRCErrors::ERR_NICKNAMEINUSE(args[1]), SERVER);
+		setNewNick(client, args[1]);
+		// RPL::sendRPL(server, client, "NICK :" + client->getNickname(), SERVER);
 	} else {
 		if (!client->getNickname().empty() && client->getNickname() != args[1]) {
 			RPL::sendRPL(server, client, "NICK :" + args[1], SERVER);

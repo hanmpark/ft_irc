@@ -6,7 +6,7 @@ void	Server::handleClient(Client *client) {
 
 	while ((pos = buffer.find("\r\n")) != string::npos) {
 		_commands.select(*this, client, buffer.substr(0, pos));
-		if (client->getRegistered() == false) {
+		if (client && client->getRegistered() == false) {
 			if (client->getGotPasswordRight() && !client->getNickname().empty() && !client->getUsername().empty()) {
 				client->setRegistered(true);
 				RPL::sendRPL(*this, client, IRCReplies::RPL_WELCOME(client->getNickname(), client->getUsername()), SERVER);

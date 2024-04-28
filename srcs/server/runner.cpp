@@ -12,13 +12,11 @@ void Server::signalHandler(int signum)
 void Server::closeFileDescriptors() {
 	_clients.closeFileDescriptors();
 	if (_sockfd != -1) {
-		cout << RED << "Server: " << _sockfd << " Disconnected" << RESET << endl;
 		close(_sockfd);
 	}
 }
 
-void Server::removePollFd(int fd)
-{
+void Server::removePollFd(int fd) {
 	for (size_t i = 0; i < _pollFds.size(); i++) {
 		if (_pollFds[i].fd == fd) {
 			_pollFds.erase(_pollFds.begin() + i);
@@ -27,8 +25,7 @@ void Server::removePollFd(int fd)
 	}
 }
 
-void	Server::runServer()
-{
+void	Server::runServer() {
 	signal(SIGINT, &signalHandler);
 	signal(SIGQUIT, &signalHandler);
 
@@ -50,7 +47,7 @@ void	Server::runServer()
 		}
 	}
 
-	// send broadcast message to all clients that server is shutting down using QUIT command
+	//! send broadcast message to all clients that server is shutting down using QUIT command
 	
 	closeFileDescriptors(); // Close the server socket and all client sockets if they are still open
 }

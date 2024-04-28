@@ -31,3 +31,15 @@ Channel	*ChannelList::getChannelByName(string const &name) const {
 	}
 	return NULL;
 }
+
+vector<Channel*>	ChannelList::getChannelsFromClient(Client *client) const{
+	vector<Channel*>	channels;
+	map<string, Channel*>::const_iterator	it;
+
+	for (it = _channels.begin(); it != _channels.end(); it++) {
+		if (it->second->getUsers().getClientByNickname(client->getNickname())) {
+			channels.push_back(it->second);
+		}
+	}
+	return channels;
+}

@@ -35,7 +35,6 @@ private:
 	void			receiveData(int clientFd);
 	void			handleClient(Client *client);
 	void			closeFileDescriptors();
-	void			removePollFd(int fd);
 
 	Server();
 
@@ -44,6 +43,7 @@ public:
 	~Server();
 
 	/* Accessors */
+	void			removePollFd(int fd);
 	int				getPort() const;
 	int				getSockfd() const;
 	string const 	&getName() const;
