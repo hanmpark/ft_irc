@@ -55,10 +55,9 @@ void	NICK::execute(Server &server, Client *client, vector<string> &args) const {
 	} else if (!_isValidNickname(args[1])) {
 		RPL::sendRPL(server, client, IRCErrors::ERR_ERRONEUSNICKNAME(args[1]), SERVER);
 	} else if (_isNicknameInUse(server.getClientList().getClients(), client, args[1])) {
+		RPL::sendRPL(server, client, IRCErrors::ERR_NICKNAMEINUSE(args[1]), SERVER);
 		if (!client->getRegistered()) {
 			_setNewNick(client, args[1]);
-		} else {
-			RPL::sendRPL(server, client, IRCErrors::ERR_NICKNAMEINUSE(args[1]), SERVER);
 		}
 	} else {
 		if (client->getRegistered() && client->getNickname() != args[1]) {
