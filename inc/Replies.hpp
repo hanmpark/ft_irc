@@ -77,6 +77,7 @@ public:
 	static string const KICK(string const &channel, string const &nick) { return "KICK " + channel + " " + nick + " :" + nick + "\r\n"; }
 	static string const MODE(string const &channel, string const &modeString, string const &modeArgs) { return "MODE " + channel + " " + modeString + " " + modeArgs + "\r\n"; }
 	static string const NICK(string const &nick) { return "NICK :" + nick + "\r\n"; }
+	static string const PART(string const &channel, string const &message) { return "PART " + channel + (message.empty() ? " " : " :" + message) + "\r\n"; }
 	static string const PING(string const &server, string const &token) { return "PONG " + server + " " + token + "\r\n"; }
 	static string const PRIVMSG(string const &target, string const &message) { return "PRIVMSG " + target + " :" + message + "\r\n"; }
 	static string const QUIT(string const &message) { return "QUIT :" + message + "\r\n"; }

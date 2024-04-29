@@ -6,7 +6,6 @@ class MODE : public ACommand {
 private:
 	typedef bool	(MODE::*modeFunction)(Server &server, Channel *channel, Client *client, vector<string> &modeArgs, size_t *modeArgsIndex) const;
 	map<pair<string, bool>, modeFunction>	_modeMap;
-	string const							_modeChars = "itkol";
 
 	bool	INVITE(Server &server, Channel *channel, Client *client, vector<string> &modeArgs, size_t *modeArgsIndex) const;
 	bool	UNINVITE(Server &server, Channel *channel, Client *client, vector<string> &modeArgs, size_t *modeArgsIndex) const;
@@ -22,7 +21,8 @@ private:
 	bool			_addFlagToModeArgs(string const &modeArgs, bool flag) const;
 	bool			_checkNumberModeArgs(string const &modeString, size_t modeArgsSize) const;
 	vector<string>	_getModeArgs(vector<string> const &args) const;
-	void			_applyModeSetting(Server &server, Client *client, Channel *channel, vector<string> &args) const;
+	string const	_applyModeSetting(Server &server, Client *client, Channel *channel, string const &modeString, vector<string> &modeArgs) const;
+	void			_parseModeSetting(Server &server, Client *client, Channel *channel, vector<string> &args) const;
 
 	bool			_checkLimitArg(string const &arg) const;
 

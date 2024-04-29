@@ -5,6 +5,7 @@
 #include "commands/KICK.hpp"
 #include "commands/MODE.hpp"
 #include "commands/NICK.hpp"
+#include "commands/PART.hpp"
 #include "commands/PASS.hpp"
 #include "commands/PING.hpp"
 #include "commands/PRIVMSG.hpp"
@@ -19,6 +20,7 @@ CommandList::CommandList() {
 	_commands["KICK"] = new KICK();
 	_commands["MODE"] = new MODE();
 	_commands["NICK"] = new NICK();
+	_commands["PART"] = new PART();
 	_commands["PASS"] = new PASS();
 	_commands["PING"] = new PING();
 	_commands["PRIVMSG"] = new PRIVMSG();

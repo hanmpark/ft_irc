@@ -5,10 +5,8 @@
  * The sin_port field is a 16-bit integer, which means that it can store values in the range 0-65535.
 
 // -------------------------------------------------------------------------- //
- TODO: Broadcast message
- TODO: check nickname on netcat
- TODO: check mode success messages, they have to be sent to every client
-
+ TODO: SOCKET RANGE
+ TODO: localhost ?
  */
 int main(int argc, char **argv) {
 	if (argc != 3) {

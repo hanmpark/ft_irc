@@ -44,6 +44,7 @@ DEPS		:=	${addprefix ${HEADER},	IRCIncludes.hpp \
 												INVITE.hpp \
 												JOIN.hpp \
 												KICK.hpp \
+												PART.hpp \
 												MODE.hpp \
 												NICK.hpp \
 												PASS.hpp \
@@ -71,6 +72,7 @@ SRCS	=	${addprefix ${SRCS_DIR},	main.cpp \
 												KICK.cpp \
 												MODE.cpp \
 												NICK.cpp \
+												PART.cpp \
 												PASS.cpp \
 												PING.cpp \
 												PRIVMSG.cpp \

@@ -14,7 +14,7 @@ map<string, string>	JOIN::_tokenizeChannels(Server &server, Client *client, vect
 	while (getline(ssChannel, channelToken, ',')) {
 		if (channelToken.at(0) != '#') {
 			Reply::sendRPL(server, client, ERR::ERR_NOSUCHCHANNEL(client->getNickname(), channelToken), SERVER);
-			continue ;
+			continue;
 		}
 		tokenizedChannels.insert(make_pair(channelToken, ""));
 	}
