@@ -1,6 +1,6 @@
 #include "Server.hpp"
 
-void	Server::handleClient(Client *client) {
+void	Server::_handleClient(Client *client) {
 	string	buffer = client->getBuffer();
 	size_t	pos;
 
@@ -17,25 +17,21 @@ void	Server::handleClient(Client *client) {
 	client->clearBuffer();
 }
 
-void	Server::receiveData(int clientFd) {
+void	Server::_receiveData(int clientFd) {
 	char	buff[BUFFER_SIZE]; bzero(buff, BUFFER_SIZE);
-	Client	*client = _clients.getClientByFd(clientFd);
-
+	Client	*client = _clients.getClient(clientFd);
 	ssize_t	bytesReceived = recv(clientFd, buff, BUFFER_SIZE - 1, 0);
+
 	if (bytesReceived <= 0) {
-		removePollFd(clientFd);
-		_clients.deleteClient(_clients.getClientByFd(clientFd));
-		close(clientFd);
-		return;
-	}
-	client->addToBuffer(static_cast<string>(buff));
-	if (client->getBuffer().find("\r\n") != string::npos) {
-		try {
-			handleClient(client);
-		} catch (exception &e) { // This is when the client's password mismatches
-			removePollFd(clientFd);
-			_clients.deleteClient(_clients.getClientByFd(clientFd));
-			close(clientFd);
+		_clients.deleteClient(client);
+	} else {
+		client->addToBuffer(static_cast<string>(buff));
+		if (client->getBuffer().find("\r\n") != string::npos) {
+			try {
+				_handleClient(client);
+			} catch (exception &e) {
+				_clients.deleteClient(client);
+			}
 		}
 	}
 }

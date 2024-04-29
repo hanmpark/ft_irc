@@ -38,7 +38,7 @@ string const	JOIN::_getNamesChannel(Channel *channel, vector<Client*> const &cli
 	string	namesChannel;
 
 	for (size_t i = 0; i < clients.size(); i++) {
-		namesChannel += (channel->getOperatorsList().getClientByFd(clients[i]->getFd()) != NULL ? "@" : "") + clients[i]->getNickname();
+		namesChannel += (channel->getOperatorsList().getClient(clients[i]->getFd()) != NULL ? "@" : "") + clients[i]->getNickname();
 		if (i + 1 < clients.size()) {
 			namesChannel += " ";
 		}
@@ -48,16 +48,15 @@ string const	JOIN::_getNamesChannel(Channel *channel, vector<Client*> const &cli
 
 void	JOIN::_sendJOIN(Server &server, Client *client, Channel *channel) const {
 	channel->getClientsList().addClient(client);
-	Reply::sendRPL(server, client, CMD::JOIN(channel->getName()), CLIENT);
+	Reply::sendRPL(server, client, channel, CMD::JOIN(channel->getName()), CLIENT, false);
 
 	string const namesChannel = _getNamesChannel(channel, channel->getClientsList().getClients());
 	Reply::sendRPL(server, client, RPL::RPL_NAMREPLY(client->getNickname(), channel->getName(), namesChannel), SERVER);
 	Reply::sendRPL(server, client, RPL::RPL_ENDOFNAMES(client->getNickname(), channel->getName()), SERVER);
-
 }
 
 Channel	*JOIN::_checkChannel(Server &server, Client *client, string const &channelName, string const &key) const {
-	Channel	*channel = server.getChannelList().getChannelByName(channelName);
+	Channel	*channel = server.getChannelList().getChannel(channelName);
 
 	if (channel == NULL) {
 		channel = new Channel(channelName);
@@ -71,7 +70,7 @@ Channel	*JOIN::_checkChannel(Server &server, Client *client, string const &chann
 			}
 		}
 		if (channel->getModes() & Channel::INVITE) {
-			if (channel->getInvitedList().getClientByFd(client->getFd())) {
+			if (channel->getInvitedList().getClient(client->getFd())) {
 				channel->getInvitedList().removeClient(client);
 			} else {
 				Reply::sendRPL(server, client, ERR::ERR_INVITEONLYCHAN(client->getNickname(), channel->getName()), SERVER);

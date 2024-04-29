@@ -5,14 +5,14 @@ QUIT::QUIT() : ACommand() {}
 QUIT::~QUIT() {}
 
 void	QUIT::execute(Server &server, Client *client, vector<string> &args) const {
-	vector<Channel*>	channelList = server.getChannelList().getChannelsFromClient(client);
-	vector<Channel*>::const_iterator	it;
+	vector<Channel*>			channelList = server.getChannelList().getChannelsFromClient(client);
+	vector<Channel*>::iterator	it;
+
 	for (it = channelList.begin(); it != channelList.end(); it++) {
-		vector<Client*>::const_iterator	clientIt = (*it)->getClientsList().getClients().begin();
-		vector<Client*>::const_iterator	clientEnd = (*it)->getClientsList().getClients().end();
-		for (; clientIt != clientEnd; clientIt++) {
-			Reply::sendRPL(server, client, *clientIt, CMD::QUIT((args.size() == 1 ? "Client Quit" : args[1])), CLIENT);
-		}
+		Reply::sendRPL(server, client, *it, CMD::QUIT((args[1].empty() ? "Client Quit" : args[1])), CLIENT, true);
 		(*it)->removeClient(client);
+		if ((*it)->getClientsList().getClients().empty()) {
+			server.getChannelList().removeChannel(*it);
+		}
 	}
 }

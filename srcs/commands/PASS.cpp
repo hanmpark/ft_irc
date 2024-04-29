@@ -5,7 +5,7 @@ PASS::PASS() : ACommand() {}
 PASS::~PASS() {}
 
 void	PASS::execute(Server &server, Client *client, vector<string> &args) const {
-	if (args.size() == 1) {
+	if (args.size() < 2) {
 		Reply::sendRPL(server, client, ERR::ERR_NEEDMOREPARAMS(client->getNickname(), args[0]), SERVER);
 	} else if (client->getRegistered() == true) {
 		Reply::sendRPL(server, client, ERR::ERR_ALREADYREGISTRED(client->getNickname()), SERVER);

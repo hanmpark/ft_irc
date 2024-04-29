@@ -16,9 +16,7 @@ public:
 	void			removeClient(Client *client);
 	void			deleteClient(Client *client);
 
-	Client			*getClientByFd(int fd) const;
-	Client			*getClientByNickname(string const &nickname) const;
+	Client			*getClient(int fd) const;
+	Client			*getClient(string const &nickname) const;
 	vector<Client*>	&getClients();
-
-	void			closeFileDescriptors();
 };

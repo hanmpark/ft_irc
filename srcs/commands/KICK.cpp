@@ -9,9 +9,9 @@ string const	KICK::_checkParams(Client *client, Channel *channel, string const &
 
 	if (channel == NULL) {
 		error = ERR::ERR_NOSUCHCHANNEL(client->getNickname(), channel->getName());
-	} else if (channel->getClientsList().getClientByNickname(nick) == NULL) {
+	} else if (channel->getClientsList().getClient(nick) == NULL) {
 		error = ERR::ERR_NOSUCHNICK(client->getNickname(), nick);
-	} else if (channel->getOperatorsList().getClientByFd(client->getFd()) == NULL) {
+	} else if (channel->getOperatorsList().getClient(client->getFd()) == NULL) {
 		error = ERR::ERR_CHANOPRIVSNEEDED(client->getNickname(), channel->getName());
 	}
 
@@ -22,14 +22,14 @@ void	KICK::execute(Server &server, Client *client, vector<string> &args) const {
 	if (args.size() < 3) {
 		Reply::sendRPL(server, client, ERR::ERR_NEEDMOREPARAMS(client->getNickname(), args[0]), SERVER);
 	} else {
-		Channel	*channel = server.getChannelList().getChannelByName(args[1]);
+		Channel	*channel = server.getChannelList().getChannel(args[1]);
 		string	error = _checkParams(client, channel, args[2]);
 
 		if (!error.empty()) {
 			Reply::sendRPL(server, client, error, SERVER);
 		} else {
-			channel->getClientsList().removeClient(channel->getClientsList().getClientByNickname(args[2]));
-			Reply::sendRPL(server, client, CMD::KICK(args[1], args[2]), CLIENT);
+			channel->getClientsList().removeClient(channel->getClientsList().getClient(args[2]));
+			Reply::sendRPL(server, client, channel, CMD::KICK(args[1], args[2]), CLIENT, false);
 		}
 	}
 }

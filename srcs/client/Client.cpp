@@ -2,7 +2,7 @@
 
 /* Constructors / Destructors */
 
-Client::Client() : _fd(0), _hostname("localhost"), _gotPasswordRight(false), _registered(false) {}
+Client::Client() : _fd(0), _hostname("127.0.0.1"), _gotPasswordRight(false), _registered(false) {}
 
 Client::~Client() {}
 
@@ -21,8 +21,6 @@ string	Client::getUsername() const { return _username; }
 
 string 	Client::getHostname() const { return _hostname; }
 
-string	Client::getRealname() const { return _realname; }
-
 string	Client::getIpAddr() const { return _ipAddr; }
 
 string	Client::getBuffer() const { return _buffer; }
@@ -33,24 +31,22 @@ bool	Client::getRegistered() const { return _registered; }
 
 /* Setters */
 
-void	Client::setFd(int fd) { _fd = fd; }
+void	Client::setFd(int const &fd) { _fd = fd; }
 
 void	Client::setNickname(string const &nickname) { _nickname = nickname; }
 
 void	Client::setUsername(string const &username) { _username = username; }
 
-void	Client::setHostname(string const &hostname) { _hostname = hostname; }
-
 void	Client::setRealname(string const &realname) { _realname = realname; }
 
 void	Client::setIpAddr(string const &ipAddr) { _ipAddr = ipAddr; }
 
-void	Client::setBuffer(string const &command) { _buffer = command; }
+void	Client::setGotPasswordRight(bool const &password) { _gotPasswordRight = password; }
 
-void	Client::setGotPasswordRight(bool password) { _gotPasswordRight = password; }
-
-void	Client::setRegistered(bool registered) { _registered = registered; }
+void	Client::setRegistered(bool const &registered) { _registered = registered; }
 
 void	Client::addToBuffer(string const &buffer) { _buffer += buffer; }
 
 void	Client::clearBuffer() { _buffer.clear(); }
+
+void	Client::closeFd() { close(_fd); }

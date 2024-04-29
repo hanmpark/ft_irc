@@ -25,17 +25,15 @@ private:
 	ClientList				_clients;
 	ChannelList				_channels;
 	string					_name, _password;
-	int						_port, _sockfd;
-	vector<struct pollfd>	_pollFds;
+	int						_port, _serverFd;
+	vector<struct pollfd>	_pollfds;
 	static bool				_signalReceived;
 
-	static void		signalHandler(int signum);
-	struct pollfd	createSocket(int fd) const;
-	void			acceptNewClient();
-	void			receiveData(int clientFd);
-	void			handleClient(Client *client);
-	void			closeFileDescriptors();
-	void			removePollFd(int fd);
+	static void		_signalHandler(int signum);
+	struct pollfd	_createSocket(int fd) const;
+	void			_acceptNewClient();
+	void			_receiveData(int clientFd);
+	void			_handleClient(Client *client);
 
 	Server();
 

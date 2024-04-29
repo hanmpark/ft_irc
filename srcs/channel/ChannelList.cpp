@@ -3,42 +3,41 @@
 ChannelList::ChannelList() {}
 
 ChannelList::~ChannelList() {
-	for (map<string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++) {
-		delete it->second;
+	for (vector<Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++) {
+		delete *it;
 	}
 	_channels.clear();
 }
 
 void	ChannelList::addChannel(Channel *channel) {
-	_channels[channel->getName()] = channel;
+	_channels.push_back(channel);
 }
 
-void	ChannelList::removeChannel(string const &name) {
-	for (map<string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++) {
-		if (it->second->getName() == name) {
-			delete it->second;
+void	ChannelList::removeChannel(Channel *channel) {
+	for (vector<Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++) {
+		if (*it == channel) {
+			delete *it;
 			_channels.erase(it);
 			break;
 		}
 	}
 }
 
-Channel	*ChannelList::getChannelByName(string const &name) const {
-	for (map<string, Channel*>::const_iterator it = _channels.begin(); it != _channels.end(); it++) {
-		if (it->second->getName() == name) {
-			return it->second;
+Channel	*ChannelList::getChannel(string const &name) const {
+	for (vector<Channel*>::const_iterator it = _channels.begin(); it != _channels.end(); it++) {
+		if ((*it)->getName() == name) {
+			return *it;
 		}
 	}
 	return NULL;
 }
 
-vector<Channel*>	ChannelList::getChannelsFromClient(Client *client) const{
+vector<Channel*>	ChannelList::getChannelsFromClient(Client *client) {
 	vector<Channel*>	channels;
-	map<string, Channel*>::const_iterator	it;
 
-	for (it = _channels.begin(); it != _channels.end(); it++) {
-		if (it->second->getClientsList().getClientByNickname(client->getNickname())) {
-			channels.push_back(it->second);
+	for (vector<Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++) {
+		if ((*it)->getClientsList().getClient(client->getNickname())) {
+			channels.push_back(*it);
 		}
 	}
 	return channels;

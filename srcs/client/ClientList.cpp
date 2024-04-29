@@ -31,18 +31,19 @@ void	ClientList::removeClient(Client *client) {
 }
 
 void	ClientList::deleteClient(Client *client) {
-	if (!client) 
+	if (!client)
 		return ;
 	for (vector<Client*>::iterator it = _clients.begin(); it != _clients.end(); it++) {
 		if (client && *it == client) {
 			delete *it;
+			(*it)->closeFd();
 			_clients.erase(it);
 			break;
 		}
 	}
 }
 
-Client	*ClientList::getClientByFd(int fd) const {
+Client	*ClientList::getClient(int fd) const {
 	for (vector<Client*>::const_iterator it = _clients.begin(); it != _clients.end(); it++) {
 		if ((*it)->getFd() == fd) {
 			return *it;
@@ -51,7 +52,7 @@ Client	*ClientList::getClientByFd(int fd) const {
 	return NULL;
 }
 
-Client	*ClientList::getClientByNickname(string const &nickname) const {
+Client	*ClientList::getClient(string const &nickname) const {
 	for (vector<Client*>::const_iterator it = _clients.begin(); it != _clients.end(); it++) {
 		if ((*it)->getNickname() == nickname) {
 			return *it;
@@ -61,10 +62,3 @@ Client	*ClientList::getClientByNickname(string const &nickname) const {
 }
 
 vector<Client *>	&ClientList::getClients() { return _clients; }
-
-void	ClientList::closeFileDescriptors() {
-	for (size_t i = 0; i < _clients.size(); i++) {
-		cout << RED << "Client: " << _clients[i]->getFd() << " Disconnected" << RESET << endl;
-		close(_clients[i]->getFd());
-	}
-}

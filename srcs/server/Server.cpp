@@ -7,7 +7,7 @@
  * 2. 1024 to 49151 can be registered for specific purposes
  * 3. 49152-65535 used by client apps for outgoing conncections.
  */
-Server::Server(string const &portString, string const &password) : _name("irc.yobouhle.chat"), _sockfd(-1) {
+Server::Server(string const &portString, string const &password) : _name("irc.yobouhle.chat"), _serverFd(-1) {
 	if (portString.find_last_not_of("0123456789") != string::npos || atoi(portString.c_str()) < 0 || atoi(portString.c_str()) > 65535) { // Check Range
 		throw runtime_error("Invalid port\n");
 	}
@@ -21,18 +21,17 @@ Server::Server(string const &portString, string const &password) : _name("irc.yo
 Server::~Server() {
 	vector<Client*>	clients = _clients.getClients();
 
+	cout << RED "Server shutting down..." RESET << endl;
 	for (vector<Client*>::iterator it = clients.begin(); it != clients.end(); it++) {
-		if (*it) {
-			delete *it;
-		}
+		_clients.deleteClient(*it);
 	}
 	clients.clear();
-	_pollFds.clear();
+	close(_serverFd);
 }
 
 int	Server::getPort() const { return _port; }
 
-int	Server::getSockfd() const { return _sockfd; }
+int	Server::getSockfd() const { return _serverFd; }
 
 string const	&Server::getName() const { return _name; }
 

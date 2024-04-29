@@ -35,7 +35,7 @@ CommandList::~CommandList() {
 	_commands.clear();
 }
 
-ACommand	*CommandList::getCommandByName(string const &commandName) const {
+ACommand	*CommandList::getCommand(string const &commandName) const {
 	commandIt	it = _commands.find(commandName);
 
 	if (it == _commands.end())
@@ -61,10 +61,10 @@ vector<string>	CommandList::_split(string const &buffer, string const &limiter) 
 	return args;
 }
 
-void	CommandList::select(Server &server, Client *client, string const &buffer) {
+void	CommandList::select(Server &server, Client *client, string const &buffer) const {
 	vector<string>	args = _split(buffer, " ");
 
-	ACommand	*cmd = getCommandByName(args[0]);
+	ACommand	*cmd = getCommand(args[0]);
 	if (cmd != NULL) {
 		Reply::debugLog(args, DEBUG);
 		if (!client->getRegistered()) {

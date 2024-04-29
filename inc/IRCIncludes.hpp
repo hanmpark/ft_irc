@@ -33,7 +33,7 @@
 # include <algorithm>
 # include <cctype>
 # include <map>
-# include <deque>
+# include <cerrno>
 
 /* Namespace */
 using namespace std;

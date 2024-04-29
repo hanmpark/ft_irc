@@ -3,6 +3,7 @@
 # include "IRCIncludes.hpp"
 # include "Server.hpp"
 # include "client/Client.hpp"
+# include "channel/Channel.hpp"
 
 class Server;
 
@@ -16,12 +17,13 @@ private:
 	Reply();
 
 public:
-	static string	findPrefix(Server &server, Client *client, e_endpoint const &side);
-	static void		sendRPL(Server &server, Client *client, string const &message, e_endpoint const &endPoint);
-	static void		sendRPL(Server &server, Client *from, Client *to, string const &message, e_endpoint const &endPoint);
-	static void		debugLog(string const &errorLog, bool const &debug);
-	static void		debugLog(vector<string> const &args, bool const &debug);
-	static void		debugLog(Server &server, Client *client, vector<string> const &args, e_endpoint const &endPoint, bool const &debug);
+	static string const	findPrefix(Server &server, Client *client, e_endpoint const &side);
+	static void			sendRPL(Server &server, Client *client, string const &message, e_endpoint const &endPoint);
+	static void			sendRPL(Server &server, Client *from, Client *to, string const &message, e_endpoint const &endPoint);
+	static void			sendRPL(Server &server, Client *from, Channel *to, string const &message, e_endpoint const &endPoint, bool const &withoutUser);
+	static void			debugLog(string const &errorLog, bool const &debug);
+	static void			debugLog(vector<string> const &args, bool const &debug);
+	static void			debugLog(Server &server, Client *client, vector<string> const &args, e_endpoint const &endPoint, bool const &debug);
 };
 
 class RPL {
