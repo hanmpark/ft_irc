@@ -1,4 +1,4 @@
-#include "Client.hpp"
+#include "client/Client.hpp"
 
 /* Constructors / Destructors */
 
@@ -53,4 +53,4 @@ void	Client::setRegistered(bool registered) { _registered = registered; }
 
 void	Client::addToBuffer(string const &buffer) { _buffer += buffer; }
 
-void	Client::clearCommand() { _buffer.clear(); }
+void	Client::clearBuffer() { _buffer.clear(); }

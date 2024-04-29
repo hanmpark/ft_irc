@@ -98,7 +98,7 @@ bool	MODE::UNKEY(Server &server, Channel *channel, Client *client, vector<string
 
 bool	MODE::OP(Server &server, Channel *channel, Client *client, vector<string> &modeArgs, size_t *modeArgsIndex) const {
 	if (server.getClientList().getClientByNickname(modeArgs[*modeArgsIndex]) == NULL) {
-		RPL::sendRPL(server, client, IRCErrors::ERR_NOSUCHNICK(client->getNickname(), modeArgs[*modeArgsIndex]), SERVER);
+		Reply::sendRPL(server, client, ERR::ERR_NOSUCHNICK(client->getNickname(), modeArgs[*modeArgsIndex]), SERVER);
 		modeArgs.erase(modeArgs.begin());
 		return false;
 	} else {
@@ -110,7 +110,7 @@ bool	MODE::OP(Server &server, Channel *channel, Client *client, vector<string> &
 
 bool	MODE::DEOP(Server &server, Channel *channel, Client *client, vector<string> &modeArgs, size_t *modeArgsIndex) const {
 	if (server.getClientList().getClientByNickname(modeArgs[*modeArgsIndex]) == NULL) {
-		RPL::sendRPL(server, client, IRCErrors::ERR_NOSUCHNICK(client->getNickname(), modeArgs[*modeArgsIndex]), SERVER);
+		Reply::sendRPL(server, client, ERR::ERR_NOSUCHNICK(client->getNickname(), modeArgs[*modeArgsIndex]), SERVER);
 		modeArgs.erase(modeArgs.begin());
 		return false;
 	} else {
@@ -200,8 +200,8 @@ void	MODE::_applyModeSetting(Server &server, Client *client, Channel *channel, v
 	string			modeStringApplied;
 	vector<string>	modeArgs;
 
-	if (!_checkFormatModeArgs(modeString, (args.size() - 3 < 0 ? 0 : args.size() - 3))) {
-		RPL::sendRPL(server, client, IRCErrors::ERR_NEEDMOREPARAMS(client->getNickname(), args[0]), SERVER);
+	if (!_checkFormatModeArgs(modeString, (args.size() < 3 ? 0 : args.size() - 3))) {
+		Reply::sendRPL(server, client, ERR::ERR_NEEDMOREPARAMS(client->getNickname(), args[0]), SERVER);
 	} else {
 		modeArgs = _getModeArgs(args);
 		size_t	modeArgsIndex = 0;
@@ -219,7 +219,7 @@ void	MODE::_applyModeSetting(Server &server, Client *client, Channel *channel, v
 					}
 				}
 			} else {
-				RPL::sendRPL(server, client, IRCErrors::ERR_UNKNOWNMODE(client->getNickname(), modeString.substr(i, 1)), SERVER);
+				Reply::sendRPL(server, client, ERR::ERR_UNKNOWNMODE(client->getNickname(), modeString.substr(i, 1)), SERVER);
 			}
 		}
 	}
@@ -229,20 +229,20 @@ void	MODE::_applyModeSetting(Server &server, Client *client, Channel *channel, v
 		for (vector<string>::const_iterator it = modeArgs.begin(); it != modeArgs.end(); it++) {
 			appliedArgs += *it + (it + 1 != modeArgs.end() ? " " : "");
 		}
-		RPL::sendRPL(server, client, IRCCommands::MODE(channel->getName(), modeStringApplied, appliedArgs), CLIENT);
+		Reply::sendRPL(server, client, CMD::MODE(channel->getName(), modeStringApplied, appliedArgs), CLIENT);
 	}
 }
 
 void	MODE::execute(Server &server, Client *client, vector<string> &args) const {
 	if (args.size() < 2) {
-		RPL::sendRPL(server, client, IRCErrors::ERR_NEEDMOREPARAMS(client->getNickname(), args[0]), SERVER);
+		Reply::sendRPL(server, client, ERR::ERR_NEEDMOREPARAMS(client->getNickname(), args[0]), SERVER);
 	} else if (args.size() > 2 && args[1][0] == '#') {
 		Channel	*channel = server.getChannelList().getChannelByName(args[1]);
 
 		if (channel) {
 			_applyModeSetting(server, client, channel, args);
 		} else {
-			RPL::sendRPL(server, client, IRCErrors::ERR_NOSUCHCHANNEL(client->getNickname(), args[1]), SERVER);
+			Reply::sendRPL(server, client, ERR::ERR_NOSUCHCHANNEL(client->getNickname(), args[1]), SERVER);
 		}
 	}
 }

@@ -32,10 +32,12 @@ SRCS_DIR	:=	./srcs/
 OBJS_DIR	:=	./objs/
 HEADER		:=	./inc/
 DEPS		:=	${addprefix ${HEADER},	IRCIncludes.hpp \
-										Client.hpp \
 										Server.hpp \
-										IRCReplies.hpp \
-										Channel.hpp} \
+										Replies.hpp} \
+				${addprefix ${HEADER}channel/,	Channel.hpp \
+												ChannelList.hpp} \
+				${addprefix ${HEADER}client/,	Client.hpp \
+												ClientList.hpp} \
 				${addprefix ${HEADER}commands/,	ACommand.hpp \
 												CommandList.hpp \
 												CAP.hpp \
@@ -46,7 +48,6 @@ DEPS		:=	${addprefix ${HEADER},	IRCIncludes.hpp \
 												NICK.hpp \
 												PASS.hpp \
 												PING.hpp \
-												PONG.hpp \
 												PRIVMSG.hpp \
 												QUIT.hpp \
 												TOPIC.hpp \
@@ -54,7 +55,7 @@ DEPS		:=	${addprefix ${HEADER},	IRCIncludes.hpp \
 
 # Files
 SRCS	=	${addprefix ${SRCS_DIR},	main.cpp \
-										RPL.cpp} \
+										Replies.cpp} \
 			${addprefix ${SRCS_DIR}server/,	Server.cpp \
 											socket.cpp \
 											runner.cpp \
@@ -72,7 +73,6 @@ SRCS	=	${addprefix ${SRCS_DIR},	main.cpp \
 												NICK.cpp \
 												PASS.cpp \
 												PING.cpp \
-												PONG.cpp \
 												PRIVMSG.cpp \
 												QUIT.cpp \
 												TOPIC.cpp \

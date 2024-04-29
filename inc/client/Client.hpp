@@ -11,12 +11,7 @@
 class Client {
 private:
 	int		_fd;
-	string	_nickname;
-	string	_username;
-	string	_hostname;
-	string	_realname;
-	string	_ipAddr;
-	string	_buffer;
+	string	_nickname, _username, _hostname, _realname, _ipAddr, _buffer;
 	bool	_gotPasswordRight, _registered;
 
 public:
@@ -48,5 +43,5 @@ public:
 	void	setRegistered(bool registered);
 
 	void	addToBuffer(string const &buffer);
-	void	clearCommand();
+	void	clearBuffer();
 };

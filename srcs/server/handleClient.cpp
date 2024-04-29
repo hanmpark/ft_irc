@@ -9,12 +9,12 @@ void	Server::handleClient(Client *client) {
 		if (client && client->getRegistered() == false) {
 			if (client->getGotPasswordRight() && !client->getNickname().empty() && !client->getUsername().empty()) {
 				client->setRegistered(true);
-				RPL::sendRPL(*this, client, IRCReplies::RPL_WELCOME(client->getNickname(), client->getUsername()), SERVER);
+				Reply::sendRPL(*this, client, RPL::RPL_WELCOME(client->getNickname()), SERVER);
 			}
 		}
 		buffer.erase(0, pos + 2);
 	}
-	client->clearCommand();
+	client->clearBuffer();
 }
 
 void	Server::receiveData(int clientFd) {
@@ -26,7 +26,7 @@ void	Server::receiveData(int clientFd) {
 		removePollFd(clientFd);
 		_clients.deleteClient(_clients.getClientByFd(clientFd));
 		close(clientFd);
-		return ;
+		return;
 	}
 	client->addToBuffer(static_cast<string>(buff));
 	if (client->getBuffer().find("\r\n") != string::npos) {

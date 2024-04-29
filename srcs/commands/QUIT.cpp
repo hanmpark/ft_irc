@@ -11,7 +11,7 @@ void	QUIT::execute(Server &server, Client *client, vector<string> &args) const {
 		vector<Client*>::const_iterator	clientIt = (*it)->getClientsList().getClients().begin();
 		vector<Client*>::const_iterator	clientEnd = (*it)->getClientsList().getClients().end();
 		for (; clientIt != clientEnd; clientIt++) {
-			RPL::sendRPL(server, client, *clientIt, IRCCommands::QUIT((args.size() == 1 ? "Client Quit" : args[1])), CLIENT);
+			Reply::sendRPL(server, client, *clientIt, CMD::QUIT((args.size() == 1 ? "Client Quit" : args[1])), CLIENT);
 		}
 		(*it)->removeClient(client);
 	}

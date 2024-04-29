@@ -10,7 +10,7 @@ public:
 	ChannelList();
 	~ChannelList();
 
-	void				addChannel(string const &channelName, Channel *channel);
+	void				addChannel(Channel *channel);
 	void				removeChannel(string const &name);
 	Channel				*getChannelByName(string const &name) const;
 	vector<Channel*>	getChannelsFromClient(Client *client) const;

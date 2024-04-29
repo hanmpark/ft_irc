@@ -1,4 +1,4 @@
-#include "ChannelList.hpp"
+#include "channel/ChannelList.hpp"
 
 ChannelList::ChannelList() {}
 
@@ -9,8 +9,8 @@ ChannelList::~ChannelList() {
 	_channels.clear();
 }
 
-void	ChannelList::addChannel(string const &channelName, Channel *channel) {
-	_channels[channelName] = channel;
+void	ChannelList::addChannel(Channel *channel) {
+	_channels[channel->getName()] = channel;
 }
 
 void	ChannelList::removeChannel(string const &name) {

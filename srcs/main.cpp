@@ -5,14 +5,15 @@
  * The sin_port field is a 16-bit integer, which means that it can store values in the range 0-65535.
 
 // -------------------------------------------------------------------------- //
- TODO: Server not working with more than 3 clients because of same NICK
- TODO: IRC SUCCESS MESSAGE
+ TODO: Broadcast message
+ TODO: check nickname on netcat
+ TODO: check mode success messages, they have to be sent to every client
 
  */
 int main(int argc, char **argv) {
 	if (argc != 3) {
-		cout << BLUE "Usage: ./ircserv <port> <password>" RESET << endl;
-		return 0;
+		cerr << BLUE "Usage: ./ircserv <port> <password>" RESET << endl;
+		return 1;
 	}
 
 	try {
@@ -22,10 +23,10 @@ int main(int argc, char **argv) {
 		server.runServer();
 	} catch (runtime_error &e) {
 		cerr << RED "Error: " << e.what() << RESET << endl;
-		return 1;
+		return 2;
 	} catch (...) {
 		cerr << RED ERR_UNKNOWN RESET << endl;
-		return 1;
+		return 3;
 	}
 
 	return 0;

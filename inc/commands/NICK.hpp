@@ -8,7 +8,6 @@ class NICK : public ACommand {
 private:
 	bool	_isValidNickname(string &nick) const;
 	bool	_isNicknameInUse(vector<Client*> const &clients, Client *client, string const &nick) const;
-	void	_setNewNick(Client *client, string const &nick) const;
 
 	bool	_checkFirstChar(char const &c) const;
 

@@ -19,15 +19,15 @@ void	PRIVMSG::_sendToChannel(Server &server, Client *client, string const &chann
 	Channel	*channel = server.getChannelList().getChannelByName(channelName);
 
 	if (channel == NULL) {
-		RPL::sendRPL(server, client, IRCErrors::ERR_NOSUCHCHANNEL(client->getNickname(), channelName), SERVER);
+		Reply::sendRPL(server, client, ERR::ERR_NOSUCHCHANNEL(client->getNickname(), channelName), SERVER);
 	} else {
 		if (channel->getClientsList().getClientByFd(client->getFd()) == NULL) {
-			RPL::sendRPL(server, client, IRCErrors::ERR_CANNOTSENDTOCHAN(client->getNickname(), channelName), SERVER);
+			Reply::sendRPL(server, client, ERR::ERR_CANNOTSENDTOCHAN(client->getNickname(), channelName), SERVER);
 		} else {
 			vector<Client*>	clients = channel->getClientsList().getClients();
 			for (vector<Client*>::const_iterator it = clients.begin(); it != clients.end(); it++) {
 				if ((*it)->getFd() != client->getFd()) {
-					RPL::sendRPL(server, client, *it, IRCCommands::PRIVMSG(channel->getName(), message), CLIENT);
+					Reply::sendRPL(server, client, *it, CMD::PRIVMSG(channel->getName(), message), CLIENT);
 				}
 			}
 		}
@@ -38,20 +38,20 @@ void	PRIVMSG::_sendToClient(Server &server, Client *client, string const &client
 	Client	*target = server.getClientList().getClientByNickname(clientNickname);
 
 	if (target == NULL) {
-		RPL::sendRPL(server, client, IRCErrors::ERR_NOSUCHNICK(client->getNickname(), clientNickname), SERVER);
+		Reply::sendRPL(server, client, ERR::ERR_NOSUCHNICK(client->getNickname(), clientNickname), SERVER);
 	} else {
-		RPL::sendRPL(server, client, target, IRCCommands::PRIVMSG(target->getNickname(), message), CLIENT);
+		Reply::sendRPL(server, client, target, CMD::PRIVMSG(target->getNickname(), message), CLIENT);
 	}
 }
 
 void	PRIVMSG::execute(Server &server, Client *client, vector<string> &args) const {
 	if (args.size() == 1) {
-		RPL::sendRPL(server, client, IRCErrors::ERR_NORECIPIENT(client->getNickname(), args[0]), SERVER);
+		Reply::sendRPL(server, client, ERR::ERR_NORECIPIENT(client->getNickname(), args[0]), SERVER);
 	} else if (args.size() == 2) {
 		if (args[1][0] == ':') {
-			RPL::sendRPL(server, client, IRCErrors::ERR_NORECIPIENT(client->getNickname(), args[0]), SERVER);
+			Reply::sendRPL(server, client, ERR::ERR_NORECIPIENT(client->getNickname(), args[0]), SERVER);
 		} else {
-			RPL::sendRPL(server, client, IRCErrors::ERR_NOTEXTTOSEND(client->getNickname()), SERVER);
+			Reply::sendRPL(server, client, ERR::ERR_NOTEXTTOSEND(client->getNickname()), SERVER);
 		}
 	} else {
 		vector<string>	targets = _splitChannels(args[1]);

@@ -7,7 +7,6 @@
 #include "commands/NICK.hpp"
 #include "commands/PASS.hpp"
 #include "commands/PING.hpp"
-#include "commands/PONG.hpp"
 #include "commands/PRIVMSG.hpp"
 #include "commands/QUIT.hpp"
 #include "commands/TOPIC.hpp"
@@ -22,7 +21,6 @@ CommandList::CommandList() {
 	_commands["NICK"] = new NICK();
 	_commands["PASS"] = new PASS();
 	_commands["PING"] = new PING();
-	_commands["PONG"] = new PONG();
 	_commands["PRIVMSG"] = new PRIVMSG();
 	_commands["QUIT"] = new QUIT();
 	_commands["TOPIC"] = new TOPIC();
@@ -59,7 +57,6 @@ vector<string>	CommandList::_split(string const &buffer, string const &limiter) 
 			break;
 		}
 	}
-	cout << "ICI LA OUAIS: " << buffer.substr(pos) << endl;
 	args.push_back(buffer.substr(pos));
 	return args;
 }
@@ -69,19 +66,17 @@ void	CommandList::select(Server &server, Client *client, string const &buffer) {
 
 	ACommand	*cmd = getCommandByName(args[0]);
 	if (cmd != NULL) {
-		RPL::debugLog(args, DEBUG);
+		Reply::debugLog(args, DEBUG);
 		if (!client->getRegistered()) {
 			if (args[0] != "CAP" && args[0] != "PASS" && args[0] != "NICK" && args[0] != "USER") {
-				RPL::sendRPL(server, client, IRCErrors::ERR_NOTREGISTERED(client->getNickname()), SERVER);
+				Reply::sendRPL(server, client, ERR::ERR_NOTREGISTERED(client->getNickname()), SERVER);
 				args.clear();
 				return;
 			}
 		}
-		if (cmd != NULL) {
-			cmd->execute(server, client, args);
-		}
+		cmd->execute(server, client, args);
 	} else {
-		RPL::sendRPL(server, client, IRCErrors::ERR_UNKNOWNCOMMAND(client->getNickname(), args[0]), SERVER);
+		Reply::sendRPL(server, client, ERR::ERR_UNKNOWNCOMMAND(client->getNickname(), args[0]), SERVER);
 	}
 	args.clear();
 }

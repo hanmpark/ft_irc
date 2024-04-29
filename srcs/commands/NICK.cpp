@@ -36,32 +36,16 @@ bool	NICK::_isNicknameInUse(vector<Client*> const &clients, Client *client, stri
 	return false;
 }
 
-void	NICK::_setNewNick(Client *client, string const &nick) const {
-	static long	nickNumber = 1;
-
-	stringstream iss;
-	string		nickNumberStr;
-
-	iss << nickNumber;
-	iss >> nickNumberStr;
-
-	client->setNickname(nick + nickNumberStr);
-	nickNumber++;
-}
-
 void	NICK::execute(Server &server, Client *client, vector<string> &args) const {
-	if (client->getNickname().empty() && args.size() == 1) {
-		RPL::sendRPL(server, client, IRCErrors::ERR_NONICKNAMEGIVEN(client->getNickname()), SERVER);
+	if (args.size() < 2) {
+		Reply::sendRPL(server, client, ERR::ERR_NONICKNAMEGIVEN(client->getNickname()), SERVER);
 	} else if (!_isValidNickname(args[1])) {
-		RPL::sendRPL(server, client, IRCErrors::ERR_ERRONEUSNICKNAME(args[1]), SERVER);
+		Reply::sendRPL(server, client, ERR::ERR_ERRONEUSNICKNAME(client->getNickname(), args[1]), SERVER);
 	} else if (_isNicknameInUse(server.getClientList().getClients(), client, args[1])) {
-		RPL::sendRPL(server, client, IRCErrors::ERR_NICKNAMEINUSE(args[1]), SERVER);
-		if (!client->getRegistered()) {
-			_setNewNick(client, args[1]);
-		}
+		Reply::sendRPL(server, client, ERR::ERR_NICKNAMEINUSE(client->getNickname(), args[1]), SERVER);
 	} else {
 		if (client->getRegistered() && client->getNickname() != args[1]) {
-			RPL::sendRPL(server, client, IRCCommands::NICK(args[1]), SERVER);
+			Reply::sendRPL(server, client, CMD::NICK(args[1]), SERVER);
 		}
 		client->setNickname(args[1]);
 	}

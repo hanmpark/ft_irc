@@ -1,18 +1,14 @@
 #pragma once
 
 # include "IRCIncludes.hpp"
-# include "ClientList.hpp"
+# include "client/ClientList.hpp"
 
 class ClientList;
 
 class Channel {
 private:
-	string			_name;
-	string			_topic;
-	string			_key;
-	ClientList		_clients;
-	ClientList		_operators;
-	ClientList		_invited;
+	string			_name, _topic, _key;
+	ClientList		_clients, _operators, _invited;
 	size_t			_limit;
 	unsigned int	_modes;
 

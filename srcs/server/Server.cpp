@@ -19,12 +19,14 @@ Server::Server(string const &portString, string const &password) : _name("irc.yo
 }
 
 Server::~Server() {
-	for (vector<Client*>::iterator it = _clients.getClients().begin(); it != _clients.getClients().end(); it++) {
+	vector<Client*>	clients = _clients.getClients();
+
+	for (vector<Client*>::iterator it = clients.begin(); it != clients.end(); it++) {
 		if (*it) {
 			delete *it;
 		}
 	}
-	_clients.getClients().clear();
+	clients.clear();
 	_pollFds.clear();
 }
 
