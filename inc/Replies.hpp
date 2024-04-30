@@ -52,7 +52,7 @@ private:
 	ERR();
 
 public:
-	static string const ERR_NOSUCHNICK(string const &client, string const &nick) { return "401 " + client + " " + nick + " :No such client/channel\r\n"; }
+	static string const ERR_NOSUCHNICK(string const &client, string const &nick) { return "401 " + client + " " + nick + " :No such nick/channel\r\n"; }
 	static string const ERR_NOSUCHCHANNEL(string const &client, string const &channel) { return "403 " + client + " " + channel + " :No such channel\r\n"; }
 	static string const ERR_CANNOTSENDTOCHAN(string const &client, string const &channel) { return "404 " + client + " " + channel + " :Cannot send to channel\r\n"; }
 	static string const ERR_NORECIPIENT(string const &client, string const &command) { return "411 " + client + " :No recipient given (" + command + ")\r\n"; }
@@ -63,7 +63,7 @@ public:
 	static string const ERR_NICKNAMEINUSE(string const &client, string const &nick) { return "433 " + (client.empty() ? "*" : client) + " " + nick + " :Nickname is already in use\r\n"; }
 	static string const ERR_USERNOTINCHANNEL(string const &client, string const &user, string const &channel) { return "441 " + client + " " + user + " " + channel + " :They aren't on that channel\r\n"; }
 	static string const ERR_NOTONCHANNEL(string const &client, string const &channel) { return "442 " + client + " " + channel + " :You're not on that channel\r\n"; }
-	static string const ERR_USERONCHANNEL(string const &client, string const &channel) { return "443 " + (client.empty() ? "*" : client) + " " + channel + " :is already on channel\r\n"; }
+	static string const ERR_USERONCHANNEL(string const &client, string const &user, string const &channel) { return "443 " + (client.empty() ? "*" : client) + " " + user + " " + channel + " :is already on channel\r\n"; }
 	static string const ERR_NOTREGISTERED(string const &client) { return "451 " + (client.empty() ? "*" : client) + " :You have not registered\r\n"; }
 	static string const ERR_NEEDMOREPARAMS(string const &client, string const &command) { return "461 " + (client.empty() ? "*" : client) + " " + command + " :Not enough parameters\r\n"; }
 	static string const ERR_ALREADYREGISTRED(string const &client) { return "462 " + client + " :You may not reregister\r\n"; }
@@ -82,7 +82,7 @@ private:
 public:
 	static string const INVITE(string const &nick, string const &channel) { return "INVITE " + nick + " :" + channel + "\r\n"; }
 	static string const JOIN(string const &channel) { return "JOIN " + channel + "\r\n"; }
-	static string const KICK(string const &channel, string const &nick) { return "KICK " + channel + " " + nick + " :" + nick + "\r\n"; }
+	static string const KICK(string const &channel, string const &nick, string const &message) { return "KICK " + channel + " " + nick + " :" + (message.empty() ? nick : message) + "\r\n"; }
 	static string const MODE(string const &channel, string const &modeString, string const &modeArgs) { return "MODE " + channel + " " + modeString + " " + modeArgs + "\r\n"; }
 	static string const NICK(string const &nick) { return "NICK :" + nick + "\r\n"; }
 	static string const PART(string const &channel, string const &message) { return "PART " + channel + (message.empty() ? " " : " :" + message) + "\r\n"; }

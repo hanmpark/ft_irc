@@ -24,8 +24,8 @@ void	ClientList::deleteClient(Client *client) {
 	for (vector<Client*>::iterator it = _clients.begin(); it != _clients.end(); it++) {
 		if (client && *it == client) {
 			cout << YELLOW "Client " << (client->getNickname().empty() ? "*" : client->getNickname()) << " disconnected" RESET << endl;
-			delete *it;
 			(*it)->closeFd();
+			delete *it;
 			_clients.erase(it);
 			break;
 		}

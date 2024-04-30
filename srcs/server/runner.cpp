@@ -26,7 +26,10 @@ void	Server::runServer() {
 				if (_pollfds[i].fd == _serverFd) {
 					_acceptNewClient();
 				} else {
-					_receiveData(_pollfds[i].fd);
+					if (!_receiveData(_pollfds[i].fd)) {
+						_pollfds.erase(_pollfds.begin() + i);
+						i--;
+					}
 				}
 			}
 		}

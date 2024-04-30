@@ -32,7 +32,7 @@ void	KICK::execute(Server &server, Client *client, vector<string> &args) const {
 		if (!error.empty()) {
 			Reply::sendRPL(server, client, error, SERVER);
 		} else {
-			Reply::sendRPL(server, client, channel, CMD::KICK(args[1], args[2]), CLIENT, false);
+			Reply::sendRPL(server, client, channel, CMD::KICK(args[1], args[2], (args.size() > 2 ? args[3] : "")), CLIENT, false);
 			channel->getClientsList().removeClient(channel->getClientsList().getClient(args[2]));
 		}
 	}

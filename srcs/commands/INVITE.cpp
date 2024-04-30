@@ -16,7 +16,7 @@ string const	INVITE::_checkParams(Server &server, Client *client, string const &
 	} else if (channel->getClientsList().getClient(client->getFd()) == NULL) {
 		error = ERR::ERR_NOTONCHANNEL(client->getNickname(), channelName);
 	} else if (channel->getClientsList().getClient(target->getFd())) {
-		error = ERR::ERR_USERONCHANNEL(client->getNickname(), channelName);
+		error = ERR::ERR_USERONCHANNEL(client->getNickname(), nick, channelName);
 	} else if (!channel->getInvitedList().getClient(target->getFd()) && channel->getModes() & Channel::INVITE) {
 		channel->getInvitedList().addClient(target);
 	}

@@ -48,13 +48,15 @@ void	Server::_handleClient(Client *client) {
 	client->clearBuffer();
 }
 
-void	Server::_receiveData(int clientFd) {
+
+bool	Server::_receiveData(int clientFd) {
 	char	buff[BUFFER_SIZE]; bzero(buff, BUFFER_SIZE);
 	Client	*client = _clients.getClient(clientFd);
 	ssize_t	bytesReceived = recv(clientFd, buff, BUFFER_SIZE - 1, 0);
 
 	if (bytesReceived <= 0) {
 		_clients.deleteClient(client);
+		return false;
 	} else {
 		client->addToBuffer(static_cast<string>(buff));
 		if (client->getBuffer().find("\n") != string::npos) {
@@ -62,7 +64,9 @@ void	Server::_receiveData(int clientFd) {
 				_handleClient(client);
 			} catch (exception &e) {
 				_clients.deleteClient(client);
+				return false;
 			}
 		}
 	}
+	return true;
 }
