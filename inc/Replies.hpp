@@ -23,7 +23,6 @@ public:
 	static void			sendRPL(Server &server, Client *from, Channel *to, string const &message, e_endpoint const &endPoint, bool const &withoutUser);
 	static void			debugLog(string const &errorLog, bool const &debug);
 	static void			debugLog(vector<string> const &args, bool const &debug);
-	static void			debugLog(Server &server, Client *client, vector<string> const &args, e_endpoint const &endPoint, bool const &debug);
 };
 
 class RPL {
@@ -37,6 +36,9 @@ public:
 	static string const RPL_INVITING(string const &nick, string const &destNick, string const &channel) { return "341 " + nick + " " + destNick + " " + channel + "\r\n"; }
 	static string const RPL_NAMREPLY(string const &nick, string const &channel, string const &names) { return "353 " + nick + " = " + channel + " :" + names + "\r\n"; }
 	static string const RPL_ENDOFNAMES(string const &nick, string const &channel) { return "366 " + nick + " " + channel + " :End of /NAMES list\r\n"; }
+	static string const RPL_MOTD(string const &nick, string const &message) { return "372 " + nick + " :- " + message + "\r\n"; }
+	static string const RPL_MOTDSTART(string const &nick, string const &serverName) { return "375 " + nick + " :- " + serverName + " Message of the day -\r\n"; }
+	static string const RPL_ENDOFMOTD(string const &nick) { return "376 " + nick + " :End of /MOTD command.\r\n"; }
 	static string const RPL_YOUREOPER(string const &nick) { return "381 " + nick + " :You are now an IRC operator\r\n"; }
 };
 

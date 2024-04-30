@@ -34,6 +34,7 @@ private:
 	void			_acceptNewClient();
 	void			_receiveData(int clientFd);
 	void			_handleClient(Client *client);
+	void			_welcome(Server &server, Client *client) const;
 
 	Server();
 

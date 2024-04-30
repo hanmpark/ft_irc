@@ -53,14 +53,3 @@ void	Reply::debugLog(vector<string> const &args, bool const &debug) {
 	}
 	cout << endl;
 }
-
-void	Reply::debugLog(Server &server, Client *client, vector<string> const &args, e_endpoint const &endPoint, bool const &debug) {
-	if (!debug)
-		return ;
-	string	log = Reply::findPrefix(server, client, endPoint);
-	cout << ">> " << log;
-	for (vector<string>::const_iterator it = args.begin(); it != args.end(); it++) {
-		cout << *it << (it + 1 == args.end() ? "" : " ");
-	}
-	cout << endl;
-}

@@ -7,6 +7,9 @@
 // -------------------------------------------------------------------------- //
  TODO: SOCKET RANGE
  TODO: localhost ?
+ TODO: MESSAGE PARSING ':'
+ TODO: TOPIC
+ TODO: test with nc
  */
 int main(int argc, char **argv) {
 	if (argc != 3) {
