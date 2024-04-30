@@ -39,7 +39,7 @@ SRCS	= main.cpp \
 OBJS	=	${SRCS:.cpp=.o}
 
 SRC_COUNT	= 0
-SRC_TOT		:= ${shell find ${SRCS_DIR} -type f -name "*.cpp" | wc -l}
+SRC_TOT		:= ${shell find . -type f -name "*.cpp" | wc -l}
 SRC_PRCT	= ${shell expr 100 \* ${SRC_COUNT} / ${SRC_TOT}}
 BAR			= ${shell expr 23 \* ${SRC_COUNT} / ${SRC_TOT}}
 

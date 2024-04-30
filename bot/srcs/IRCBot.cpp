@@ -31,24 +31,24 @@ void	IRCBot::initJokes() {
 	_jokes["Tell me a joke about cows"] = "What do you call a cow with no legs? Ground beef!";
 	_jokes["Tell me a joke about pigs"] = "What do you call a pig that knows karate? A pork chop!";
 	_jokes["Tell me a joke about chickens"] = "Why did the chicken join a band? Because it had the drumsticks!";
-	_jokes["Tell me a about sheep"] = "What do you call a sheep with no legs? A cloud!";
-	_jokes["Dark humor"] = "I'm sorry, I can't do that.";
+	_jokes["Tell me a joke about sheep"] = "What do you call a sheep with no legs? A cloud!";
 }
 
 void	IRCBot::addToBuffer(string const &buffer) { _buffer += buffer; }
 
 void	IRCBot::handleInput() {
-	size_t	end, triggerBegin, msgBegin;
+	size_t	end, triggerBegin, msgBegin, targetBegin, targetEnd;
 	string	target, message;
 
 	while ((end = _buffer.find("\r\n")) != string::npos) {
-		cout << YELLOW "OUILLE: " << BLUE << _buffer << RESET << endl; // Debug
 		if ((triggerBegin = _buffer.find("PRIVMSG")) != string::npos) {
-			target = _buffer.substr(triggerBegin + 8, _buffer.find(" ", triggerBegin + 8) - triggerBegin - 8);
-			cout << RED "Target: " << BLUE << target << RESET << endl; // Debug
+			targetBegin = _buffer.find(":") + 1;
+			targetEnd = _buffer.find("!");
+
+			target = _buffer.substr(targetBegin, targetEnd - targetBegin);
+
 			msgBegin = _buffer.find(":", triggerBegin + 8 + target.length());
 			message = _buffer.substr(msgBegin + 1, end - msgBegin - 1);
-			cout << RED "Message: " << BLUE << message << RESET << endl; // Debug
 			if (_jokes.find(message) != _jokes.end()) {
 				sendData("PRIVMSG " + target + " :" + _jokes[message] + "\r\n");
 			}
@@ -103,7 +103,6 @@ bool	IRCBot::recvData() {
 	addToBuffer(static_cast<string>(buff));
 	if (_buffer.find("\r\n") != string::npos) {
 		try {
-			cout << YELLOW "Buffer: " << BLUE << _buffer << RESET << endl; // Debug
 			handleInput();
 		} catch (exception &e) {
 			return false;

@@ -12,6 +12,7 @@ private:
 	string	_password;
 	string	_buffer;
 	map<string, string>	_jokes;
+	map<string, string>	_finisher;
 
 	IRCBot();
 public:
