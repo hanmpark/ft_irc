@@ -92,7 +92,6 @@ void	IRCBot::authToServer() {
 }
 
 bool	IRCBot::recvData() {
-	cout << GREEN "Waiting for data..." << RESET << endl;
 	char	buff[BUFFER_SIZE]; bzero(buff, BUFFER_SIZE);
 	int		bytesReceived;
 
