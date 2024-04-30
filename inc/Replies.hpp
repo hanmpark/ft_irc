@@ -61,9 +61,9 @@ public:
 	static string const ERR_NONICKNAMEGIVEN(string const &client) { return "431 " + (client.empty() ? "*" : client) + " :No nickname given\r\n"; }
 	static string const ERR_ERRONEUSNICKNAME(string const &client, string const &nick) { return "432 " + (client.empty() ? "*" : client) + " " + nick + " :Erroneous nickname\r\n"; }
 	static string const ERR_NICKNAMEINUSE(string const &client, string const &nick) { return "433 " + (client.empty() ? "*" : client) + " " + nick + " :Nickname is already in use\r\n"; }
-	static string const ERR_USERNOTINCHANNEL(string const &client, string const &user, string const &channel) { return "441 " + client + " " + user + " " + channel + " :They aren't on that channel\r\n"; }
+	static string const ERR_USERNOTINCHANNEL(string const &client, string const &nick, string const &channel) { return "441 " + client + " " + nick + " " + channel + " :They aren't on that channel\r\n"; }
 	static string const ERR_NOTONCHANNEL(string const &client, string const &channel) { return "442 " + client + " " + channel + " :You're not on that channel\r\n"; }
-	static string const ERR_USERONCHANNEL(string const &client, string const &user, string const &channel) { return "443 " + (client.empty() ? "*" : client) + " " + user + " " + channel + " :is already on channel\r\n"; }
+	static string const ERR_USERONCHANNEL(string const &client, string const &nick, string const &channel) { return "443 " + (client.empty() ? "*" : client) + " " + nick + " " + channel + " :is already on channel\r\n"; }
 	static string const ERR_NOTREGISTERED(string const &client) { return "451 " + (client.empty() ? "*" : client) + " :You have not registered\r\n"; }
 	static string const ERR_NEEDMOREPARAMS(string const &client, string const &command) { return "461 " + (client.empty() ? "*" : client) + " " + command + " :Not enough parameters\r\n"; }
 	static string const ERR_ALREADYREGISTRED(string const &client) { return "462 " + client + " :You may not reregister\r\n"; }
