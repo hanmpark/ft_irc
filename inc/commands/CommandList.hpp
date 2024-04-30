@@ -12,7 +12,7 @@ private:
 
 	typedef map<string, ACommand*>::const_iterator	commandIt;
 
-	vector<string>	_split(string const &buffer, string const &limiter) const;
+	vector<string>	_split(string const &buffer) const;
 
 public:
 	CommandList();

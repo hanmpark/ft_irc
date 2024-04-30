@@ -19,7 +19,6 @@ map<string, string>	JOIN::_tokenizeChannels(Server &server, Client *client, vect
 		tokenizedChannels.insert(make_pair(channelToken, ""));
 	}
 
-	// check if there is a key for the channel
 	if (args.size() == 3) {
 		map<string, string>::iterator	it = tokenizedChannels.begin();
 		istringstream					ssKey(args[2]);
@@ -49,6 +48,9 @@ string const	JOIN::_getNamesChannel(Channel *channel, vector<Client*> const &cli
 void	JOIN::_sendJOIN(Server &server, Client *client, Channel *channel) const {
 	channel->getClientsList().addClient(client);
 	Reply::sendRPL(server, client, channel, CMD::JOIN(channel->getName()), CLIENT, false);
+	if (!channel->getTopic().empty()) {
+		Reply::sendRPL(server, client, RPL::RPL_TOPIC(client->getNickname(), channel->getName(), channel->getTopic()), SERVER);
+	}
 
 	string const namesChannel = _getNamesChannel(channel, channel->getClientsList().getClients());
 	Reply::sendRPL(server, client, RPL::RPL_NAMREPLY(client->getNickname(), channel->getName(), namesChannel), SERVER);
@@ -69,17 +71,17 @@ Channel	*JOIN::_checkChannel(Server &server, Client *client, string const &chann
 				return NULL;
 			}
 		}
+		if (channel->getModes() & Channel::LIMIT) {
+			if (channel->getClientsList().getClients().size() >= channel->getLimit()) {
+				Reply::sendRPL(server, client, ERR::ERR_CHANNELISFULL(client->getNickname(), channel->getName()), SERVER);
+				return NULL;
+			}
+		}
 		if (channel->getModes() & Channel::INVITE) {
 			if (channel->getInvitedList().getClient(client->getFd())) {
 				channel->getInvitedList().removeClient(client);
 			} else {
 				Reply::sendRPL(server, client, ERR::ERR_INVITEONLYCHAN(client->getNickname(), channel->getName()), SERVER);
-				return NULL;
-			}
-		}
-		if (channel->getModes() & Channel::LIMIT) {
-			if (channel->getClientsList().getClients().size() >= channel->getLimit()) {
-				Reply::sendRPL(server, client, ERR::ERR_CHANNELISFULL(client->getNickname(), channel->getName()), SERVER);
 				return NULL;
 			}
 		}
@@ -106,5 +108,4 @@ void	JOIN::execute(Server &server, Client *client, vector<string> &args) const {
 			}
 		}
 	}
-
 }

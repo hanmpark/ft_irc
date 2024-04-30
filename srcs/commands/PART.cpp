@@ -29,10 +29,14 @@ void	PART::execute(Server &server, Client *client, std::vector<std::string> &arg
 		for (vector<string>::iterator it = channelNames.begin(); it != channelNames.end(); it++) {
 			Channel *channel;
 			if ((channel = server.getChannelList().getChannel(*it)) != NULL) {
-				Reply::sendRPL(server, client, channel, CMD::PART(channel->getName(), (args.size() < 3 ? "" : args[2])), CLIENT, false);
-				channel->removeClient(client);
-				if (channel->getClientsList().getClients().empty()) {
-					server.getChannelList().removeChannel(channel);
+				if (channel->getClientsList().getClient(client->getFd()) == NULL) {
+					Reply::sendRPL(server, client, ERR::ERR_NOTONCHANNEL(client->getNickname(), channel->getName()), SERVER);
+				} else {
+					Reply::sendRPL(server, client, channel, CMD::PART(channel->getName(), (args.size() < 3 ? "" : args[2])), CLIENT, false);
+					channel->removeClient(client);
+					if (channel->getClientsList().getClients().empty()) {
+						server.getChannelList().removeChannel(channel);
+					}
 				}
 			}
 		}

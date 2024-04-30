@@ -45,12 +45,11 @@ ACommand	*CommandList::getCommand(string const &commandName) const {
 	return it->second;
 }
 
-vector<string>	CommandList::_split(string const &buffer, string const &limiter) const {
+vector<string>	CommandList::_split(string const &buffer) const {
 	vector<string>	args;
-	size_t			pos = 0;
-	size_t			nextPos = 0;
+	size_t			pos = 0, nextPos = 0;
 
-	while ((nextPos = buffer.find(limiter, pos)) != string::npos) {
+	while ((nextPos = buffer.find(" ", pos)) != string::npos) {
 		string	arg = buffer.substr(pos, nextPos - pos);
 		args.push_back(arg);
 		pos = nextPos + 1;
@@ -64,7 +63,7 @@ vector<string>	CommandList::_split(string const &buffer, string const &limiter) 
 }
 
 void	CommandList::select(Server &server, Client *client, string const &buffer) const {
-	vector<string>	args = _split(buffer, " ");
+	vector<string>	args = _split(buffer);
 
 	ACommand	*cmd = getCommand(args[0]);
 	if (cmd != NULL) {

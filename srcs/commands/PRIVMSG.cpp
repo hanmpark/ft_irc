@@ -35,7 +35,7 @@ void	PRIVMSG::_sendToChannel(Server &server, Client *client, string const &chann
 }
 
 void	PRIVMSG::_sendToClient(Server &server, Client *client, string const &clientNickname, string const &message) const {
-	Client	*target = server.getClientList().getClient(clientNickname);
+	Client	*target = server.getClientsList().getClient(clientNickname);
 
 	if (target == NULL) {
 		Reply::sendRPL(server, client, ERR::ERR_NOSUCHNICK(client->getNickname(), clientNickname), SERVER);

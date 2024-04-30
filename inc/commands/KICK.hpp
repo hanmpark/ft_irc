@@ -4,7 +4,7 @@
 
 class KICK : public ACommand {
 private:
-	string const	_checkParams(Client *client, Channel *channel, string const &nick) const;
+	string const	_checkParams(Server &server, Client *client, Channel *channel, string const &nick) const;
 
 public:
 	KICK();

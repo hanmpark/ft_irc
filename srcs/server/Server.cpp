@@ -35,7 +35,7 @@ int	Server::getSockfd() const { return _serverFd; }
 
 string const	&Server::getName() const { return _name; }
 
-ClientList	&Server::getClientList() { return _clients; }
+ClientList	&Server::getClientsList() { return _clients; }
 
 ChannelList	&Server::getChannelList() { return _channels; }
 

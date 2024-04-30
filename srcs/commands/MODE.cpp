@@ -105,19 +105,19 @@ bool	MODE::OP(Server &server, Channel *channel, Client *client, vector<string> &
 		modeArgs.erase(modeArgs.begin());
 		return false;
 	} else {
-		channel->getOperatorsList().addClient(server.getClientList().getClient(modeArgs[*modeArgsIndex]));
+		channel->getOperatorsList().addClient(server.getClientsList().getClient(modeArgs[*modeArgsIndex]));
 		(*modeArgsIndex)++;
 	}
 	return true;
 }
 
 bool	MODE::DEOP(Server &server, Channel *channel, Client *client, vector<string> &modeArgs, size_t *modeArgsIndex) const {
-	if (server.getClientList().getClient(modeArgs[*modeArgsIndex]) == NULL) {
+	if (server.getClientsList().getClient(modeArgs[*modeArgsIndex]) == NULL) {
 		Reply::sendRPL(server, client, ERR::ERR_NOSUCHNICK(client->getNickname(), modeArgs[*modeArgsIndex]), SERVER);
 		modeArgs.erase(modeArgs.begin());
 		return false;
 	} else {
-		channel->getOperatorsList().removeClient(server.getClientList().getClient(modeArgs[*modeArgsIndex]));
+		channel->getOperatorsList().removeClient(server.getClientsList().getClient(modeArgs[*modeArgsIndex]));
 		(*modeArgsIndex)++;
 	}
 	return true;
@@ -252,7 +252,7 @@ void	MODE::execute(Server &server, Client *client, vector<string> &args) const {
 
 		if (channel) {
 			_parseModeSetting(server, client, channel, args);
-		} else if (args[1][0] == '#') {
+		} else {
 			Reply::sendRPL(server, client, ERR::ERR_NOSUCHCHANNEL(client->getNickname(), args[1]), SERVER);
 		}
 	}

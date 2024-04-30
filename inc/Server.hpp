@@ -46,7 +46,7 @@ public:
 	int				getPort() const;
 	int				getSockfd() const;
 	string const 	&getName() const;
-	ClientList		&getClientList();
+	ClientList		&getClientsList();
 	ChannelList		&getChannelList();
 	string			&getPassword();
 	bool			&getSignalReceived() const;

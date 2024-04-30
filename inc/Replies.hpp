@@ -30,16 +30,16 @@ private:
 	RPL();
 
 public:
-	static string const RPL_WELCOME(string const &nick) { return "001 " + nick + " :Welcome to the Internet Relay Network " + nick + "\r\n"; }
-	static string const RPL_NOTOPIC(string const &nick, string const &channel) { return "331 " + nick + " " + channel + " :No topic is set\r\n"; }
-	static string const RPL_TOPIC(string const &nick, string const &channel, string const &topic) { return "332 " + nick + " " + channel + " :" + topic + "\r\n"; }
-	static string const RPL_INVITING(string const &nick, string const &destNick, string const &channel) { return "341 " + nick + " " + destNick + " " + channel + "\r\n"; }
-	static string const RPL_NAMREPLY(string const &nick, string const &channel, string const &names) { return "353 " + nick + " = " + channel + " :" + names + "\r\n"; }
-	static string const RPL_ENDOFNAMES(string const &nick, string const &channel) { return "366 " + nick + " " + channel + " :End of /NAMES list\r\n"; }
-	static string const RPL_MOTD(string const &nick, string const &message) { return "372 " + nick + " :- " + message + "\r\n"; }
-	static string const RPL_MOTDSTART(string const &nick, string const &serverName) { return "375 " + nick + " :- " + serverName + " Message of the day -\r\n"; }
-	static string const RPL_ENDOFMOTD(string const &nick) { return "376 " + nick + " :End of /MOTD command.\r\n"; }
-	static string const RPL_YOUREOPER(string const &nick) { return "381 " + nick + " :You are now an IRC operator\r\n"; }
+	static string const RPL_WELCOME(string const &client) { return "001 " + client + " :Welcome to the Internet Relay Network " + client + "\r\n"; }
+	static string const RPL_NOTOPIC(string const &client, string const &channel) { return "331 " + client + " " + channel + " :No topic is set\r\n"; }
+	static string const RPL_TOPIC(string const &client, string const &channel, string const &topic) { return "332 " + client + " " + channel + " :" + topic + "\r\n"; }
+	static string const RPL_INVITING(string const &client, string const &destNick, string const &channel) { return "341 " + client + " " + destNick + " " + channel + "\r\n"; }
+	static string const RPL_NAMREPLY(string const &client, string const &channel, string const &names) { return "353 " + client + " = " + channel + " :" + names + "\r\n"; }
+	static string const RPL_ENDOFNAMES(string const &client, string const &channel) { return "366 " + client + " " + channel + " :End of /NAMES list\r\n"; }
+	static string const RPL_MOTD(string const &client, string const &message) { return "372 " + client + " :- " + message + "\r\n"; }
+	static string const RPL_MOTDSTART(string const &client, string const &serverName) { return "375 " + client + " :- " + serverName + " Message of the day -\r\n"; }
+	static string const RPL_ENDOFMOTD(string const &client) { return "376 " + client + " :End of /MOTD command.\r\n"; }
+	static string const RPL_YOUREOPER(string const &client) { return "381 " + client + " :You are now an IRC operator\r\n"; }
 };
 
 class ERR {
@@ -47,26 +47,27 @@ private:
 	ERR();
 
 public:
-	static string const ERR_NOSUCHNICK(string const &nick, string const &newNick) { return "401 " + nick + " " + newNick + " :No such nick/channel\r\n"; }
-	static string const ERR_NOSUCHCHANNEL(string const &nick, string const &channel) { return "403 " + nick + " " + channel + " :No such channel\r\n"; }
-	static string const ERR_CANNOTSENDTOCHAN(string const &nick, string const &channel) { return "404 " + nick + " " + channel + " :Cannot send to channel\r\n"; }
-	static string const ERR_NORECIPIENT(string const &nick, string const &command) { return "411 " + nick + " :No recipient given (" + command + ")\r\n"; }
-	static string const ERR_NOTEXTTOSEND(string const &nick) { return "412 " + nick + " :No text to send\r\n"; }
-	static string const ERR_UNKNOWNCOMMAND(string const &nick, string const &command) { return "421 " + (nick.empty() ? "*" : nick) + " " + command + " :Unknown command\r\n"; }
-	static string const ERR_NONICKNAMEGIVEN(string const &nick) { return "431 " + (nick.empty() ? "*" : nick) + " :No nickname given\r\n"; }
-	static string const ERR_ERRONEUSNICKNAME(string const &nick, string const &newNick) { return "432 " + (nick.empty() ? "*" : nick) + " " + newNick + " :Erroneous nickname\r\n"; }
-	static string const ERR_NICKNAMEINUSE(string const &nick, string const &newNick) { return "433 " + (nick.empty() ? "*" : nick) + " " + newNick + " :Nickname is already in use\r\n"; }
-	static string const ERR_NOTONCHANNEL(string const &nick, string const &channel) { return "442 " + nick + " " + channel + " :You're not on that channel\r\n"; }
-	static string const ERR_USERONCHANNEL(string const &nick, string const &channel) { return "443 " + (nick.empty() ? "*" : nick) + " " + channel + " :is already on channel\r\n"; }
-	static string const ERR_NOTREGISTERED(string const &nick) { return "451 " + (nick.empty() ? "*" : nick) + " :You have not registered\r\n"; }
-	static string const ERR_NEEDMOREPARAMS(string const &nick, string const &command) { return "461 " + (nick.empty() ? "*" : nick) + " " + command + " :Not enough parameters\r\n"; }
-	static string const ERR_ALREADYREGISTRED(string const &nick) { return "462 " + nick + " :You may not reregister\r\n"; }
-	static string const ERR_PASSWDMISMATCH(string const &nick) { return "464 " + (nick.empty() ? "*" : nick) + " :Password incorrect\r\n"; }
-	static string const ERR_CHANNELISFULL(string const &nick, string const &channel) { return "471 " + nick + " " + channel + " :Cannot join channel (+l)\r\n"; }
-	static string const ERR_UNKNOWNMODE(string const &nick, string const &mode) { return "472 " + nick + " " + mode + " :is unknown mode char to me\r\n"; }
-	static string const ERR_INVITEONLYCHAN(string const &nick, string const &channel) { return "473 " + nick + " " + channel + " :Cannot join channel (+i)\r\n"; }
-	static string const ERR_BADCHANNELKEY(string const &nick, string const &channel) { return "475 " + nick + " " + channel + " :Cannot join channel (+k)\r\n"; }
-	static string const ERR_CHANOPRIVSNEEDED(string const &nick, string const &channel) { return "482 " + nick + " " + channel + " :You're not channel operator\r\n"; }
+	static string const ERR_NOSUCHNICK(string const &client, string const &nick) { return "401 " + client + " " + nick + " :No such client/channel\r\n"; }
+	static string const ERR_NOSUCHCHANNEL(string const &client, string const &channel) { return "403 " + client + " " + channel + " :No such channel\r\n"; }
+	static string const ERR_CANNOTSENDTOCHAN(string const &client, string const &channel) { return "404 " + client + " " + channel + " :Cannot send to channel\r\n"; }
+	static string const ERR_NORECIPIENT(string const &client, string const &command) { return "411 " + client + " :No recipient given (" + command + ")\r\n"; }
+	static string const ERR_NOTEXTTOSEND(string const &client) { return "412 " + client + " :No text to send\r\n"; }
+	static string const ERR_UNKNOWNCOMMAND(string const &client, string const &command) { return "421 " + (client.empty() ? "*" : client) + " " + command + " :Unknown command\r\n"; }
+	static string const ERR_NONICKNAMEGIVEN(string const &client) { return "431 " + (client.empty() ? "*" : client) + " :No nickname given\r\n"; }
+	static string const ERR_ERRONEUSNICKNAME(string const &client, string const &nick) { return "432 " + (client.empty() ? "*" : client) + " " + nick + " :Erroneous nickname\r\n"; }
+	static string const ERR_NICKNAMEINUSE(string const &client, string const &nick) { return "433 " + (client.empty() ? "*" : client) + " " + nick + " :Nickname is already in use\r\n"; }
+	static string const ERR_USERNOTINCHANNEL(string const &client, string const &user, string const &channel) { return "441 " + client + " " + user + " " + channel + " :They aren't on that channel\r\n"; }
+	static string const ERR_NOTONCHANNEL(string const &client, string const &channel) { return "442 " + client + " " + channel + " :You're not on that channel\r\n"; }
+	static string const ERR_USERONCHANNEL(string const &client, string const &channel) { return "443 " + (client.empty() ? "*" : client) + " " + channel + " :is already on channel\r\n"; }
+	static string const ERR_NOTREGISTERED(string const &client) { return "451 " + (client.empty() ? "*" : client) + " :You have not registered\r\n"; }
+	static string const ERR_NEEDMOREPARAMS(string const &client, string const &command) { return "461 " + (client.empty() ? "*" : client) + " " + command + " :Not enough parameters\r\n"; }
+	static string const ERR_ALREADYREGISTRED(string const &client) { return "462 " + client + " :You may not reregister\r\n"; }
+	static string const ERR_PASSWDMISMATCH(string const &client) { return "464 " + (client.empty() ? "*" : client) + " :Password incorrect\r\n"; }
+	static string const ERR_CHANNELISFULL(string const &client, string const &channel) { return "471 " + client + " " + channel + " :Cannot join channel (+l)\r\n"; }
+	static string const ERR_UNKNOWNMODE(string const &client, string const &mode) { return "472 " + client + " " + mode + " :is unknown mode char to me\r\n"; }
+	static string const ERR_INVITEONLYCHAN(string const &client, string const &channel) { return "473 " + client + " " + channel + " :Cannot join channel (+i)\r\n"; }
+	static string const ERR_BADCHANNELKEY(string const &client, string const &channel) { return "475 " + client + " " + channel + " :Cannot join channel (+k)\r\n"; }
+	static string const ERR_CHANOPRIVSNEEDED(string const &client, string const &channel) { return "482 " + client + " " + channel + " :You're not channel operator\r\n"; }
 };
 
 class CMD {

@@ -41,7 +41,7 @@ void	NICK::execute(Server &server, Client *client, vector<string> &args) const {
 		Reply::sendRPL(server, client, ERR::ERR_NONICKNAMEGIVEN(client->getNickname()), SERVER);
 	} else if (!_isValidNickname(args[1])) {
 		Reply::sendRPL(server, client, ERR::ERR_ERRONEUSNICKNAME(client->getNickname(), args[1]), SERVER);
-	} else if (_isNicknameInUse(server.getClientList().getClients(), client, args[1])) {
+	} else if (_isNicknameInUse(server.getClientsList().getClients(), client, args[1])) {
 		Reply::sendRPL(server, client, ERR::ERR_NICKNAMEINUSE(client->getNickname(), args[1]), SERVER);
 	} else {
 		if (client->getRegistered() && client->getNickname() != args[1]) {

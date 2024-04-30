@@ -4,31 +4,44 @@ TOPIC::TOPIC() : ACommand() {}
 
 TOPIC::~TOPIC() {}
 
+void	TOPIC::_getTopic(Server &server, Client *client, Channel *channel) const {
+	if (channel->getTopic().empty()) {
+		Reply::sendRPL(server, client, RPL::RPL_NOTOPIC(client->getNickname(), channel->getName()), SERVER);
+	} else {
+		if (channel->getClientsList().getClient(client->getFd())) {
+			Reply::sendRPL(server, client, RPL::RPL_TOPIC(client->getNickname(), channel->getName(), channel->getTopic()), SERVER);
+		} else {
+			Reply::sendRPL(server, client, ERR::ERR_NOTONCHANNEL(client->getNickname(), channel->getName()), SERVER);
+		}
+	}
+}
+
+void	TOPIC::_setTopic(Server &server, Client *client, Channel *channel, string const &topic) const {
+	if (!channel->getClientsList().getClient(client->getFd())) {
+		Reply::sendRPL(server, client, ERR::ERR_NOTONCHANNEL(client->getNickname(), channel->getName()), SERVER);
+	} else if (channel->getModes() & Channel::TOPIC) {
+		if (channel->getOperatorsList().getClient(client->getFd()) == NULL) {
+			Reply::sendRPL(server, client, ERR::ERR_CHANOPRIVSNEEDED(client->getNickname(), channel->getName()), SERVER);
+		} else {
+			channel->setTopic(topic);
+			Reply::sendRPL(server, client, channel, CMD::TOPIC(channel->getName(), topic), CLIENT, false);
+		}
+	} else {
+		channel->setTopic(topic);
+		Reply::sendRPL(server, client, channel, CMD::TOPIC(channel->getName(), topic), CLIENT, false);
+	}
+}
+
 void	TOPIC::execute(Server &server, Client *client, vector<string> &args) const {
-	if (args.size() == 1) {
+	if (args.size() < 2) {
 		Reply::sendRPL(server, client, ERR::ERR_NEEDMOREPARAMS(client->getNickname(), args[0]), SERVER);
 	} else {
-		Channel *channel = server.getChannelList().getChannel(args[1]);
+		Channel	*channel = server.getChannelList().getChannel(args[1]);
 		if (channel) {
-			if (args.size() == 2) { // get TOPIC
-				if (channel->getTopic().empty()) { // no topic
-					Reply::sendRPL(server, client, RPL::RPL_NOTOPIC(client->getNickname(), args[1]), SERVER);
-				} else { // topic exists
-					if (channel->getClientsList().getClient(client->getFd())) { // client is in channel
-						Reply::sendRPL(server, client, RPL::RPL_TOPIC(client->getNickname(), args[1], channel->getTopic()), SERVER);
-					} else { // client is not in channel
-						Reply::sendRPL(server, client, ERR::ERR_NOTONCHANNEL(client->getNickname(), args[1]), SERVER);
-					}
-				}
-			} else { // set TOPIC
-				if (channel->getModes() & Channel::TOPIC) { // check if client is operator to set TOPIC
-					if (channel->getOperatorsList().getClient(client->getFd()) == NULL) {
-						Reply::sendRPL(server, client, ERR::ERR_CHANOPRIVSNEEDED(client->getNickname(), args[1]), SERVER);
-						return;
-					}
-					channel->setTopic(args[2]);
-					Reply::sendRPL(server, client, channel, CMD::TOPIC(args[1], args[2]), CLIENT, false);
-				}
+			if (args.size() == 2) {
+				_getTopic(server, client, channel);
+			} else {
+				_setTopic(server, client, channel, args[2]);
 			}
 		} else {
 			Reply::sendRPL(server, client, ERR::ERR_NOSUCHCHANNEL(client->getNickname(), args[1]), SERVER);
