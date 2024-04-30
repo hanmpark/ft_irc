@@ -9,9 +9,7 @@ ChannelList::~ChannelList() {
 	_channels.clear();
 }
 
-void	ChannelList::addChannel(Channel *channel) {
-	_channels.push_back(channel);
-}
+void	ChannelList::addChannel(Channel *channel) { _channels.push_back(channel); }
 
 void	ChannelList::removeChannel(Channel *channel) {
 	for (vector<Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++) {

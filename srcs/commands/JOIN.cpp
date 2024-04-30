@@ -58,7 +58,7 @@ void	JOIN::_sendJOIN(Server &server, Client *client, Channel *channel) const {
 }
 
 Channel	*JOIN::_checkChannel(Server &server, Client *client, string const &channelName, string const &key) const {
-	Channel	*channel = server.getChannelList().getChannel(channelName);
+	Channel	*channel = server.getChannel(channelName);
 
 	if (channel == NULL) {
 		channel = new Channel(channelName);

@@ -107,19 +107,19 @@ bool	MODE::OP(Server &server, Channel *channel, Client *client, vector<string> &
 		modeArgs.erase(modeArgs.begin());
 		return false;
 	} else {
-		channel->getOperatorsList().addClient(server.getClientsList().getClient(modeArgs[*modeArgsIndex]));
+		channel->getOperatorsList().addClient(server.getClient(modeArgs[*modeArgsIndex]));
 		(*modeArgsIndex)++;
 	}
 	return true;
 }
 
 bool	MODE::DEOP(Server &server, Channel *channel, Client *client, vector<string> &modeArgs, size_t *modeArgsIndex) const {
-	if (server.getClientsList().getClient(modeArgs[*modeArgsIndex]) == NULL) {
+	if (server.getClient(modeArgs[*modeArgsIndex]) == NULL) {
 		Reply::sendRPL(server, client, ERR::ERR_NOSUCHNICK(client->getNickname(), modeArgs[*modeArgsIndex]), SERVER);
 		modeArgs.erase(modeArgs.begin());
 		return false;
 	} else {
-		channel->getOperatorsList().removeClient(server.getClientsList().getClient(modeArgs[*modeArgsIndex]));
+		channel->getOperatorsList().removeClient(server.getClient(modeArgs[*modeArgsIndex]));
 		(*modeArgsIndex)++;
 	}
 	return true;
@@ -250,7 +250,7 @@ void	MODE::execute(Server &server, Client *client, vector<string> &args) const {
 	if (args.size() < 2) {
 		Reply::sendRPL(server, client, ERR::ERR_NEEDMOREPARAMS(client->getNickname(), args[0]), SERVER);
 	} else if (args.size() > 2) {
-		Channel	*channel = server.getChannelList().getChannel(args[1]);
+		Channel	*channel = server.getChannel(args[1]);
 
 		if (channel) {
 			_parseModeSetting(server, client, channel, args);

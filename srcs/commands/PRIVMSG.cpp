@@ -18,7 +18,7 @@ vector<string>	PRIVMSG::_splitChannels(string const &channelArg) const {
 }
 
 void	PRIVMSG::_sendToChannel(Server &server, Client *client, string const &channelName, string const &message) const {
-	Channel	*channel = server.getChannelList().getChannel(channelName);
+	Channel	*channel = server.getChannel(channelName);
 
 	if (channel == NULL) {
 		Reply::sendRPL(server, client, ERR::ERR_NOSUCHCHANNEL(client->getNickname(), channelName), SERVER);
@@ -37,7 +37,7 @@ void	PRIVMSG::_sendToChannel(Server &server, Client *client, string const &chann
 }
 
 void	PRIVMSG::_sendToClient(Server &server, Client *client, string const &clientNickname, string const &message) const {
-	Client	*target = server.getClientsList().getClient(clientNickname);
+	Client	*target = server.getClient(clientNickname);
 
 	if (target == NULL) {
 		Reply::sendRPL(server, client, ERR::ERR_NOSUCHNICK(client->getNickname(), clientNickname), SERVER);

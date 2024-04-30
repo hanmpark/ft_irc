@@ -9,7 +9,7 @@ string const	KICK::_checkParams(Server &server, Client *client, Channel *channel
 
 	if (channel == NULL) {
 		error = ERR::ERR_NOSUCHCHANNEL(client->getNickname(), channel->getName());
-	} else if (server.getClientsList().getClient(nick) == NULL) {
+	} else if (server.getClient(nick) == NULL) {
 		error = ERR::ERR_NOSUCHNICK(client->getNickname(), nick);
 	} else if (!channel->getClientsList().getClient(client->getFd())) {
 		error = ERR::ERR_NOTONCHANNEL(client->getNickname(), channel->getName());
@@ -26,7 +26,7 @@ void	KICK::execute(Server &server, Client *client, vector<string> &args) const {
 	if (args.size() < 2) {
 		Reply::sendRPL(server, client, ERR::ERR_NEEDMOREPARAMS(client->getNickname(), args[0]), SERVER);
 	} else {
-		Channel	*channel = server.getChannelList().getChannel(args[1]);
+		Channel	*channel = server.getChannel(args[1]);
 		string	error = _checkParams(server, client, channel, args[2]);
 
 		if (!error.empty()) {

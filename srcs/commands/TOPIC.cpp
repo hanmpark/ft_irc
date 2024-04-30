@@ -36,7 +36,7 @@ void	TOPIC::execute(Server &server, Client *client, vector<string> &args) const 
 	if (args.size() < 2) {
 		Reply::sendRPL(server, client, ERR::ERR_NEEDMOREPARAMS(client->getNickname(), args[0]), SERVER);
 	} else {
-		Channel	*channel = server.getChannelList().getChannel(args[1]);
+		Channel	*channel = server.getChannel(args[1]);
 		if (channel) {
 			if (args.size() == 2) {
 				_getTopic(server, client, channel);

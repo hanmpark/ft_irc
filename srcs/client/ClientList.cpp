@@ -5,24 +5,9 @@
 
 ClientList::ClientList() {}
 
-ClientList::ClientList(ClientList const &copy) {
-	*this = copy;
-}
+ClientList::~ClientList() { _clients.clear(); }
 
-ClientList	&ClientList::operator=(ClientList const &rhs) {
-	if (this != &rhs) {
-		_clients = rhs._clients;
-	}
-	return *this;
-}
-
-ClientList::~ClientList() {
-	_clients.clear();
-}
-
-void	ClientList::addClient(Client *client) {
-	_clients.push_back(client);
-}
+void	ClientList::addClient(Client *client) { _clients.push_back(client); }
 
 void	ClientList::removeClient(Client *client) {
 	for (vector<Client*>::iterator it = _clients.begin(); it != _clients.end(); it++) {

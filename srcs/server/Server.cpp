@@ -48,3 +48,9 @@ ChannelList	&Server::getChannelList() { return _channels; }
 string	&Server::getPassword() { return _password; }
 
 bool	&Server::getSignalReceived() const { return _signalReceived; }
+
+Client	*Server::getClient(string const &nickname) const { return _clients.getClient(nickname); }
+
+Client	*Server::getClient(int const &fd) const { return _clients.getClient(fd); }
+
+Channel	*Server::getChannel(string const &name) const { return _channels.getChannel(name); }

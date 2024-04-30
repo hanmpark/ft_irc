@@ -8,8 +8,6 @@
 # include "channel/ChannelList.hpp"
 # include "client/ClientList.hpp"
 
-# define BUFFER_SIZE 1024
-
 using namespace std;
 
 /*
@@ -46,7 +44,6 @@ public:
 	Server(string const &portString, string const &password);
 	~Server();
 
-	/* Accessors */
 	int				getPort() const;
 	int				getSockfd() const;
 	string const 	&getName() const;
@@ -54,6 +51,10 @@ public:
 	ChannelList		&getChannelList();
 	string			&getPassword();
 	bool			&getSignalReceived() const;
+
+	Client	*getClient(string const &nickname) const;
+	Client	*getClient(int const &fd) const;
+	Channel	*getChannel(string const &name) const;
 
 	void	initServer();
 	void	runServer();

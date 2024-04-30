@@ -10,8 +10,6 @@ private:
 
 public:
 	ClientList();
-	ClientList(ClientList const &copy);
-	ClientList	&operator=(ClientList const &rhs);
 	~ClientList();
 
 	void			addClient(Client *client);

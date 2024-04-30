@@ -6,8 +6,8 @@ INVITE::~INVITE() {}
 
 string const	INVITE::_checkParams(Server &server, Client *client, string const &nick, string const &channelName) const {
 	string	error;
-	Client	*target = server.getClientsList().getClient(nick);
-	Channel *channel = server.getChannelList().getChannel(channelName);
+	Client	*target = server.getClient(nick);
+	Channel *channel = server.getChannel(channelName);
 
 	if (target == NULL) {
 		error = ERR::ERR_NOSUCHNICK(client->getNickname(), nick);
@@ -33,7 +33,7 @@ void	INVITE::execute(Server &server, Client *client, vector<string> &args) const
 			Reply::sendRPL(server, client, error, SERVER);
 		} else {
 			Reply::sendRPL(server, client, RPL::RPL_INVITING(client->getNickname(), args[1], args[2]), SERVER);
-			Reply::sendRPL(server, client, server.getClientsList().getClient(args[1]), CMD::INVITE(args[1], args[2]), CLIENT);
+			Reply::sendRPL(server, client, server.getClient(args[1]), CMD::INVITE(args[1], args[2]), CLIENT);
 		}
 	}
 }

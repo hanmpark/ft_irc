@@ -1,3 +1,5 @@
+#include <sys/socket.h>
+
 #include "Replies.hpp"
 
 string const	Reply::findPrefix(Server &server, Client *client, e_endpoint const &side) {

@@ -1,7 +1,10 @@
 #include <cstring>
+#include <sys/socket.h>
 
 #include "Server.hpp"
 #include "Replies.hpp"
+
+#define BUFFER_SIZE 1024
 
 void	Server::_welcome(Server &server, Client *client) const {
 	Reply::sendRPL(server, client, RPL::RPL_WELCOME(client->getNickname()), SERVER);

@@ -30,7 +30,7 @@ void	PART::execute(Server &server, Client *client, std::vector<std::string> &arg
 
 		for (vector<string>::iterator it = channelNames.begin(); it != channelNames.end(); it++) {
 			Channel *channel;
-			if ((channel = server.getChannelList().getChannel(*it)) != NULL) {
+			if ((channel = server.getChannel(*it)) != NULL) {
 				if (channel->getClientsList().getClient(client->getFd()) == NULL) {
 					Reply::sendRPL(server, client, ERR::ERR_NOTONCHANNEL(client->getNickname(), channel->getName()), SERVER);
 				} else {
