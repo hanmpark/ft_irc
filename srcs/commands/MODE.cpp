@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "commands/MODE.hpp"
 
 MODE::MODE() {

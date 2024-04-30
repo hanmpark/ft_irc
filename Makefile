@@ -31,8 +31,7 @@ endif
 SRCS_DIR	:=	./srcs/
 OBJS_DIR	:=	./objs/
 HEADER		:=	./inc/
-DEPS		:=	${addprefix ${HEADER},	IRCIncludes.hpp \
-										Server.hpp \
+DEPS		:=	${addprefix ${HEADER},	Server.hpp \
 										Replies.hpp} \
 				${addprefix ${HEADER}channel/,	Channel.hpp \
 												ChannelList.hpp} \

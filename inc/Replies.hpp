@@ -1,9 +1,16 @@
 #pragma once
 
-# include "IRCIncludes.hpp"
+# include <sys/socket.h>
+
 # include "Server.hpp"
 # include "client/Client.hpp"
 # include "channel/Channel.hpp"
+
+# ifdef WLOGS
+#  define DEBUG true
+# else
+#  define DEBUG false
+# endif
 
 class Server;
 

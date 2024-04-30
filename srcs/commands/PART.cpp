@@ -1,3 +1,5 @@
+#include <sstream>
+
 #include "commands/PART.hpp"
 
 PART::PART() : ACommand() {}

@@ -1,9 +1,8 @@
 #pragma once
 
-# include "IRCIncludes.hpp"
-# include "Replies.hpp"
 # include "Server.hpp"
 # include "client/Client.hpp"
+# include "Replies.hpp"
 
 class Server;
 

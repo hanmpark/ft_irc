@@ -1,4 +1,10 @@
+#include <algorithm>
+#include <unistd.h>
+
 #include "Server.hpp"
+
+#define RED	"\033[1;31m"
+#define RESET	"\033[0m"
 
 /*
  * reasoning behind the port range is that TCP & UDP have port numbers represented
@@ -8,11 +14,11 @@
  * 3. 49152-65535 used by client apps for outgoing conncections.
  */
 Server::Server(string const &portString, string const &password) : _name("irc.yobouhle.chat"), _serverFd(-1) {
-	if (portString.find_last_not_of("0123456789") != string::npos || atoi(portString.c_str()) < 0 || atoi(portString.c_str()) > 65535) { // Check Range
-		throw runtime_error("Invalid port\n");
+	if (portString.find_last_not_of("0123456789") != string::npos || atoi(portString.c_str()) < 1024 || atoi(portString.c_str()) > 65535) { // Check Range
+		throw runtime_error("Invalid port");
 	}
 	if (password.empty()) {
-		throw runtime_error("Password empty\n");
+		throw runtime_error("Password empty");
 	}
 	_port = atoi(portString.c_str());
 	_password = password;

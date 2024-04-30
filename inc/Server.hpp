@@ -1,12 +1,16 @@
 #pragma once
 
-# include "IRCIncludes.hpp"
-# include "Replies.hpp"
+# include <iostream>
+# include <poll.h>
+# include <vector>
+
 # include "commands/CommandList.hpp"
 # include "channel/ChannelList.hpp"
 # include "client/ClientList.hpp"
 
 # define BUFFER_SIZE 1024
+
+using namespace std;
 
 /*
  * Server class:

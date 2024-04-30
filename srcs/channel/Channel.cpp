@@ -1,6 +1,6 @@
 #include "channel/Channel.hpp"
-#include "client/ClientList.hpp"
-#include "Server.hpp"
+
+using namespace std;
 
 Channel::Channel() : _modes(NOMODE) {}
 

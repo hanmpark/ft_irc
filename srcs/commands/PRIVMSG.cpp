@@ -1,3 +1,5 @@
+#include <sstream>
+
 #include "commands/PRIVMSG.hpp"
 
 PRIVMSG::PRIVMSG() : ACommand() {}

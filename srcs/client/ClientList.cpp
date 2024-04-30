@@ -1,5 +1,8 @@
 #include "client/ClientList.hpp"
 
+#define YELLOW	"\033[1;33m"
+#define RESET	"\033[0m"
+
 ClientList::ClientList() {}
 
 ClientList::ClientList(ClientList const &copy) {

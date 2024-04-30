@@ -1,3 +1,6 @@
+#include <cstring>
+#include <cctype>
+
 #include "commands/NICK.hpp"
 
 NICK::NICK() : ACommand() {}

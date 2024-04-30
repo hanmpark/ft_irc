@@ -1,4 +1,7 @@
+#include <cstring>
+
 #include "Server.hpp"
+#include "Replies.hpp"
 
 void	Server::_welcome(Server &server, Client *client) const {
 	Reply::sendRPL(server, client, RPL::RPL_WELCOME(client->getNickname()), SERVER);

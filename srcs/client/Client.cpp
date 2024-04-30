@@ -1,6 +1,6 @@
-#include "client/Client.hpp"
+#include <unistd.h>
 
-/* Constructors / Destructors */
+#include "client/Client.hpp"
 
 Client::Client() : _fd(0), _hostname("127.0.0.1"), _gotPasswordRight(false), _registered(false) {}
 
@@ -10,8 +10,6 @@ Client::Client(int fd, string const &nickname, string const &username) :	_fd(fd)
 																			_nickname(nickname), \
 																			_username(username), \
 																			_registered(false) {}
-
-/* Getters */
 
 int		Client::getFd() const { return _fd; }
 
@@ -28,8 +26,6 @@ string	Client::getBuffer() const { return _buffer; }
 bool	Client::getGotPasswordRight() const { return _gotPasswordRight; }
 
 bool	Client::getRegistered() const { return _registered; }
-
-/* Setters */
 
 void	Client::setFd(int const &fd) { _fd = fd; }
 

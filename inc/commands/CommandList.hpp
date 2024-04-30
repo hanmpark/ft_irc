@@ -1,6 +1,10 @@
 #pragma once
 
-#include "IRCIncludes.hpp"
+# include <iostream>
+# include <map>
+# include <vector>
+
+using namespace std;
 
 class Server;
 class ACommand;

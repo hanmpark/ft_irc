@@ -1,53 +1,54 @@
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <fcntl.h>
+#include <cstring>
+
 #include "Server.hpp"
 
-// https://www.geeksforgeeks.org/socket-programming-cc/
+#define BLUE	"\033[1;34m"
+#define GREEN	"\033[1;32m"
+#define RESET	"\033[0m"
+
 void	Server::initServer() {
 	int	opt = 1;
 
 	_serverFd = socket(AF_INET, SOCK_STREAM, 0);
-	if (_serverFd < 0) {
-		throw runtime_error("Failed at socket creation\n");
-	}
-	if (setsockopt(_serverFd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
-		throw runtime_error("Failed at socket options setup\n");
-	}
-	if (fcntl(_serverFd, F_SETFL, O_NONBLOCK) < 0) {
-		throw runtime_error("Failed at setting non-blocking socket\n");
-	}
+	if (_serverFd == -1)
+		throw runtime_error("Failed at socket creation");
+	if (setsockopt(_serverFd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)
+		throw runtime_error("Failed at socket options setup");
+	if (fcntl(_serverFd, F_SETFL, O_NONBLOCK) == -1)
+		throw runtime_error("Failed at setting non-blocking socket");
 
 	struct sockaddr_in	servAddr;
 
 	memset(&servAddr, 0, sizeof(servAddr));
-	servAddr.sin_family = AF_INET; // IPv4
-	servAddr.sin_port = htons(_port); // Convert to network byte order
-	servAddr.sin_addr.s_addr = INADDR_ANY; // Bind to any address
+	servAddr.sin_family = AF_INET;
+	servAddr.sin_port = htons(_port);
+	servAddr.sin_addr.s_addr = INADDR_ANY;
 
-	if (bind(_serverFd, reinterpret_cast<sockaddr*>(&servAddr), sizeof(servAddr)) < 0) {
-		throw runtime_error("Failed at binding socket to the address\n");
-	}
-	if (listen(_serverFd, SOMAXCONN) < 0) {
-		throw runtime_error("Failed at listen function\n");
-	}
+	if (bind(_serverFd, reinterpret_cast<sockaddr*>(&servAddr), sizeof(servAddr)) < 0)
+		throw runtime_error("Failed at binding socket to the address");
+	if (listen(_serverFd, SOMAXCONN) < 0)
+		throw runtime_error("Failed at listen function");
 	_pollfds.push_back(_createSocket(_serverFd));
 }
 
 void	Server::_acceptNewClient() {
-	struct sockaddr_in	cliAddr; // Client address
-	socklen_t			cliLen = sizeof(cliAddr); // Client address length for accept()
+	struct sockaddr_in	cliAddr;
+	socklen_t			cliLen = sizeof(cliAddr);
 
-	int	clientFd = accept(_serverFd, reinterpret_cast<sockaddr*>(&cliAddr), &cliLen); // accept() returns a new fd which is the client socket
-	if (clientFd < 0) {
-		return ;
-	}
-	// Set the client socket to non-blocking
-	if (fcntl(clientFd, F_SETFL, O_NONBLOCK) < 0) {
-		return ;
-	}
+	int	clientFd = accept(_serverFd, reinterpret_cast<sockaddr*>(&cliAddr), &cliLen);
+	if (clientFd == -1)
+		cout << BLUE "Failed to accept new client" RESET << endl;
+	if (fcntl(clientFd, F_SETFL, O_NONBLOCK) < 0)
+		cout << BLUE "Failed to set non-blocking socket" RESET << endl;
 
-	Client	*client = new Client(); // Create a new instance of the client
+	Client	*client = new Client();
 
 	client->setFd(clientFd);
-	client->setIpAddr(inet_ntoa(cliAddr.sin_addr)); // inet_ntoa() converts the client address to a string.
+	client->setIpAddr(inet_ntoa(cliAddr.sin_addr));
 	_clients.addClient(client);
 	_pollfds.push_back(_createSocket(clientFd));
 

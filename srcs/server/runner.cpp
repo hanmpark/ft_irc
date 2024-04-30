@@ -1,3 +1,6 @@
+#include <signal.h>
+#include <cerrno>
+
 #include "Server.hpp"
 
 bool	Server::_signalReceived = false;
@@ -16,7 +19,7 @@ void	Server::runServer() {
 		if (poll(&_pollfds[0], _pollfds.size(), -1) < 0) {
 			if (errno == EINTR)
 				break;
-			throw runtime_error("poll()\n");
+			throw runtime_error("poll()");
 		}
 		for (size_t i = 0; i < _pollfds.size(); i++) {
 			if (_pollfds[i].revents & POLLIN) {

@@ -1,6 +1,6 @@
-#include "commands/JOIN.hpp"
+# include <sstream>
 
-#include <stdio.h>
+#include "commands/JOIN.hpp"
 
 JOIN::JOIN() : ACommand() {}
 

@@ -1,6 +1,8 @@
 #pragma once
 
-# include "IRCIncludes.hpp"
+# include <iostream>
+
+using namespace std;
 
 /* Client class:
  * - Client class is responsible for keeping track of all the
