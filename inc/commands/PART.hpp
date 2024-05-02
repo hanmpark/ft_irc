@@ -4,7 +4,7 @@
 
 class PART : public ACommand {
 private:
-	vector<string>	_getChannels(Server &server, Client *client, string const &channelArg) const;
+	vector<string>	_splitChannels(Server &server, Client *client, string const &channelArg) const;
 
 public:
 	PART();

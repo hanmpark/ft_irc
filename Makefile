@@ -18,7 +18,7 @@ ifdef STRICT
 endif
 
 ifdef DEBUG
-	CFLAGS	+=	-fsanitize=address -g3 
+	CFLAGS	+=	-fsanitize=address -g3
 endif
 
 ifdef WLOGS
@@ -57,9 +57,9 @@ DEPS		:=	${addprefix ${HEADER},	Server.hpp \
 SRCS	=	${addprefix ${SRCS_DIR},	main.cpp \
 										Replies.cpp} \
 			${addprefix ${SRCS_DIR}server/,	Server.cpp \
-											socket.cpp \
+											connection.cpp \
 											runner.cpp \
-											handleClient.cpp} \
+											data.cpp} \
 			${addprefix ${SRCS_DIR}client/,	Client.cpp \
 											ClientList.cpp} \
 			${addprefix ${SRCS_DIR}channel/,	Channel.cpp \

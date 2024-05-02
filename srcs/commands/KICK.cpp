@@ -4,6 +4,16 @@ KICK::KICK() : ACommand() {}
 
 KICK::~KICK() {}
 
+/**
+ * @brief Checks the parameters of the KICK command.
+ *
+ * @param server The Server object reference.
+ * @param client The Client object pointer that issued the command.
+ * @param channel The Channel object pointer that the command is being executed on.
+ * @param nick The nickname of the user to be kicked.
+ *
+ * @return An error message string if any of the conditions are not met, or an empty string if all conditions are met.
+ */
 string const	KICK::_checkParams(Server &server, Client *client, Channel *channel, string const &nick) const {
 	string	error;
 
@@ -18,12 +28,23 @@ string const	KICK::_checkParams(Server &server, Client *client, Channel *channel
 	} else if (channel->getClientsList().getClient(nick) == NULL) {
 		error = ERR::ERR_USERNOTINCHANNEL(client->getNickname(), nick, channel->getName());
 	}
-
 	return error;
 }
 
+/**
+ * @brief Executes the KICK command.
+ *
+ * Syntax: KICK <channel> <user> [<comment>]
+ *
+ * This command is used to kick a user from a channel.
+ * The user must be a member of the channel and have the appropriate permissions to kick other users.
+ *
+ * @param server The server object reference.
+ * @param client The client object pointer.
+ * @param args The vector of command arguments.
+ */
 void	KICK::execute(Server &server, Client *client, vector<string> &args) const {
-	if (args.size() < 2) {
+	if (args.size() < 3) {
 		Reply::sendRPL(server, client, ERR::ERR_NEEDMOREPARAMS(client->getNickname(), args[0]), SERVER);
 	} else {
 		Channel	*channel = server.getChannel(args[1]);

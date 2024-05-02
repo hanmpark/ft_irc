@@ -34,18 +34,16 @@ void	ClientList::deleteClient(Client *client) {
 
 Client	*ClientList::getClient(int fd) const {
 	for (vector<Client*>::const_iterator it = _clients.begin(); it != _clients.end(); it++) {
-		if ((*it)->getFd() == fd) {
+		if ((*it)->getFd() == fd)
 			return *it;
-		}
 	}
 	return NULL;
 }
 
 Client	*ClientList::getClient(string const &nickname) const {
 	for (vector<Client*>::const_iterator it = _clients.begin(); it != _clients.end(); it++) {
-		if ((*it)->getNickname() == nickname) {
+		if ((*it)->getNickname() == nickname)
 			return *it;
-		}
 	}
 	return NULL;
 }

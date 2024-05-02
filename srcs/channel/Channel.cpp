@@ -10,6 +10,19 @@ Channel::~Channel() {}
 
 string	Channel::getName() const { return _name; }
 
+void	Channel::addMode(e_modes mode) { _modes |= mode; }
+
+void	Channel::removeMode(e_modes mode) { _modes &= ~mode; }
+
+void	Channel::removeClient(Client *client) {
+	if (_clients.getClient(client->getFd()))
+		_clients.removeClient(client);
+	if (_operators.getClient(client->getFd()))
+		_operators.removeClient(client);
+	if (_invited.getClient(client->getFd()))
+		_invited.removeClient(client);
+}
+
 string	Channel::getTopic() const { return _topic; }
 
 string	Channel::getKey() const { return _key; }
@@ -23,22 +36,6 @@ ClientList	&Channel::getClientsList() { return _clients; }
 ClientList	&Channel::getOperatorsList() { return _operators; }
 
 ClientList	&Channel::getInvitedList() { return _invited; }
-
-void	Channel::addMode(e_modes mode) { _modes |= mode; }
-
-void	Channel::removeMode(e_modes mode) { _modes &= ~mode; }
-
-void	Channel::removeClient(Client *client) {
-	if (_clients.getClient(client->getFd())) {
-		_clients.removeClient(client);
-	}
-	if (_operators.getClient(client->getFd())) {
-		_operators.removeClient(client);
-	}
-	if (_invited.getClient(client->getFd())) {
-		_invited.removeClient(client);
-	}
-}
 
 void	Channel::setTopic(string const &topic) { _topic = topic; }
 

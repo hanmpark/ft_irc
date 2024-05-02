@@ -73,9 +73,8 @@ bool	MODE::KEY(Server &server, Channel *channel, Client *client, vector<string> 
 	static_cast<void>(server);
 	static_cast<void>(client);
 
-	if (modeArgs.empty()) {
+	if (modeArgs.empty())
 		return false;
-	}
 	channel->addMode(Channel::KEY);
 	channel->setKey(modeArgs[*modeArgsIndex]);
 	(*modeArgsIndex)++;
@@ -124,9 +123,8 @@ bool	MODE::DEOP(Server &server, Channel *channel, Client *client, vector<string>
 
 bool	MODE::_checkLimitArg(string const &arg) const {
 	for (size_t i = 0; i < arg.length(); i++) {
-		if (!isdigit(arg[i])) {
+		if (!isdigit(arg[i]))
 			return false;
-		}
 	}
 	return true;
 }
@@ -151,13 +149,20 @@ bool	MODE::UNLIMIT(Server &server, Channel *channel, Client *client, vector<stri
 	static_cast<void>(modeArgs);
 	static_cast<void>(modeArgsIndex);
 
-	if (!(channel->getModes() & Channel::LIMIT)) {
+	if (!(channel->getModes() & Channel::LIMIT))
 		return false;
-	}
 	channel->removeMode(Channel::LIMIT);
 	return true;
 }
 
+/**
+ * @brief Determines whether a flag should be added to the mode string based on the current mode string and the flag being set.
+ *
+ * @param modeArgs The current mode string.
+ * @param flag The flag being set.
+ *
+ * @return True if the flag should be added to the mode string, false otherwise.
+ */
 bool	MODE::_addFlagToModeArgs(string const &modeArgs, bool flag) const {
 	size_t	plus = modeArgs.find_last_of("+");
 	size_t	minus = modeArgs.find_last_of("-");
@@ -170,6 +175,14 @@ bool	MODE::_addFlagToModeArgs(string const &modeArgs, bool flag) const {
 	return true;
 }
 
+/**
+ * @brief Checks if the number of mode arguments provided is valid for the given mode string.
+ *
+ * @param modeString The mode string to check.
+ * @param modeArgsSize The number of mode arguments provided.
+ *
+ * @return True if the number of arguments is valid, false otherwise.
+ */
 bool	MODE::_checkNumberModeArgs(string const &modeString, size_t modeArgsSize) const {
 	size_t	count = 0;
 	bool	applyMode = true;
@@ -181,12 +194,18 @@ bool	MODE::_checkNumberModeArgs(string const &modeString, size_t modeArgsSize) c
 		}
 		count += modeString[i] == 'o' || (modeString[i] == 'l' && applyMode == true) || modeString[i] == 'k';
 	}
-	if (count > modeArgsSize) {
+	if (count > modeArgsSize)
 		return false;
-	}
 	return true;
 }
 
+/**
+ * @brief Extracts the mode arguments from the given vector of command arguments.
+ *
+ * @param args The vector of command arguments.
+ *
+ * @return A vector of mode arguments.
+ */
 vector<string>	MODE::_getModeArgs(vector<string> const &args) const {
 	vector<string>	modeArgs;
 
@@ -196,6 +215,17 @@ vector<string>	MODE::_getModeArgs(vector<string> const &args) const {
 	return modeArgs;
 }
 
+/**
+ * @brief Applies the mode setting specified in the modeString parameter to the channel.
+ *
+ * @param server The server object reference.
+ * @param client The client object pointer.
+ * @param channel The channel object pointer.
+ * @param modeString The string containing the mode setting to apply.
+ * @param modeArgs The vector of mode arguments.
+ *
+ * @return A string containing the mode settings that were successfully applied to the channel.
+ */
 string const	MODE::_applyModeSetting(Server &server, Client *client, Channel *channel, string const &modeString, vector<string> &modeArgs) const {
 	bool	applyMode = true;
 	size_t	modeArgsIndex = 0;
@@ -221,6 +251,14 @@ string const	MODE::_applyModeSetting(Server &server, Client *client, Channel *ch
 	return modeStringApplied;
 }
 
+/**
+ * @brief Parses the mode setting command and applies the changes to the specified channel.
+ *
+ * @param server The server object reference.
+ * @param client The client object pointer.
+ * @param channel The channel object pointer.
+ * @param args The vector of command arguments.
+ */
 void	MODE::_parseModeSetting(Server &server, Client *client, Channel *channel, vector<string> &args) const {
 	string			modeStringApplied;
 	vector<string>	modeArgs;
@@ -232,9 +270,9 @@ void	MODE::_parseModeSetting(Server &server, Client *client, Channel *channel, v
 	} else {
 		modeArgs = _getModeArgs(args);
 		modeStringApplied = _applyModeSetting(server, client, channel, args[2], modeArgs);
+
 		if (!modeStringApplied.empty()) {
 			string	appliedArgs;
-
 			for (vector<string>::const_iterator it = modeArgs.begin(); it != modeArgs.end(); it++) {
 				appliedArgs += *it + (it + 1 != modeArgs.end() ? " " : "");
 			}
@@ -243,8 +281,22 @@ void	MODE::_parseModeSetting(Server &server, Client *client, Channel *channel, v
 	}
 }
 
+/**
+ * @brief Executes the MODE command.
+ *
+ * Syntax: MODE <channel> [<mode> [<mode params>]]
+ *
+ * The MODE command is used to set or change the mode of a channel.
+ * The first argument is the target of the command.
+ * The second argument is the mode to set or change.
+ * The third argument (if present) is the mode parameter.
+ *
+ * @param server The server object reference.
+ * @param client The client object that sent the command.
+ * @param args The vector of command arguments.
+ */
 void	MODE::execute(Server &server, Client *client, vector<string> &args) const {
-	if (args.size() < 2) {
+	if (args.size() < 3) {
 		Reply::sendRPL(server, client, ERR::ERR_NEEDMOREPARAMS(client->getNickname(), args[0]), SERVER);
 	} else if (args.size() > 2) {
 		Channel	*channel = server.getChannel(args[1]);

@@ -3,27 +3,29 @@
 
 #include "Server.hpp"
 
-#define RED	"\033[1;31m"
+#define RED		"\033[1;31m"
 #define RESET	"\033[0m"
 
-/*
- * reasoning behind the port range is that TCP & UDP have port numbers represented
- * by a 16-bit unsigned integer.
- * 1. 0-1023 reserved for specific services
- * 2. 1024 to 49151 can be registered for specific purposes
- * 3. 49152-65535 used by client apps for outgoing conncections.
+/**
+ * @brief Creates a new Server object with the given port and password.
+ *
+ * @param portString the port number as a string
+ * @param password the server password
+ *
+ * @throws runtime_error if the port is invalid or the password is empty
  */
 Server::Server(string const &portString, string const &password) : _name("irc.yobouhle.chat"), _serverFd(-1) {
-	if (portString.find_last_not_of("0123456789") != string::npos || atoi(portString.c_str()) < 1024 || atoi(portString.c_str()) > 65535) { // Check Range
+	if (portString.find_last_not_of("0123456789") != string::npos || atoi(portString.c_str()) < 1024 || atoi(portString.c_str()) > 65535)
 		throw runtime_error("Invalid port");
-	}
-	if (password.empty()) {
+	if (password.empty())
 		throw runtime_error("Password empty");
-	}
 	_port = atoi(portString.c_str());
 	_password = password;
 }
 
+/**
+ * @brief Destroys the Server object and closes all associated file descriptors.
+ */
 Server::~Server() {
 	vector<Client*>	clients = _clients.getClients();
 

@@ -23,9 +23,8 @@ void	ChannelList::removeChannel(Channel *channel) {
 
 Channel	*ChannelList::getChannel(string const &name) const {
 	for (vector<Channel*>::const_iterator it = _channels.begin(); it != _channels.end(); it++) {
-		if ((*it)->getName() == name) {
+		if ((*it)->getName() == name)
 			return *it;
-		}
 	}
 	return NULL;
 }
@@ -34,9 +33,8 @@ vector<Channel*>	ChannelList::getChannelsFromClient(Client *client) {
 	vector<Channel*>	channels;
 
 	for (vector<Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++) {
-		if ((*it)->getClientsList().getClient(client->getNickname())) {
+		if ((*it)->getClientsList().getClient(client->getNickname()))
 			channels.push_back(*it);
-		}
 	}
 	return channels;
 }

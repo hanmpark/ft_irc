@@ -4,12 +4,6 @@
 
 using namespace std;
 
-/* Client class:
- * - Client class is responsible for keeping track of all the
- * information about the client.
- * - It has a private attribute _fd to store the file descriptor
- * of the client.
- */
 class Client {
 private:
 	int		_fd;

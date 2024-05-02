@@ -6,12 +6,9 @@ Client::Client() : _fd(0), _hostname("127.0.0.1"), _gotPasswordRight(false), _re
 
 Client::~Client() {}
 
-Client::Client(int fd, string const &nickname, string const &username) :	_fd(fd), \
-																			_nickname(nickname), \
-																			_username(username), \
-																			_registered(false) {}
+Client::Client(int fd, string const &nickname, string const &username) : _fd(fd), _nickname(nickname), _username(username), _registered(false) {}
 
-int		Client::getFd() const { return _fd; }
+int	Client::getFd() const { return _fd; }
 
 string	Client::getNickname() const { return _nickname; }
 

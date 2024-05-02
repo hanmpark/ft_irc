@@ -12,7 +12,7 @@
 
 class Server;
 
-enum e_endpoint {
+enum e_side {
 	CLIENT,
 	SERVER
 };
@@ -22,10 +22,10 @@ private:
 	Reply();
 
 public:
-	static string const	findPrefix(Server &server, Client *client, e_endpoint const &side);
-	static void			sendRPL(Server &server, Client *client, string const &message, e_endpoint const &endPoint);
-	static void			sendRPL(Server &server, Client *from, Client *to, string const &message, e_endpoint const &endPoint);
-	static void			sendRPL(Server &server, Client *from, Channel *to, string const &message, e_endpoint const &endPoint, bool const &withoutUser);
+	static string const	findPrefix(Server &server, Client *client, e_side const &side);
+	static void			sendRPL(Server &server, Client *client, string const &message, e_side const &side);
+	static void			sendRPL(Server &server, Client *from, Client *to, string const &message, e_side const &side);
+	static void			sendRPL(Server &server, Client *from, Channel *to, string const &message, e_side const &side, bool const &withoutUser);
 	static void			debugLog(string const &errorLog, bool const &debug);
 	static void			debugLog(vector<string> const &args, bool const &debug);
 };

@@ -5,12 +5,22 @@
 
 bool	Server::_signalReceived = false;
 
-void Server::_signalHandler(int signum)
-{
-	(void)signum;
+/**
+ * @brief Handles signals received by the server.
+ *
+ * @param signum The signal number received.
+ */
+void	Server::_signalHandler(int signum) {
+	static_cast<void>(signum);
 	_signalReceived = true;
 }
 
+/**
+ * @brief Runs the server main loop, which listens for incoming connections and data.
+ * The loop continues until a signal is received to stop the server.
+ *
+ * @throws runtime_error if poll() fails with an error other than EINTR.
+ */
 void	Server::runServer() {
 	signal(SIGINT, &_signalHandler);
 	signal(SIGQUIT, &_signalHandler);

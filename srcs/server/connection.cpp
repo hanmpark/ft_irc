@@ -10,6 +10,29 @@
 #define GREEN	"\033[1;32m"
 #define RESET	"\033[0m"
 
+/**
+ * @brief Creates a new pollfd struct for the given file descriptor.
+ *
+ * @param fd the file descriptor to create a pollfd for
+ *
+ * @return the new pollfd struct
+ */
+struct pollfd	Server::_createSocket(int fd) const {
+	struct pollfd	newSocket;
+
+	newSocket.fd = fd;
+	newSocket.events = POLLIN;
+	newSocket.revents = 0;
+
+	return newSocket;
+}
+
+/**
+ * @brief Initializes the server by creating a socket, binding it to an address and port,
+ * and setting it to listen for incoming connections.
+ *
+ * @throws runtime_error if any step of the initialization process fails
+ */
 void	Server::initServer() {
 	int	opt = 1;
 
@@ -28,13 +51,16 @@ void	Server::initServer() {
 	servAddr.sin_port = htons(_port);
 	servAddr.sin_addr.s_addr = INADDR_ANY;
 
-	if (bind(_serverFd, reinterpret_cast<sockaddr*>(&servAddr), sizeof(servAddr)) < 0)
+	if (bind(_serverFd, reinterpret_cast<sockaddr*>(&servAddr), sizeof(servAddr)) == -1)
 		throw runtime_error("Failed at binding socket to the address");
-	if (listen(_serverFd, SOMAXCONN) < 0)
+	if (listen(_serverFd, SOMAXCONN) == -1)
 		throw runtime_error("Failed at listen function");
 	_pollfds.push_back(_createSocket(_serverFd));
 }
 
+/**
+ * @brief Accepts a new client connection and adds it to the server's list of clients.
+ */
 void	Server::_acceptNewClient() {
 	struct sockaddr_in	cliAddr;
 	socklen_t			cliLen = sizeof(cliAddr);
@@ -42,7 +68,7 @@ void	Server::_acceptNewClient() {
 	int	clientFd = accept(_serverFd, reinterpret_cast<sockaddr*>(&cliAddr), &cliLen);
 	if (clientFd == -1)
 		cout << BLUE "Failed to accept new client" RESET << endl;
-	if (fcntl(clientFd, F_SETFL, O_NONBLOCK) < 0)
+	if (fcntl(clientFd, F_SETFL, O_NONBLOCK) == -1)
 		cout << BLUE "Failed to set non-blocking socket" RESET << endl;
 
 	Client	*client = new Client();
@@ -53,14 +79,4 @@ void	Server::_acceptNewClient() {
 	_pollfds.push_back(_createSocket(clientFd));
 
 	cout << GREEN "New connection from: " << client->getIpAddr() << RESET << endl;
-}
-
-struct pollfd	Server::_createSocket(int fd) const {
-	struct pollfd	newSocket;
-
-	newSocket.fd = fd;
-	newSocket.events = POLLIN;
-	newSocket.revents = 0;
-
-	return newSocket;
 }

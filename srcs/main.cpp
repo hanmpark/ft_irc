@@ -4,13 +4,21 @@
 #define RED		"\033[1;31m"
 #define RESET	"\033[0m"
 
-/*
- * In the sockaddr_in structure, the sin_port field is used to store the port number for a socket.
- * The sin_port field is a 16-bit integer, which means that it can store values in the range 0-65535.
-
-// -------------------------------------------------------------------------- //
- TODO: SOCKET RANGE
- TODO: localhost ?
+/**
+ * @brief The main function of the IRC server.
+ *
+ * This function is the entry point of the IRC server program. It takes two command-line arguments: the port number and the password.
+ * If the number of arguments is not equal to 3, it prints a usage message and returns 1.
+ *
+ * It creates an instance of the Server class with the provided port number and password, and then initializes and runs the server.
+ *
+ * If any runtime error occurs during the execution of the server, it catches the exception, prints the error message, and returns 2.
+ * If an unknown error occurs, it prints a generic error message and returns 3.
+ *
+ * @param argc The number of command-line arguments.
+ * @param argv An array of strings containing the command-line arguments.
+ *
+ * @return int The exit status of the program.
  */
 int main(int argc, char **argv) {
 	if (argc != 3) {
@@ -19,6 +27,7 @@ int main(int argc, char **argv) {
 	}
 	try {
 		Server	server(static_cast<string>(argv[1]), static_cast<string>(argv[2]));
+
 		server.initServer();
 		server.runServer();
 	} catch (runtime_error &e) {
@@ -28,6 +37,5 @@ int main(int argc, char **argv) {
 		cerr << RED "An unknown error occured" RESET << endl;
 		return 3;
 	}
-
 	return 0;
 }

@@ -1,22 +1,51 @@
+#include <unistd.h>
+#include <cstdlib>
+
 #include "IRCBot.hpp"
 
-IRCBot::IRCBot(string const &host, string const &port, string const &password) {
-	if (!isValidArgs(host, port, password)) {
+IRCBot::IRCBot(string const &host, string const &port, string const &password) : _sockfd(-1) {
+	if (!_isValidArgs(host, port, password))
 		throw runtime_error("Invalid arguments");
-	}
 	_host = host;
 	_port = atoi(port.c_str());
 	_password = password;
-	_sockfd = -1;
 }
 
 IRCBot::~IRCBot() {
-	if (_sockfd != -1) {
+	if (_sockfd != -1)
 		close(_sockfd);
-	}
 }
 
-void	IRCBot::initJokes() {
+/**
+ * @brief Checks if the given arguments for the host, port, and password are valid.
+ *
+ * @param host The host argument to check.
+ * @param port The port argument to check.
+ * @param password The password argument to check.
+ *
+ * @return True if the arguments are valid, false otherwise.
+ */
+bool	IRCBot::_isValidArgs(string const &host, string const &port, string const &password) const {
+	if (host.empty() || port.empty() || password.empty()) {
+		return false;
+	} else {
+		if (host != "localhost" && host != "127.0.0.1") {
+			return false;
+		} else if (port.find_last_not_of("0123456789") != string::npos || atoi(port.c_str()) < 1024 || atoi(port.c_str()) > 65535) {
+			return false;
+		}
+	}
+	return true;
+}
+
+/**
+ * @brief Initializes a map of jokes with their corresponding responses.
+ *
+ * This function adds 15 different jokes to the map,
+ * each with a unique key that corresponds to the user's request for a specific type of joke.
+ * The map is named _jokes and is a member variable of the IRCBot class.
+ */
+void	IRCBot::_initJokes() {
 	_jokes["Tell me a joke"] = "Knock, knock";
 	_jokes["Who's there?"] = "Boo";
 	_jokes["Boo who?"] = "Don't cry, it's just a joke";
@@ -34,89 +63,18 @@ void	IRCBot::initJokes() {
 	_jokes["Tell me a joke about sheep"] = "What do you call a sheep with no legs? A cloud!";
 }
 
-void	IRCBot::addToBuffer(string const &buffer) { _buffer += buffer; }
-
-void	IRCBot::handleInput() {
-	size_t	end, triggerBegin, msgBegin, targetBegin, targetEnd;
-	string	target, message;
-
-	while ((end = _buffer.find("\r\n")) != string::npos) {
-		if ((triggerBegin = _buffer.find("PRIVMSG")) != string::npos) {
-			targetBegin = _buffer.find(":") + 1;
-			targetEnd = _buffer.find("!");
-
-			target = _buffer.substr(targetBegin, targetEnd - targetBegin);
-
-			msgBegin = _buffer.find(":", triggerBegin + 8 + target.length());
-			message = _buffer.substr(msgBegin + 1, end - msgBegin - 1);
-			if (_jokes.find(message) != _jokes.end()) {
-				sendData("PRIVMSG " + target + " :" + _jokes[message] + "\r\n");
-			}
-		}
-		_buffer.erase(0, end + 2);
-	}
-}
-
-void	IRCBot::initBotSocket() {
-	_sockfd = socket(AF_INET, SOCK_STREAM, 0); // Create a socket
-	if (_sockfd < 0) {
-		throw runtime_error("Error opening socket");
-	}
-}
-
-void	IRCBot::connectToServer() {
-	if (_sockfd == -1) {
-		throw runtime_error("Socket not initialized");
-	}
-	struct sockaddr_in	serv_addr; // Declare server address to use it in connect()
-
-	memset(&serv_addr, 0, sizeof(serv_addr));
-	serv_addr.sin_family = AF_INET; // Set address family to IPv4
-	serv_addr.sin_port = htons(_port); // Convert port to network byte order
-	if (inet_pton(AF_INET, _host.c_str(), &serv_addr.sin_addr) <= 0) { // Convert IPv4 and IPv6 addresses from text to binary form
-		throw runtime_error("Invalid address");
-	} else if (connect(_sockfd, reinterpret_cast<struct sockaddr*>(&serv_addr), sizeof(serv_addr)) < 0) {
-		throw runtime_error("Connection failed");
-	}
-
-	cout << GREEN "Connected to " << _host << ":" << BLUE << _port << RESET << endl;
-}
-
-void	IRCBot::authToServer() {
-	if (_sockfd == -1) {
-		throw runtime_error("Socket not initialized");
-	}
-	sendData("PASS " + _password + "\r\n");
-	sendData("NICK IRCBot\r\n");
-	sendData("USER IRCBot 0 * :IRCBot\r\n");
-}
-
-bool	IRCBot::recvData() {
-	char	buff[BUFFER_SIZE]; bzero(buff, BUFFER_SIZE);
-	int		bytesReceived;
-
-	bytesReceived = recv(_sockfd, buff, BUFFER_SIZE - 1, 0); // Receive data from server
-	if (bytesReceived <= 0) {
-		return false;
-	}
-	addToBuffer(static_cast<string>(buff));
-	if (_buffer.find("\r\n") != string::npos) {
-		try {
-			handleInput();
-		} catch (exception &e) {
-			return false;
-		}
-	}
-	_buffer.clear();
-	return true;
-}
-
+/**
+ * @brief Runs the bot.
+ *
+ * This function initializes the bot's jokes,
+ * authenticates the bot with the server,
+ * and then enters a loop to continuously receive data from the server.
+ * The function exits when the connection to the server is closed.
+ */
 void	IRCBot::runBot() {
-	initJokes();
-	authToServer();
-	while (recvData());
+	_initJokes();
+	_authToServer();
+	while (_recvData());
 }
 
-void	IRCBot::sendData(string const &data) const {
-	send(_sockfd, data.c_str(), data.length(), 0);
-}
+void	IRCBot::_addToBuffer(string const &buffer) { _buffer += buffer; }

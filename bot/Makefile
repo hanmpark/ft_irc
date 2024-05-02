@@ -21,20 +21,18 @@ ifdef DEBUG
 	CFLAGS	+=	-fsanitize=address -g3 
 endif
 
-ifdef WLOGS
-	CFLAGS	+=	-D WLOGS=1
-endif
-
 # === Sources & Objects === #
 
 # Directories
 SRCS_DIR	:=	./srcs/
 HEADER		:=	./inc/
+DEPS		:=	${addprefix ${HEADER}, IRCBot.hpp}
 
 # Sources
-SRCS	= main.cpp \
-			srcs/IRCBot.cpp \
-			utils/utils.cpp \
+SRCS	= ${addprefix ${SRCS_DIR},	connection.cpp \
+									data.cpp \
+									IRCBot.cpp \
+									main.cpp}
 
 OBJS	=	${SRCS:.cpp=.o}
 
@@ -43,7 +41,7 @@ SRC_TOT		:= ${shell find . -type f -name "*.cpp" | wc -l}
 SRC_PRCT	= ${shell expr 100 \* ${SRC_COUNT} / ${SRC_TOT}}
 BAR			= ${shell expr 23 \* ${SRC_COUNT} / ${SRC_TOT}}
 
-%.o:	%.cpp
+${SRCS_DIR}%.o:	${SRCS_DIR}%.cpp ${DEPS}
 	@${eval SRC_COUNT = ${shell expr ${SRC_COUNT} + 1}}
 	@${CC} ${CFLAGS} -I${HEADER} -c $< -o $@
 	@printf "${PROMPT} ${GREEN}Compiling${RESET}\n"
@@ -66,9 +64,6 @@ strict:
 debug:
 	@${MAKE} DEBUG=1
 
-wlogs:
-	@${MAKE} WLOGS=1
-
 clean:
 	@printf "${PROMPT} ${RED}Cleaning${RESET} objects\n"
 	@rm -f ${OBJS}
@@ -79,4 +74,4 @@ fclean:		clean
 
 re:			fclean all
 
-.PHONY:		all strict debug wlogs clean fclean re
+.PHONY:		all strict debug clean fclean re

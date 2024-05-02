@@ -13,6 +13,10 @@
 #include "commands/TOPIC.hpp"
 #include "commands/USER.hpp"
 
+/**
+ * @brief Constructs a CommandList object and initializes the command map with
+ * instances of various command classes.
+ */
 CommandList::CommandList() {
 	_commands["CAP"] = new CAP();
 	_commands["INVITE"] = new INVITE();
@@ -37,14 +41,13 @@ CommandList::~CommandList() {
 	_commands.clear();
 }
 
-ACommand	*CommandList::getCommand(string const &commandName) const {
-	commandIt	it = _commands.find(commandName);
-
-	if (it == _commands.end())
-		return NULL;
-	return it->second;
-}
-
+/**
+ * @brief Splits a string into a vector of strings based on spaces.
+ *
+ * @param buffer The string to split.
+ *
+ * @return A vector of strings containing the split substrings.
+ */
 vector<string>	CommandList::_split(string const &buffer) const {
 	vector<string>	args;
 	size_t			pos = 0, nextPos = 0;
@@ -62,10 +65,17 @@ vector<string>	CommandList::_split(string const &buffer) const {
 	return args;
 }
 
+/**
+ * @brief Selects the appropriate command to execute based on user input.
+ *
+ * @param server The server reference.
+ * @param client The client pointer.
+ * @param buffer The user input string buffer.
+ */
 void	CommandList::select(Server &server, Client *client, string const &buffer) const {
 	vector<string>	args = _split(buffer);
+	ACommand		*cmd = getCommand(args[0]);
 
-	ACommand	*cmd = getCommand(args[0]);
 	if (cmd != NULL) {
 		Reply::debugLog(args, DEBUG);
 		if (!client->getRegistered()) {
@@ -80,4 +90,12 @@ void	CommandList::select(Server &server, Client *client, string const &buffer) c
 		Reply::sendRPL(server, client, ERR::ERR_UNKNOWNCOMMAND(client->getNickname(), args[0]), SERVER);
 	}
 	args.clear();
+}
+
+ACommand	*CommandList::getCommand(string const &commandName) const {
+	commandIt	it = _commands.find(commandName);
+
+	if (it == _commands.end())
+		return NULL;
+	return it->second;
 }

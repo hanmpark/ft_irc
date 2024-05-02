@@ -35,7 +35,7 @@ private:
 	struct pollfd	_createSocket(int fd) const;
 	void			_acceptNewClient();
 	bool			_receiveData(int clientFd);
-	void			_handleClient(Client *client);
+	void			_processClientCommand(Client *client);
 	void			_welcome(Server &server, Client *client) const;
 
 	Server();
