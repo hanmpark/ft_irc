@@ -3,6 +3,8 @@
 The aim of this project is to create our own IRC server in C++98. <br>
 IRC is a text-based communication protocol used for real-time messaging. <br>
 
+***Developed on Linux***
+
 ### Purpose:
 1. peer-to-peer communication
 2. group communication
@@ -44,21 +46,9 @@ Where:
 
 > If we try to read/reacv or write/send in any file descriptor without the use of poll() or equivalent, that's cheating.
 
-- Several IRC client exist. We have chosen Irssi (might change ?).
+- Several IRC client exist. We have chosen Irssi.
 
 - Communication between the two is done via TCP/IP (v4 or v6) protocol.
-
-## Contributing
-
-Guidelines for contributing to your project.
-
-## License
-
-Information about the license for your project.
-
-## Contact
-
-How to get in touch with you or the project team.
 
 ## Definitions
 - **socket**: socket is a file descriptor. It is used to send/receive data over a network. They are used to create a connection between 2 endpoints.
