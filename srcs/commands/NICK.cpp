@@ -83,7 +83,11 @@ void	NICK::execute(Server &server, Client *client, vector<string> &args) const {
 		Reply::sendRPL(server, client, ERR::ERR_NICKNAMEINUSE(client->getNickname(), args[1]), SERVER);
 	} else {
 		if (client->getRegistered() && client->getNickname() != args[1]) {
-			Reply::sendRPL(server, client, CMD::NICK(args[1]), SERVER);
+			Reply::sendRPL(server, client, CMD::NICK(args[1]), CLIENT);
+			vector<Channel*> channels = server.getChannelList().getChannelsFromClient(client);
+			for (size_t i = 0; i < channels.size(); i++) {
+				Reply::sendRPL(server, client, channels[i], CMD::NICK(args[1]), CLIENT, true);
+			}
 		}
 		client->setNickname(args[1]);
 	}
