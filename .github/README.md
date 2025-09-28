@@ -66,7 +66,7 @@ A **socket** is a file descriptor used to send/receive data over a network.
 It establishes communication between two endpoints.
 
 <div align="center">
-    <img src="./img/socketImg.png" alt="socket representation"/>
+    <img src="../img/socketImg.png" alt="socket representation"/>
 </div>
 
 Example:
